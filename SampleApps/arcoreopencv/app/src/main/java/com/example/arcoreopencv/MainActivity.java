@@ -27,8 +27,8 @@ public class MainActivity extends AppCompatActivity {
     private static final String TAG = MainActivity.class.getSimpleName();
     private static final double MIN_OPENGL_VERSION = 3.0;
 
-    private ArFragment arFragment;
-    private ModelRenderable lampPostRenderable;
+    private ArFragment ArFragment;
+    private ModelRenderable LampRenderable;
 
     @Override
     @SuppressWarnings({"AndroidApiChecker", "FutureReturnValueIgnored"})
@@ -51,7 +51,40 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    public static boolean checkIsSupportedDeviceOrFinish(final Activity activity) {
+    public void SetScenformEnvironment(){
+        ArFragment = (ArFragment) getSupportFragmentManager().findFragmentById(R.id.ux_fragment);
+
+        ModelRenderable.builder()
+                .setSource(this, Uri.parse("model.sfb"))
+                .build()
+                .thenAccept(renderable -> LampRenderable = renderable)
+                .exceptionally(throwable -> {
+                    Toast toast =
+                            Toast.makeText(this, "Unable to load andy renderable", Toast.LENGTH_LONG);
+                    toast.setGravity(Gravity.CENTER, 0, 0);
+                    toast.show();
+                    return null;
+                });
+
+        ArFragment.setOnTapArPlaneListener(
+                (HitResult hitresult, Plane plane, MotionEvent motionevent) -> {
+                    if (LampRenderable == null){
+                        return;
+                    }
+
+                    Anchor anchor = hitresult.createAnchor();
+                    AnchorNode anchorNode = new AnchorNode(anchor);
+                    anchorNode.setParent(ArFragment.getArSceneView().getScene());
+
+                    TransformableNode lamp = new TransformableNode(ArFragment.getTransformationSystem());
+                    lamp.setParent(anchorNode);
+                    lamp.setRenderable(LampRenderable);
+                    lamp.select();
+                }
+        );
+    }
+
+    private static boolean checkIsSupportedDeviceOrFinish(final Activity activity) {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.N) {
             Log.e(TAG, "Sceneform requires Android N or later");
             Toast.makeText(activity, "Sceneform requires Android N or later", Toast.LENGTH_LONG).show();
@@ -70,39 +103,5 @@ public class MainActivity extends AppCompatActivity {
             return false;
         }
         return true;
-    }
-
-    public void SetScenformEnvironment(){
-
-        arFragment = (ArFragment) getSupportFragmentManager().findFragmentById(R.id.ux_fragment);
-
-        ModelRenderable.builder()
-                .setSource(this, Uri.parse("model.sfb"))
-                .build()
-                .thenAccept(renderable -> lampPostRenderable = renderable)
-                .exceptionally(throwable -> {
-                    Toast toast =
-                            Toast.makeText(this, "Unable to load andy renderable", Toast.LENGTH_LONG);
-                    toast.setGravity(Gravity.CENTER, 0, 0);
-                    toast.show();
-                    return null;
-                });
-
-        arFragment.setOnTapArPlaneListener(
-                (HitResult hitresult, Plane plane, MotionEvent motionevent) -> {
-                    if (lampPostRenderable == null){
-                        return;
-                    }
-
-                    Anchor anchor = hitresult.createAnchor();
-                    AnchorNode anchorNode = new AnchorNode(anchor);
-                    anchorNode.setParent(arFragment.getArSceneView().getScene());
-
-                    TransformableNode lamp = new TransformableNode(arFragment.getTransformationSystem());
-                    lamp.setParent(anchorNode);
-                    lamp.setRenderable(lampPostRenderable);
-                    lamp.select();
-                }
-        );
     }
 }
