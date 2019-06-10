@@ -41,6 +41,9 @@ dependencies {
 
     // Alternatively, use ArSceneView without the UX dependency.
     implementation 'com.google.ar.sceneform:core:1.9.0'
+
+    // Support for animated model renderables
+    implementation "com.google.ar.sceneform:animation:1.9.0"
 }
 
 
