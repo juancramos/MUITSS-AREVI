@@ -9,6 +9,7 @@
          visible in the Google Play Store on devices that support ARCore.
          For "AR Optional" apps remove this line. -->
     <uses-feature android:name="android.hardware.camera.ar" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
 
     <application
         android:allowBackup="true"
@@ -32,6 +33,15 @@
          For an "AR Optional" app, specify "optional" instead of "required".
         -->
         <meta-data android:name="com.google.ar.core" android:value="required" />
+        <provider
+            android:name="android.support.v4.content.FileProvider"
+            android:authorities="${applicationId}.ar.codelab.name.provider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/paths"/>
+        </provider>
     </application>
 
 </manifest>
