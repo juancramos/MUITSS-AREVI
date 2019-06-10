@@ -31,11 +31,12 @@ public class ModelLoader {
                     } else if (throwable != null) {
                         activity.onException(throwable);
                     } else {
-                        activity.addNodeToScene(anchor, renderable);
+                        if (uri.toString().equals("chroma_key_video.sfb"))
+                            activity.addPlayerToScene(anchor, renderable);
+                        else
+                            activity.addNodeToScene(anchor, renderable);
                     }
                     return null;
                 });
-
-        return;
     }
 }

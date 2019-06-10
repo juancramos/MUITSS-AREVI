@@ -9,7 +9,9 @@
          visible in the Google Play Store on devices that support ARCore.
          For "AR Optional" apps remove this line. -->
     <uses-feature android:name="android.hardware.camera.ar" />
+
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+
 
     <application
         android:allowBackup="true"

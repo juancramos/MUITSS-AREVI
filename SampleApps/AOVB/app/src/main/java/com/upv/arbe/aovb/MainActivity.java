@@ -2,6 +2,7 @@ package com.upv.arbe.aovb;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.Point;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -27,7 +28,7 @@ import com.google.ar.core.TrackingState;
 import com.google.ar.sceneform.AnchorNode;
 import com.google.ar.sceneform.ArSceneView;
 import com.google.ar.sceneform.animation.ModelAnimator;
-import com.google.ar.sceneform.rendering.AnimationData;
+import com.google.ar.sceneform.rendering.Color;
 import com.google.ar.sceneform.rendering.ModelRenderable;
 import com.google.ar.sceneform.ux.ArFragment;
 import com.google.ar.sceneform.ux.TransformableNode;
@@ -43,19 +44,23 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
     private ArFragment fragment;
+
     private PointerDrawable pointer = new PointerDrawable();
     private boolean isTracking;
     private boolean isHitting;
+
     private ModelLoader modelLoader;
+
+    private Player player = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-
         fragment = (ArFragment)
                 getSupportFragmentManager().findFragmentById(R.id.sceneform_fragment);
+        assert fragment != null;
         fragment.getArSceneView().getScene().addOnUpdateListener(frameTime -> {
             fragment.onUpdate(frameTime);
             onUpdate();
@@ -117,7 +122,7 @@ public class MainActivity extends AppCompatActivity {
         return wasHitting != isHitting;
     }
 
-    private android.graphics.Point getScreenCenter() {
+    private Point getScreenCenter() {
         View vw = findViewById(R.id.pointer_view);
         int cx = vw.getWidth()/2;
         int cy = vw.getHeight()/2;
@@ -130,26 +135,29 @@ public class MainActivity extends AppCompatActivity {
         ImageView andy = new ImageView(this);
         andy.setImageResource(R.drawable.droid_thumb);
         andy.setContentDescription("andy");
-        andy.setOnClickListener(view ->{addObject(Uri.parse("andy_dance.sfb"));});
+        andy.setOnClickListener(view -> addObject(Uri.parse("andy_dance.sfb")));
         gallery.addView(andy);
 
         ImageView cabin = new ImageView(this);
         cabin.setImageResource(R.drawable.cabin_thumb);
         cabin.setContentDescription("cabin");
-        cabin.setOnClickListener(view ->{addObject(Uri.parse("Cabin.sfb"));});
+        cabin.setOnClickListener(view -> addObject(Uri.parse("Cabin.sfb")));
         gallery.addView(cabin);
 
         ImageView house = new ImageView(this);
         house.setImageResource(R.drawable.house_thumb);
         house.setContentDescription("house");
-        house.setOnClickListener(view ->{addObject(Uri.parse("House.sfb"));});
+        house.setOnClickListener(view -> addObject(Uri.parse("House.sfb")));
         gallery.addView(house);
 
-        ImageView igloo = new ImageView(this);
-        igloo.setImageResource(R.drawable.igloo_thumb);
-        igloo.setContentDescription("igloo");
-        igloo.setOnClickListener(view ->{addObject(Uri.parse("igloo.sfb"));});
-        gallery.addView(igloo);
+
+        ImageView play = new ImageView(this);
+        play.setImageResource(R.drawable.igloo_thumb);
+        play.setContentDescription("igloo");
+        play.setOnClickListener(view -> {
+            addObject(Uri.parse("chroma_key_video.sfb"));
+        });
+        gallery.addView(play);
     }
 
     private void addObject(Uri model) {
@@ -170,14 +178,25 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    public void addPlayerToScene(Anchor anchor, ModelRenderable renderable) {
+
+        player = new Player(this, renderable);
+
+        AnchorNode anchorNode = new AnchorNode(anchor);
+        anchorNode.setParent(fragment.getArSceneView().getScene());
+
+        player.startPlayer(anchorNode);
+    }
+
     public void addNodeToScene(Anchor anchor, ModelRenderable renderable) {
         AnchorNode anchorNode = new AnchorNode(anchor);
         TransformableNode node = new TransformableNode(fragment.getTransformationSystem());
         node.setRenderable(renderable);
         node.setParent(anchorNode);
-        fragment.getArSceneView().getScene().addChild(anchorNode);
         node.select();
         startAnimation(node, renderable);
+
+        fragment.getArSceneView().getScene().addChild(anchorNode);
     }
 
     public void onException(Throwable throwable){
@@ -186,7 +205,6 @@ public class MainActivity extends AppCompatActivity {
                 .setTitle("Codelab error!");
         AlertDialog dialog = builder.create();
         dialog.show();
-        return;
     }
 
     public void startAnimation(TransformableNode node, ModelRenderable renderable){
@@ -194,14 +212,13 @@ public class MainActivity extends AppCompatActivity {
             return;
         }
         for(int i = 0;i < renderable.getAnimationDataCount();i++){
-            AnimationData animationData = renderable.getAnimationData(i);
+            // AnimationData animationData = renderable.getAnimationData(i);
+            renderable.getAnimationData(i);
         }
         ModelAnimator animator = new ModelAnimator(renderable.getAnimationData(0), renderable);
         animator.start();
         node.setOnTapListener(
-                (hitTestResult, motionEvent) -> {
-                    togglePauseAndResume(animator);
-                });
+                (hitTestResult, motionEvent) -> togglePauseAndResume(animator));
     }
 
     public void togglePauseAndResume(ModelAnimator animator) {
@@ -281,5 +298,15 @@ public class MainActivity extends AppCompatActivity {
             }
             handlerThread.quitSafely();
         }, new Handler(handlerThread.getLooper()));
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+
+        if (player != null) {
+            player.onDestroy();
+            player = null;
+        }
     }
 }
