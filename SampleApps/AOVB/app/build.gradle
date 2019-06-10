@@ -67,3 +67,8 @@ sceneform.asset('sampledata/models/igloo.obj',
         'default',
         'sampledata/models/igloo.sfa',
         'src/main/assets/igloo')
+
+sceneform.asset('sampledata/models/chroma_key_video.obj',
+        'default',
+        'sampledata/models/chroma_key_video.sfa',
+        'src/main/assets/chroma_key_video')
