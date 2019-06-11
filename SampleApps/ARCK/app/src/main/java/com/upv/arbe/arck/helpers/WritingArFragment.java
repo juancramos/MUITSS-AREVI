@@ -1,4 +1,4 @@
-package com.upv.arbe.arck.Helpers;
+package com.upv.arbe.arck.helpers;
 
 import android.Manifest;
 

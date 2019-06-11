@@ -29,7 +29,7 @@ import com.google.ar.core.Plane;
 import com.google.ar.core.Trackable;
 import com.google.ar.sceneform.ArSceneView;
 import com.google.ar.sceneform.ux.ArFragment;
-import com.upv.arbe.arck.Helpers.ModelLoader;
+import com.upv.arbe.arck.helpers.ModelLoader;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -74,7 +74,7 @@ public class MainActivity extends AppCompatActivity {
         ImageView andy = new ImageView(this);
         andy.setImageResource(R.drawable.ic_android_black_60dp);
         andy.setContentDescription("andy");
-        andy.setOnClickListener(view -> addObject("chroma_key_video.sfb"));
+        andy.setOnClickListener(view -> addObject("chroma_key_video.sfb", true));
         gallery.addView(andy);
 
         ImageView camera = new ImageView(this);
@@ -84,7 +84,7 @@ public class MainActivity extends AppCompatActivity {
         gallery.addView(camera);
     }
 
-    private void addObject(String path) {
+    private void addObject(String path, boolean isMedia) {
         Frame frame = getArFragment().getArSceneView().getArFrame();
         android.graphics.Point pt = getScreenCenter();
         List<HitResult> hits;
@@ -93,7 +93,8 @@ public class MainActivity extends AppCompatActivity {
             for (HitResult hit : hits) {
                 Trackable trackable = hit.getTrackable();
                 if (trackable instanceof Plane && ((Plane) trackable).isPoseInPolygon(hit.getHitPose())) {
-                    modelLoader.loadMediaModel(hit, path);
+                    if (isMedia) modelLoader.loadMediaModel(hit, path);
+                    else modelLoader.loadModel(hit, path);
                     break;
                 }
             }
