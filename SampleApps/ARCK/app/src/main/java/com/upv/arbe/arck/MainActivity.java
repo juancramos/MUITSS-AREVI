@@ -3,41 +3,24 @@ package com.upv.arbe.arck;
 import android.app.Activity;
 import android.app.ActivityManager;
 import android.content.Context;
-import android.graphics.SurfaceTexture;
-import android.media.MediaPlayer;
-import android.net.Uri;
 import android.os.Build;
 import android.os.Build.VERSION_CODES;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
-import android.view.Gravity;
-import android.view.MotionEvent;
 import android.widget.Toast;
-import com.google.ar.core.Anchor;
-import com.google.ar.core.HitResult;
-import com.google.ar.core.Plane;
-import com.google.ar.sceneform.AnchorNode;
-import com.google.ar.sceneform.Node;
-import com.google.ar.sceneform.math.Vector3;
-import com.google.ar.sceneform.rendering.Color;
-import com.google.ar.sceneform.rendering.ExternalTexture;
-import com.google.ar.sceneform.rendering.ModelRenderable;
 import com.google.ar.sceneform.ux.ArFragment;
 
+import java.lang.ref.WeakReference;
+
 public class MainActivity extends AppCompatActivity {
-    private static final String TAG = MainActivity.class.getSimpleName();
-    private static final double MIN_OPENGL_VERSION = 3.0;
 
     private ArFragment arFragment;
 
-    @Nullable private ModelRenderable videoRenderable;
+    private static final String TAG = MainActivity.class.getSimpleName();
+    private static final double MIN_OPENGL_VERSION = 3.0;
 
-    // The color to filter out of the video.
-    private static final Color CHROMA_KEY_COLOR = new Color(0.1843f, 1.0f, 0.098f);
-
-    private Player player;
+    private ModelLoader modelLoader;
 
     @Override
     @SuppressWarnings({"AndroidApiChecker", "FutureReturnValueIgnored"})
@@ -53,42 +36,21 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         arFragment = (ArFragment) getSupportFragmentManager().findFragmentById(R.id.ux_fragment);
 
-        // Create an ExternalTexture for displaying the contents of the video.
-        ExternalTexture texture = new ExternalTexture();
+        modelLoader = new ModelLoader(new WeakReference<>(this));
 
-        player = new Player(this, texture);
+        modelLoader.loadModel();
+    }
 
-        // Create a renderable with a material that has a parameter of type 'samplerExternal' so that
-        // it can display an ExternalTexture. The material also has an implementation of a chroma key
-        // filter.
-        ModelRenderable.builder()
-                .setSource(this, Uri.parse("chroma_key_video.sfb"))
-                .build()
-                .thenAccept(
-                        renderable -> {
-                            videoRenderable = renderable;
-                            renderable.getMaterial().setExternalTexture("videoTexture", texture);
-                            renderable.getMaterial().setFloat4("keyColor", CHROMA_KEY_COLOR);
-                        })
-                .exceptionally(
-                        throwable -> {
-                            Toast toast =
-                                    Toast.makeText(this, "Unable to load video renderable", Toast.LENGTH_LONG);
-                            toast.setGravity(Gravity.CENTER, 0, 0);
-                            toast.show();
-                            return null;
-                        });
-
-        arFragment.setOnTapArPlaneListener(
-                (HitResult hitResult, Plane plane, MotionEvent motionEvent) -> player.startPlayer(hitResult, arFragment, videoRenderable) );
+    public ArFragment getArFragment() {
+        return arFragment;
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
 
-        if (player != null) {
-            player.destroy();
+        if (modelLoader != null) {
+            modelLoader.destroy();
         }
     }
 
