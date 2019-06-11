@@ -1,4 +1,4 @@
-package com.upv.arbe.arck.Helpers;
+package com.upv.arbe.arck.media;
 
 import android.graphics.SurfaceTexture;
 import android.media.MediaPlayer;
@@ -10,6 +10,7 @@ import com.google.ar.core.HitResult;
 import com.google.ar.sceneform.AnchorNode;
 import com.google.ar.sceneform.Node;
 import com.google.ar.sceneform.math.Vector3;
+import com.google.ar.sceneform.rendering.Color;
 import com.google.ar.sceneform.rendering.ExternalTexture;
 import com.google.ar.sceneform.rendering.ModelRenderable;
 import com.google.ar.sceneform.ux.ArFragment;
@@ -19,6 +20,10 @@ import com.upv.arbe.arck.R;
 import java.lang.ref.WeakReference;
 
 public class Player {
+
+    // The color to filter out of the video.
+    public static final Color CHROMA_KEY_COLOR = new Color(0.1843f, 1.0f, 0.098f);
+
     private final WeakReference<MainActivity> owner;
     private static final String TAG = "PlayerLoader";
 
@@ -27,8 +32,8 @@ public class Player {
 
     // Controls the height of the video in world space.
     private static final float VIDEO_HEIGHT_METERS = 0.85f;
-    private MediaPlayer mediaPlayer;
 
+    private MediaPlayer mediaPlayer;
     private ExternalTexture texture;
 
     public Player(WeakReference<MainActivity> pOwner) {
@@ -46,16 +51,11 @@ public class Player {
         return texture;
     }
 
-    @Nullable
-    public ModelRenderable getVideoRenderable() {
-        return videoRenderable;
-    }
-
     public void setVideoRenderable(@Nullable ModelRenderable pVideoRenderable) {
         videoRenderable = pVideoRenderable;
     }
 
-    public void startPlayer(HitResult hitResult, ArFragment arFragment, ModelRenderable videoRenderable){
+    public void startPlayer(HitResult hitResult, ArFragment arFragment){
         if (owner.get() == null) {
             Log.d(TAG, "Activity is null.  Cannot load model.");
             return;

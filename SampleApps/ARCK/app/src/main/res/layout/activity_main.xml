@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
-    <fragment android:name="com.upv.arbe.arck.Helpers.WritingArFragment"
+    <fragment android:name="com.upv.arbe.arck.helpers.WritingArFragment"
         android:id="@+id/ux_fragment"
         android:layout_width="match_parent"
         android:layout_height="0dp"

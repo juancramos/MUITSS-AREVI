@@ -1,4 +1,4 @@
-package com.upv.arbe.arck.Helpers;
+package com.upv.arbe.arck.helpers;
 
 import android.net.Uri;
 import android.util.Log;
@@ -6,9 +6,10 @@ import android.view.Gravity;
 import android.widget.Toast;
 
 import com.google.ar.core.HitResult;
-import com.google.ar.sceneform.rendering.Color;
 import com.google.ar.sceneform.rendering.ModelRenderable;
 import com.upv.arbe.arck.MainActivity;
+import com.upv.arbe.arck.media.Player;
+import com.upv.arbe.arck.model.Handler;
 
 import java.lang.ref.WeakReference;
 
@@ -18,37 +19,35 @@ public class ModelLoader {
     private static final String TAG = "ModelLoader";
 
     private Player player;
-
-    // The color to filter out of the video.
-    private static final Color CHROMA_KEY_COLOR = new Color(0.1843f, 1.0f, 0.098f);
+    private Handler handler;
 
     public ModelLoader(WeakReference<MainActivity> pOwner) {
         owner = pOwner;
     }
 
-    void loadModel(HitResult hitResult, String path) {
+    public void loadModel(HitResult hitResult, String path) {
         if (owner.get() == null) {
             Log.d(TAG, "Activity is null.  Cannot load model.");
             return;
         }
 
-//        ModelRenderable.builder()
-//                .setSource(owner.get(), Uri.parse(path))
-//                .build()
-//                .thenAccept(
-//                        renderable -> {
-//                            videoRenderable = renderable;
-//                            activity.addNodeToScene(anchor, renderable);
-//                        })
-//                .exceptionally(
-//                        throwable -> {
-//                            Toast toast =
-//                                    Toast.makeText(owner.get(), "Unable to load video renderable", Toast.LENGTH_LONG);
-//                            toast.setGravity(Gravity.CENTER, 0, 0);
-//                            toast.show();
-//                            activity.onException(throwable);
-//                            return null;
-//                        });
+        handler = new Handler(new WeakReference<>(owner.get()));
+
+
+        ModelRenderable.builder()
+                .setSource(owner.get(), Uri.parse(path))
+                .build()
+                .thenAccept(
+                        renderable -> {
+                            handler.setRenderable(renderable);
+                        })
+                .exceptionally(
+                        throwable -> {
+                            handler.onException(throwable);
+                            return null;
+                        });
+
+        handler.addNodeToScene(hitResult, owner.get().getArFragment());
     }
 
     public void loadMediaModel(HitResult hitResult, String path) {
@@ -74,7 +73,7 @@ public class ModelLoader {
                         renderable -> {
                             player.setVideoRenderable(renderable);
                             renderable.getMaterial().setExternalTexture("videoTexture", player.getTexture());
-                            renderable.getMaterial().setFloat4("keyColor", CHROMA_KEY_COLOR);
+                            renderable.getMaterial().setFloat4("keyColor", Player.CHROMA_KEY_COLOR);
                         })
                 .exceptionally(
                         throwable -> {
@@ -85,7 +84,7 @@ public class ModelLoader {
                             return null;
                         });
 
-        player.startPlayer(hitResult, owner.get().getArFragment(), player.getVideoRenderable());
+        player.startPlayer(hitResult, owner.get().getArFragment());
     }
 
     public void destroy() {
