@@ -3,15 +3,25 @@ package com.upv.arbe.arck;
 import android.app.Activity;
 import android.app.ActivityManager;
 import android.content.Context;
+import android.graphics.Point;
 import android.os.Build;
 import android.os.Build.VERSION_CODES;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.View;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.Toast;
+
+import com.google.ar.core.Frame;
+import com.google.ar.core.HitResult;
+import com.google.ar.core.Plane;
+import com.google.ar.core.Trackable;
 import com.google.ar.sceneform.ux.ArFragment;
 
 import java.lang.ref.WeakReference;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -38,7 +48,42 @@ public class MainActivity extends AppCompatActivity {
 
         modelLoader = new ModelLoader(new WeakReference<>(this));
 
-        modelLoader.loadModel();
+        initializeGallery();
+    }
+
+    private void initializeGallery() {
+        LinearLayout gallery = findViewById(R.id.gallery_layout);
+
+        ImageView andy = new ImageView(this);
+        andy.setImageResource(R.drawable.ic_android_black_60dp);
+        andy.setContentDescription("andy");
+        andy.setOnClickListener(view -> addObject("chroma_key_video.sfb"));
+        gallery.addView(andy);
+    }
+
+    private void addObject(String path) {
+        Frame frame = getArFragment().getArSceneView().getArFrame();
+        android.graphics.Point pt = getScreenCenter();
+        List<HitResult> hits;
+        if (frame != null) {
+            hits = frame.hitTest(pt.x, pt.y);
+            for (HitResult hit : hits) {
+                Trackable trackable = hit.getTrackable();
+                if (trackable instanceof Plane &&
+                        ((Plane) trackable).isPoseInPolygon(hit.getHitPose())) {
+                    modelLoader.loadModel(hit, path);
+                    break;
+
+                }
+            }
+        }
+    }
+
+    private Point getScreenCenter() {
+        View vw = findViewById(android.R.id.content);
+        int cx = vw.getWidth()/2;
+        int cy = vw.getHeight()/2;
+        return new android.graphics.Point(cx, cy);
     }
 
     public ArFragment getArFragment() {
