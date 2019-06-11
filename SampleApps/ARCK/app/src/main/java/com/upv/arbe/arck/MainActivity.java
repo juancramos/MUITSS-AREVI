@@ -93,7 +93,7 @@ public class MainActivity extends AppCompatActivity {
             for (HitResult hit : hits) {
                 Trackable trackable = hit.getTrackable();
                 if (trackable instanceof Plane && ((Plane) trackable).isPoseInPolygon(hit.getHitPose())) {
-                    modelLoader.loadModel(hit, path);
+                    modelLoader.loadMediaModel(hit, path);
                     break;
                 }
             }

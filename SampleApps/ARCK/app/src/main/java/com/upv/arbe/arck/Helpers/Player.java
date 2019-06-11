@@ -2,6 +2,7 @@ package com.upv.arbe.arck.Helpers;
 
 import android.graphics.SurfaceTexture;
 import android.media.MediaPlayer;
+import android.support.annotation.Nullable;
 import android.util.Log;
 
 import com.google.ar.core.Anchor;
@@ -20,6 +21,9 @@ import java.lang.ref.WeakReference;
 public class Player {
     private final WeakReference<MainActivity> owner;
     private static final String TAG = "PlayerLoader";
+
+    @Nullable
+    private ModelRenderable videoRenderable;
 
     // Controls the height of the video in world space.
     private static final float VIDEO_HEIGHT_METERS = 0.85f;
@@ -40,6 +44,15 @@ public class Player {
 
     public ExternalTexture getTexture() {
         return texture;
+    }
+
+    @Nullable
+    public ModelRenderable getVideoRenderable() {
+        return videoRenderable;
+    }
+
+    public void setVideoRenderable(@Nullable ModelRenderable pVideoRenderable) {
+        videoRenderable = pVideoRenderable;
     }
 
     public void startPlayer(HitResult hitResult, ArFragment arFragment, ModelRenderable videoRenderable){
@@ -91,6 +104,9 @@ public class Player {
         if (mediaPlayer != null) {
             mediaPlayer.release();
             mediaPlayer = null;
+        }
+        if (texture != null) {
+            texture = null;
         }
     }
 }
