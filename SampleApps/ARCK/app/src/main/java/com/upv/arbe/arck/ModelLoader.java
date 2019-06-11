@@ -4,12 +4,9 @@ import android.net.Uri;
 import android.support.annotation.Nullable;
 import android.util.Log;
 import android.view.Gravity;
-import android.view.MotionEvent;
 import android.widget.Toast;
 
-import com.google.ar.core.Anchor;
 import com.google.ar.core.HitResult;
-import com.google.ar.core.Plane;
 import com.google.ar.sceneform.rendering.Color;
 import com.google.ar.sceneform.rendering.ModelRenderable;
 
@@ -33,7 +30,7 @@ public class ModelLoader {
         player = new Player(new WeakReference<>(owner.get()));
     }
 
-    void loadModel() {
+    void loadModel(HitResult hitResult, String path) {
         if (owner.get() == null) {
             Log.d(TAG, "Activity is null.  Cannot load model.");
             return;
@@ -43,7 +40,7 @@ public class ModelLoader {
         // it can display an ExternalTexture. The material also has an implementation of a chroma key
         // filter.
         ModelRenderable.builder()
-                .setSource(owner.get(), Uri.parse("chroma_key_video.sfb"))
+                .setSource(owner.get(), Uri.parse(path))
                 .build()
                 .thenAccept(
                         renderable -> {
@@ -60,10 +57,7 @@ public class ModelLoader {
                             return null;
                         });
 
-        owner.get().getArFragment().setOnTapArPlaneListener(
-                (HitResult hitResult, Plane plane, MotionEvent motionEvent) ->
-                        player.startPlayer(hitResult, owner.get().getArFragment(), videoRenderable)
-        );
+        player.startPlayer(hitResult, owner.get().getArFragment(), videoRenderable);
     }
 
     public void destroy() {
