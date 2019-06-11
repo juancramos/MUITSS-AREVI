@@ -1,4 +1,4 @@
-package com.upv.arbe.arck;
+package com.upv.arbe.arck.Helpers;
 
 import android.net.Uri;
 import android.support.annotation.Nullable;
@@ -9,6 +9,7 @@ import android.widget.Toast;
 import com.google.ar.core.HitResult;
 import com.google.ar.sceneform.rendering.Color;
 import com.google.ar.sceneform.rendering.ModelRenderable;
+import com.upv.arbe.arck.MainActivity;
 
 import java.lang.ref.WeakReference;
 
@@ -24,13 +25,13 @@ public class ModelLoader {
     // The color to filter out of the video.
     private static final Color CHROMA_KEY_COLOR = new Color(0.1843f, 1.0f, 0.098f);
 
-    ModelLoader(WeakReference<MainActivity> pOwner) {
+    public ModelLoader(WeakReference<MainActivity> pOwner) {
         owner = pOwner;
 
         player = new Player(new WeakReference<>(owner.get()));
     }
 
-    void loadModel(HitResult hitResult, String path) {
+    public void loadModel(HitResult hitResult, String path) {
         if (owner.get() == null) {
             Log.d(TAG, "Activity is null.  Cannot load model.");
             return;

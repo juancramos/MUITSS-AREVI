@@ -1,4 +1,4 @@
-package com.upv.arbe.arck;
+package com.upv.arbe.arck.Helpers;
 
 import android.graphics.SurfaceTexture;
 import android.media.MediaPlayer;
@@ -12,6 +12,8 @@ import com.google.ar.sceneform.math.Vector3;
 import com.google.ar.sceneform.rendering.ExternalTexture;
 import com.google.ar.sceneform.rendering.ModelRenderable;
 import com.google.ar.sceneform.ux.ArFragment;
+import com.upv.arbe.arck.MainActivity;
+import com.upv.arbe.arck.R;
 
 import java.lang.ref.WeakReference;
 
