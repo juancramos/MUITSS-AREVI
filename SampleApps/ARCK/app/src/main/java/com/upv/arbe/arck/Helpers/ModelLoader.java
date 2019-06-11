@@ -1,7 +1,6 @@
 package com.upv.arbe.arck.Helpers;
 
 import android.net.Uri;
-import android.support.annotation.Nullable;
 import android.util.Log;
 import android.view.Gravity;
 import android.widget.Toast;
@@ -20,20 +19,48 @@ public class ModelLoader {
 
     private Player player;
 
-    @Nullable
-    private ModelRenderable videoRenderable;
     // The color to filter out of the video.
     private static final Color CHROMA_KEY_COLOR = new Color(0.1843f, 1.0f, 0.098f);
 
     public ModelLoader(WeakReference<MainActivity> pOwner) {
         owner = pOwner;
-
-        player = new Player(new WeakReference<>(owner.get()));
     }
 
-    public void loadModel(HitResult hitResult, String path) {
+    void loadModel(HitResult hitResult, String path) {
         if (owner.get() == null) {
             Log.d(TAG, "Activity is null.  Cannot load model.");
+            return;
+        }
+
+//        ModelRenderable.builder()
+//                .setSource(owner.get(), Uri.parse(path))
+//                .build()
+//                .thenAccept(
+//                        renderable -> {
+//                            videoRenderable = renderable;
+//                            activity.addNodeToScene(anchor, renderable);
+//                        })
+//                .exceptionally(
+//                        throwable -> {
+//                            Toast toast =
+//                                    Toast.makeText(owner.get(), "Unable to load video renderable", Toast.LENGTH_LONG);
+//                            toast.setGravity(Gravity.CENTER, 0, 0);
+//                            toast.show();
+//                            activity.onException(throwable);
+//                            return null;
+//                        });
+    }
+
+    public void loadMediaModel(HitResult hitResult, String path) {
+        if (owner.get() == null) {
+            Log.d(TAG, "Activity is null.  Cannot load model.");
+            return;
+        }
+
+        player = new Player(new WeakReference<>(owner.get()));
+
+        if (player.getTexture() == null) {
+            Log.d(TAG, "player is null.  Cannot load model.");
             return;
         }
 
@@ -45,7 +72,7 @@ public class ModelLoader {
                 .build()
                 .thenAccept(
                         renderable -> {
-                            videoRenderable = renderable;
+                            player.setVideoRenderable(renderable);
                             renderable.getMaterial().setExternalTexture("videoTexture", player.getTexture());
                             renderable.getMaterial().setFloat4("keyColor", CHROMA_KEY_COLOR);
                         })
@@ -58,7 +85,7 @@ public class ModelLoader {
                             return null;
                         });
 
-        player.startPlayer(hitResult, owner.get().getArFragment(), videoRenderable);
+        player.startPlayer(hitResult, owner.get().getArFragment(), player.getVideoRenderable());
     }
 
     public void destroy() {
