@@ -1,39 +1,51 @@
 package com.upv.arbe.arck;
 
-import android.content.Context;
 import android.graphics.SurfaceTexture;
 import android.media.MediaPlayer;
+import android.util.Log;
 
 import com.google.ar.core.Anchor;
 import com.google.ar.core.HitResult;
 import com.google.ar.sceneform.AnchorNode;
 import com.google.ar.sceneform.Node;
 import com.google.ar.sceneform.math.Vector3;
-import com.google.ar.sceneform.rendering.Color;
 import com.google.ar.sceneform.rendering.ExternalTexture;
 import com.google.ar.sceneform.rendering.ModelRenderable;
 import com.google.ar.sceneform.ux.ArFragment;
 
-public class Player {
+import java.lang.ref.WeakReference;
 
-    private MediaPlayer mediaPlayer;
+public class Player {
+    private final WeakReference<MainActivity> owner;
+    private static final String TAG = "PlayerLoader";
 
     // Controls the height of the video in world space.
     private static final float VIDEO_HEIGHT_METERS = 0.85f;
+    private MediaPlayer mediaPlayer;
 
-    private static ExternalTexture texture;
+    private ExternalTexture texture;
 
-
-    public Player(Context context, ExternalTexture pTexture) {
-        texture = pTexture;
+    public Player(WeakReference<MainActivity> pOwner) {
+        owner = pOwner;
+        // Create an ExternalTexture for displaying the contents of the video.
+        texture = new ExternalTexture();
 
         // Create an Android MediaPlayer to capture the video on the external texture's surface.
-        mediaPlayer = MediaPlayer.create(context, R.raw.lion_chroma);
+        mediaPlayer = MediaPlayer.create(owner.get(), R.raw.lion_chroma);
         mediaPlayer.setSurface(texture.getSurface());
         mediaPlayer.setLooping(true);
     }
 
+    public ExternalTexture getTexture() {
+        return texture;
+    }
+
     public void startPlayer(HitResult hitResult, ArFragment arFragment, ModelRenderable videoRenderable){
+        if (owner.get() == null) {
+            Log.d(TAG, "Activity is null.  Cannot load model.");
+            return;
+        }
+
         if (videoRenderable == null) {
             return;
         }
