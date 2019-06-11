@@ -43,6 +43,8 @@ dependencies {
 
     // Alternatively, use ArSceneView without the UX dependency.
     implementation 'com.google.ar.sceneform:core:1.9.0'
+    implementation "com.google.ar.sceneform:animation:1.9.0"
+
     implementation 'com.android.support:design:28.0.0'
 }
 
@@ -51,3 +53,9 @@ sceneform.asset('sampledata/models/chroma_key_video.obj',
         'default',
         'sampledata/models/chroma_key_video.sfa',
         'src/main/assets/chroma_key_video')
+
+sceneform.asset('sampledata/models/andy_dance.fbx',
+        'default',
+        'sampledata/models/andy_dance.sfa',
+        'src/main/assets/andy_dance',
+        ['sampledata/models/andy_dance.fbx'])

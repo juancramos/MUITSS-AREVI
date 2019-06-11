@@ -71,10 +71,16 @@ public class MainActivity extends AppCompatActivity {
     private void initializeGallery() {
         LinearLayout gallery = findViewById(R.id.gallery_layout);
 
+        ImageView video = new ImageView(this);
+        video.setImageResource(R.drawable.ic_play_arrow_black_60dp);
+        video.setContentDescription("video");
+        video.setOnClickListener(view -> addObject("chroma_key_video.sfb", true));
+        gallery.addView(video);
+
         ImageView andy = new ImageView(this);
         andy.setImageResource(R.drawable.ic_android_black_60dp);
         andy.setContentDescription("andy");
-        andy.setOnClickListener(view -> addObject("chroma_key_video.sfb", true));
+        andy.setOnClickListener(view -> addObject("andy_dance.sfb", false));
         gallery.addView(andy);
 
         ImageView camera = new ImageView(this);
