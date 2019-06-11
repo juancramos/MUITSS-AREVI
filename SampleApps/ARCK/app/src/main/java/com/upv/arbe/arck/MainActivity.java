@@ -27,9 +27,11 @@ import com.google.ar.core.Frame;
 import com.google.ar.core.HitResult;
 import com.google.ar.core.Plane;
 import com.google.ar.core.Trackable;
+import com.google.ar.core.TrackingState;
 import com.google.ar.sceneform.ArSceneView;
 import com.google.ar.sceneform.ux.ArFragment;
 import com.upv.arbe.arck.helpers.ModelLoader;
+import com.upv.arbe.arck.helpers.PointerDrawable;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -42,12 +44,16 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
-    private ArFragment arFragment;
-
     private static final String TAG = MainActivity.class.getSimpleName();
     private static final double MIN_OPENGL_VERSION = 3.0;
 
+    private ArFragment arFragment;
+
     private ModelLoader modelLoader;
+
+    private PointerDrawable pointer = new PointerDrawable();
+    private boolean isTracking;
+    private boolean isHitting;
 
     @Override
     @SuppressWarnings({"AndroidApiChecker", "FutureReturnValueIgnored"})
@@ -63,9 +69,64 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         arFragment = (ArFragment) getSupportFragmentManager().findFragmentById(R.id.ux_fragment);
 
+        assert arFragment != null;
+        arFragment.getArSceneView().getScene().addOnUpdateListener(frameTime -> {
+            arFragment.onUpdate(frameTime);
+            onUpdate();
+        });
+
         modelLoader = new ModelLoader(new WeakReference<>(this));
 
         initializeGallery();
+    }
+
+    private void onUpdate() {
+        boolean trackingChanged = updateTracking();
+        View contentView = findViewById(R.id.pointer_view);
+        if (trackingChanged) {
+            if (isTracking) {
+                contentView.getOverlay().add(pointer);
+            } else {
+                contentView.getOverlay().remove(pointer);
+            }
+            contentView.invalidate();
+        }
+
+        if (isTracking) {
+            boolean hitTestChanged = updateHitTest();
+            if (hitTestChanged) {
+                pointer.setEnabled(isHitting);
+                contentView.invalidate();
+            }
+        }
+    }
+
+    private boolean updateTracking() {
+        Frame frame = arFragment.getArSceneView().getArFrame();
+        boolean wasTracking = isTracking;
+        isTracking = frame != null &&
+                frame.getCamera().getTrackingState() == TrackingState.TRACKING;
+        return isTracking != wasTracking;
+    }
+
+    private boolean updateHitTest() {
+        Frame frame = arFragment.getArSceneView().getArFrame();
+        android.graphics.Point pt = getScreenCenter();
+        List<HitResult> hits;
+        boolean wasHitting = isHitting;
+        isHitting = false;
+        if (frame != null) {
+            hits = frame.hitTest(pt.x, pt.y);
+            for (HitResult hit : hits) {
+                Trackable trackable = hit.getTrackable();
+                if (trackable instanceof Plane &&
+                        ((Plane) trackable).isPoseInPolygon(hit.getHitPose())) {
+                    isHitting = true;
+                    break;
+                }
+            }
+        }
+        return wasHitting != isHitting;
     }
 
     private void initializeGallery() {
