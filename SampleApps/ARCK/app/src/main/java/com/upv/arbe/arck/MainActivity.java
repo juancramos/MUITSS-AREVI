@@ -41,6 +41,7 @@ import java.lang.ref.WeakReference;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -51,7 +52,7 @@ public class MainActivity extends AppCompatActivity {
 
     private ModelLoader modelLoader;
 
-    private PointerDrawable pointer = new PointerDrawable();
+    private PointerDrawable pointer;
     private boolean isTracking;
     private boolean isHitting;
 
@@ -76,6 +77,10 @@ public class MainActivity extends AppCompatActivity {
         });
 
         modelLoader = new ModelLoader(new WeakReference<>(this));
+
+        pointer = new PointerDrawable();
+        isTracking = false;
+        isHitting = false;
 
         initializeGallery();
     }
@@ -102,30 +107,20 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private boolean updateTracking() {
-        Frame frame = arFragment.getArSceneView().getArFrame();
+        Frame frame = getArFragment().getArSceneView().getArFrame();
         boolean wasTracking = isTracking;
-        isTracking = frame != null &&
-                frame.getCamera().getTrackingState() == TrackingState.TRACKING;
+        isTracking = frame != null && frame.getCamera().getTrackingState() == TrackingState.TRACKING;
         return isTracking != wasTracking;
     }
 
     private boolean updateHitTest() {
-        Frame frame = arFragment.getArSceneView().getArFrame();
-        android.graphics.Point pt = getScreenCenter();
-        List<HitResult> hits;
         boolean wasHitting = isHitting;
         isHitting = false;
-        if (frame != null) {
-            hits = frame.hitTest(pt.x, pt.y);
-            for (HitResult hit : hits) {
-                Trackable trackable = hit.getTrackable();
-                if (trackable instanceof Plane &&
-                        ((Plane) trackable).isPoseInPolygon(hit.getHitPose())) {
-                    isHitting = true;
-                    break;
-                }
-            }
-        }
+
+        HitResult hit = getHit();
+
+        if (hit != null) isHitting = true;
+
         return wasHitting != isHitting;
     }
 
@@ -152,6 +147,15 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void addObject(String path, boolean isMedia) {
+        HitResult hit = getHit();
+
+        if (hit == null) return;
+
+        if (isMedia) modelLoader.loadMediaModel(hit, path);
+        else modelLoader.loadModel(hit, path);
+    }
+
+    private HitResult getHit() {
         Frame frame = getArFragment().getArSceneView().getArFrame();
         android.graphics.Point pt = getScreenCenter();
         List<HitResult> hits;
@@ -160,19 +164,17 @@ public class MainActivity extends AppCompatActivity {
             for (HitResult hit : hits) {
                 Trackable trackable = hit.getTrackable();
                 if (trackable instanceof Plane && ((Plane) trackable).isPoseInPolygon(hit.getHitPose())) {
-                    if (isMedia) modelLoader.loadMediaModel(hit, path);
-                    else modelLoader.loadModel(hit, path);
-                    break;
+                    return hit;
                 }
             }
         }
+        return null;
     }
 
     private String generateFilename() {
-        String date =
-                new SimpleDateFormat("yyyyMMddHHmmss", java.util.Locale.getDefault()).format(new Date());
-        return Environment.getExternalStoragePublicDirectory(
-                Environment.DIRECTORY_PICTURES) + File.separator + "ARBE/" + date + "_screenshot.jpg";
+        String date = new SimpleDateFormat("yyyyMMddHHmmss", Locale.getDefault()).format(new Date());
+        return Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES)
+                + File.separator + "ARBE/" + date + "_screenshot.jpg";
     }
 
     private void saveBitmapToDisk(Bitmap bitmap, String filename) throws IOException {

@@ -2,6 +2,7 @@ package com.upv.arbe.arck.model;
 
 import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
+import android.util.Log;
 
 import com.google.ar.core.Anchor;
 import com.google.ar.core.HitResult;
@@ -29,7 +30,7 @@ public class Handler {
         renderable = pRenderable;
     }
 
-    public void togglePauseAndResume(ModelAnimator animator) {
+    private void togglePauseAndResume(ModelAnimator animator) {
         if (animator.isPaused()) {
             animator.resume();
         } else if (animator.isStarted()) {
@@ -39,7 +40,7 @@ public class Handler {
         }
     }
 
-    public void startAnimation(TransformableNode node, ModelRenderable renderable){
+    private void startAnimation(TransformableNode node, ModelRenderable renderable){
         if(renderable==null || renderable.getAnimationDataCount() == 0) {
             return;
         }
@@ -72,9 +73,12 @@ public class Handler {
     }
 
     public void onException(Throwable throwable){
+        if (owner.get() == null) {
+            Log.d(TAG, "Activity is null.  Cannot load model.");
+            return;
+        }
         AlertDialog.Builder builder = new AlertDialog.Builder(owner.get());
-        builder.setMessage(throwable.getMessage())
-                .setTitle("Codelab error!");
+        builder.setMessage(throwable.getMessage()).setTitle("ÀRBE error!");
         AlertDialog dialog = builder.create();
         dialog.show();
     }
