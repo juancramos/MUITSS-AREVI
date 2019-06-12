@@ -15,7 +15,6 @@ import com.google.ar.sceneform.rendering.ExternalTexture;
 import com.google.ar.sceneform.rendering.ModelRenderable;
 import com.google.ar.sceneform.ux.ArFragment;
 import com.upv.arbe.arck.MainActivity;
-import com.upv.arbe.arck.R;
 
 import java.lang.ref.WeakReference;
 
@@ -36,15 +35,14 @@ public class Player {
     private MediaPlayer mediaPlayer;
     private ExternalTexture texture;
 
+    // Set the scale of the node so that the aspect ratio of the video is correct.
+    private float videoWidth;
+    private float videoHeight;
+
     public Player(WeakReference<MainActivity> pOwner) {
         owner = pOwner;
         // Create an ExternalTexture for displaying the contents of the video.
         texture = new ExternalTexture();
-
-        // Create an Android MediaPlayer to capture the video on the external texture's surface.
-        mediaPlayer = MediaPlayer.create(owner.get(), R.raw.lion_chroma);
-        mediaPlayer.setSurface(texture.getSurface());
-        mediaPlayer.setLooping(true);
     }
 
     public ExternalTexture getTexture() {
@@ -74,30 +72,62 @@ public class Player {
         Node videoNode = new Node();
         videoNode.setParent(anchorNode);
 
-        // Set the scale of the node so that the aspect ratio of the video is correct.
-        float videoWidth = mediaPlayer.getVideoWidth();
-        float videoHeight = mediaPlayer.getVideoHeight();
+        if (mediaPlayer == null) {
+            // Create an Android MediaPlayer to capture the video on the external texture's surface.
+            // IMPORTANT! URL has to be https
+            String url = "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4"; // your URL here
+            mediaPlayer = new MediaPlayer();
+            try {
+                mediaPlayer.setDataSource(url);
+                mediaPlayer.prepareAsync();
+                //mediaPlayer.prepare(); // might take long! (for buffering, etc)
+            }
+            catch (Exception e){
+                e.printStackTrace();
+            }
+
+            mediaPlayer.setOnErrorListener((mp,what,extra)->{
+                mp.reset();
+                return false;
+            });
+
+            mediaPlayer.setOnPreparedListener((mp)->{
+
+                mp.setSurface(texture.getSurface());
+
+                // Set the scale of the node so that the aspect ratio of the video is correct.
+                videoWidth = mp.getVideoWidth();
+                videoHeight = mp.getVideoHeight();
+
+                setScale(videoNode);
+
+                // Start playing the video when the first node is placed.
+                if (!mp.isPlaying()) {
+                    mp.start();
+                }
+            });
+
+        } else {
+            setScale(videoNode);
+            videoNode.setRenderable(videoRenderable);
+        }
+    }
+
+    private void setScale(Node videoNode) {
         videoNode.setLocalScale(
                 new Vector3(
                         VIDEO_HEIGHT_METERS * (videoWidth / videoHeight), VIDEO_HEIGHT_METERS, 1.0f));
 
-        // Start playing the video when the first node is placed.
-        if (!mediaPlayer.isPlaying()) {
-            mediaPlayer.start();
-
-            // Wait to set the renderable until the first frame of the  video becomes available.
-            // This prevents the renderable from briefly appearing as a black quad before the video
-            // plays.
-            texture
-                    .getSurfaceTexture()
-                    .setOnFrameAvailableListener(
-                            (SurfaceTexture surfaceTexture) -> {
-                                videoNode.setRenderable(videoRenderable);
-                                texture.getSurfaceTexture().setOnFrameAvailableListener(null);
-                            });
-        } else {
-            videoNode.setRenderable(videoRenderable);
-        }
+        // Wait to set the renderable until the first frame of the  video becomes available.
+        // This prevents the renderable from briefly appearing as a black quad before the video
+        // plays.
+        texture
+                .getSurfaceTexture()
+                .setOnFrameAvailableListener(
+                        (SurfaceTexture surfaceTexture) -> {
+                            videoNode.setRenderable(videoRenderable);
+                            texture.getSurfaceTexture().setOnFrameAvailableListener(null);
+                        });
     }
 
     public void destroy() {
