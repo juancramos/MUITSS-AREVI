@@ -121,13 +121,11 @@ public class Player {
         // Wait to set the renderable until the first frame of the  video becomes available.
         // This prevents the renderable from briefly appearing as a black quad before the video
         // plays.
-        texture
-                .getSurfaceTexture()
-                .setOnFrameAvailableListener(
-                        (SurfaceTexture surfaceTexture) -> {
-                            videoNode.setRenderable(videoRenderable);
-                            texture.getSurfaceTexture().setOnFrameAvailableListener(null);
-                        });
+        texture.getSurfaceTexture()
+                .setOnFrameAvailableListener((SurfaceTexture surfaceTexture) -> {
+                    videoNode.setRenderable(videoRenderable);
+                    texture.getSurfaceTexture().setOnFrameAvailableListener(null);
+                });
     }
 
     public void destroy() {

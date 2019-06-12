@@ -74,9 +74,10 @@ public class ModelLoader {
                 .build()
                 .thenAccept(
                         renderable -> {
-                            player.setVideoRenderable(renderable);
                             renderable.getMaterial().setExternalTexture("videoTexture", player.getTexture());
                             renderable.getMaterial().setFloat4("keyColor", Player.CHROMA_KEY_COLOR);
+
+                            player.setVideoRenderable(renderable);
 
                             player.startPlayer(hitResult, owner.get().getArFragment());
                         })

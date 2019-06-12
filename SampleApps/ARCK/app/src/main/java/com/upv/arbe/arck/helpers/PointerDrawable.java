@@ -15,9 +15,7 @@ public class PointerDrawable extends Drawable {
     private final Paint paint = new Paint();
     private boolean enabled;
 
-    public boolean isEnabled() {
-        return enabled;
-    }
+    public boolean isEnabled() { return enabled; }
 
     public void setEnabled(boolean enabled) {
         this.enabled = enabled;
@@ -27,7 +25,7 @@ public class PointerDrawable extends Drawable {
     public void draw(@NonNull Canvas canvas) {
         float cx = canvas.getWidth()/2;
         float cy = canvas.getHeight()/2;
-        if (enabled) {
+        if (isEnabled()) {
             paint.setColor(Color.GREEN);
             canvas.drawCircle(cx, cy, 10, paint);
         } else {
