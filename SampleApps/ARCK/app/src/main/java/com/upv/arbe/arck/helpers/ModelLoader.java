@@ -31,8 +31,9 @@ public class ModelLoader {
             return;
         }
 
-        handler = new Handler(new WeakReference<>(owner.get()));
-
+        if (handler == null) {
+            handler = new Handler(new WeakReference<>(owner.get()));
+        }
 
         ModelRenderable.builder()
                 .setSource(owner.get(), Uri.parse(path))
@@ -40,14 +41,14 @@ public class ModelLoader {
                 .thenAccept(
                         renderable -> {
                             handler.setRenderable(renderable);
+
+                            handler.addNodeToScene(hitResult, owner.get().getArFragment());
                         })
                 .exceptionally(
                         throwable -> {
                             handler.onException(throwable);
                             return null;
                         });
-
-        handler.addNodeToScene(hitResult, owner.get().getArFragment());
     }
 
     public void loadMediaModel(HitResult hitResult, String path) {
@@ -56,7 +57,9 @@ public class ModelLoader {
             return;
         }
 
-        player = new Player(new WeakReference<>(owner.get()));
+        if (player == null){
+            player = new Player(new WeakReference<>(owner.get()));
+        }
 
         if (player.getTexture() == null) {
             Log.d(TAG, "player is null.  Cannot load model.");
@@ -74,6 +77,8 @@ public class ModelLoader {
                             player.setVideoRenderable(renderable);
                             renderable.getMaterial().setExternalTexture("videoTexture", player.getTexture());
                             renderable.getMaterial().setFloat4("keyColor", Player.CHROMA_KEY_COLOR);
+
+                            player.startPlayer(hitResult, owner.get().getArFragment());
                         })
                 .exceptionally(
                         throwable -> {
@@ -83,8 +88,6 @@ public class ModelLoader {
                             toast.show();
                             return null;
                         });
-
-        player.startPlayer(hitResult, owner.get().getArFragment());
     }
 
     public void destroy() {

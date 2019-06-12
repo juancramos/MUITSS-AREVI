@@ -5,6 +5,7 @@
     <!-- Both "AR Optional" and "AR Required" apps require CAMERA permission. -->
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.INTERNET" />
 
     <!-- Indicates that app requires ARCore ("AR Required"). Ensures app is only
          visible in the Google Play Store on devices that support ARCore.
