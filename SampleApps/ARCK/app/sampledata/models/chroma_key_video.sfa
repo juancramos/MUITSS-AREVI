@@ -17,7 +17,7 @@
           ],
         },
         {
-          disableChromaKey: false,
+          disableChromaKey: true,
         },
       ],
       source: 'sampledata/models/chroma_key_video_material.mat',
