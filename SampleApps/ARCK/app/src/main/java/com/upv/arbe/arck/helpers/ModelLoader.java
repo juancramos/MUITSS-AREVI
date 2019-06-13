@@ -74,8 +74,10 @@ public class ModelLoader {
                 .build()
                 .thenAccept(
                         renderable -> {
+                            renderable.setShadowReceiver(false);
+                            renderable.setShadowCaster(false);
                             renderable.getMaterial().setExternalTexture("videoTexture", player.getTexture());
-                            renderable.getMaterial().setFloat4("keyColor", Player.CHROMA_KEY_COLOR);
+                            // renderable.getMaterial().setFloat4("keyColor", Player.CHROMA_KEY_COLOR);
 
                             player.setVideoRenderable(renderable);
 
