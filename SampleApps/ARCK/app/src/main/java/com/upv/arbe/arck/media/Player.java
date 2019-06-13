@@ -21,7 +21,7 @@ import java.lang.ref.WeakReference;
 public class Player {
 
     // The color to filter out of the video.
-    public static final Color CHROMA_KEY_COLOR = new Color(0.1843f, 1.0f, 0.098f);
+    // public static final Color CHROMA_KEY_COLOR = new Color(0.1843f, 1.0f, 0.098f);
 
     private final WeakReference<MainActivity> owner;
     private static final String TAG = "PlayerLoader";
@@ -118,7 +118,7 @@ public class Player {
                 new Vector3(
                         VIDEO_HEIGHT_METERS * (videoWidth / videoHeight), VIDEO_HEIGHT_METERS, 1.0f));
 
-        // Wait to set the renderable until the first frame of the  video becomes available.
+        // Wait to set the renderable until the first frame of the video becomes available.
         // This prevents the renderable from briefly appearing as a black quad before the video
         // plays.
         texture.getSurfaceTexture()
