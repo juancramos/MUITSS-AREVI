@@ -13,10 +13,12 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.HandlerThread;
+import android.os.SystemClock;
 import android.support.design.widget.Snackbar;
 import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.PixelCopy;
 import android.view.View;
 import android.widget.ImageView;
@@ -158,12 +160,21 @@ public class MainActivity extends AppCompatActivity {
     private HitResult getHit() {
         Frame frame = getArFragment().getArSceneView().getArFrame();
         android.graphics.Point pt = getScreenCenter();
+        View contentView = findViewById(R.id.pointer_view);
+
+
         List<HitResult> hits;
         if (frame != null) {
             hits = frame.hitTest(pt.x, pt.y);
             for (HitResult hit : hits) {
                 Trackable trackable = hit.getTrackable();
                 if (trackable instanceof Plane && ((Plane) trackable).isPoseInPolygon(hit.getHitPose())) {
+                    this.dispatchTouchEvent(MotionEvent.obtain(SystemClock.uptimeMillis(),
+                            SystemClock.uptimeMillis() + 100, MotionEvent.ACTION_DOWN,
+                            pt.x, pt.y, 0));
+                    this.dispatchTouchEvent(MotionEvent.obtain(SystemClock.uptimeMillis(),
+                            SystemClock.uptimeMillis() + 100, MotionEvent.ACTION_UP,
+                            pt.x, pt.y, 0));
                     return hit;
                 }
             }
