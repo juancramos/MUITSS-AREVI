@@ -58,6 +58,8 @@ public class MainActivity extends AppCompatActivity {
     private boolean isTracking;
     private boolean isHitting;
 
+    private boolean isFocusing;
+
     @Override
     @SuppressWarnings({"AndroidApiChecker", "FutureReturnValueIgnored"})
     // CompletableFuture requires api level 24
@@ -141,6 +143,12 @@ public class MainActivity extends AppCompatActivity {
         andy.setOnClickListener(view -> addObject("andy_dance.sfb", false));
         gallery.addView(andy);
 
+        ImageView focus = new ImageView(this);
+        focus.setImageResource(R.drawable.ic_center_focus_weak_black_60dp);
+        focus.setContentDescription("focus");
+        focus.setOnClickListener(view -> isFocusing = !isFocusing);
+        gallery.addView(focus);
+
         ImageView camera = new ImageView(this);
         camera.setImageResource(R.drawable.ic_camera_alt_black_60dp);
         camera.setContentDescription("camera");
@@ -169,12 +177,14 @@ public class MainActivity extends AppCompatActivity {
             for (HitResult hit : hits) {
                 Trackable trackable = hit.getTrackable();
                 if (trackable instanceof Plane && ((Plane) trackable).isPoseInPolygon(hit.getHitPose())) {
-                    this.dispatchTouchEvent(MotionEvent.obtain(SystemClock.uptimeMillis(),
-                            SystemClock.uptimeMillis() + 100, MotionEvent.ACTION_DOWN,
-                            pt.x, pt.y, 0));
-                    this.dispatchTouchEvent(MotionEvent.obtain(SystemClock.uptimeMillis(),
-                            SystemClock.uptimeMillis() + 100, MotionEvent.ACTION_UP,
-                            pt.x, pt.y, 0));
+                    if  (isFocusing) {
+                        this.dispatchTouchEvent(MotionEvent.obtain(SystemClock.uptimeMillis(),
+                                SystemClock.uptimeMillis() + 100, MotionEvent.ACTION_DOWN,
+                                pt.x, pt.y, 0));
+                        this.dispatchTouchEvent(MotionEvent.obtain(SystemClock.uptimeMillis(),
+                                SystemClock.uptimeMillis() + 100, MotionEvent.ACTION_UP,
+                                pt.x, pt.y, 0));
+                    }
                     return hit;
                 }
             }
