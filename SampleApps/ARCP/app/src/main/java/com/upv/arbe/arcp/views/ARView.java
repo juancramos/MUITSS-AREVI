@@ -2,8 +2,11 @@ package com.upv.arbe.arcp.views;
 
 import android.content.Context;
 import android.graphics.Point;
+import android.os.SystemClock;
+import android.support.annotation.Nullable;
 import android.util.AttributeSet;
 import android.util.DisplayMetrics;
+import android.view.MotionEvent;
 import android.view.View;
 
 import com.google.ar.core.Frame;
@@ -31,15 +34,14 @@ public class ARView extends View {
         this(context, null);
     }
 
-    public ARView(Context context, AttributeSet attrs) {
+    public ARView(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
     }
 
     public void init(DisplayMetrics metrics, ArFragment arFragment) {
-        int height = metrics.heightPixels;
-        int width = metrics.widthPixels;
-        centerX = width / 2;
-        centerY = height / 2;
+        centerX = metrics.widthPixels / 2;
+        centerY = metrics.heightPixels / 2;
+
         pointer = new PointerDrawable();
 
         fragment = arFragment;
@@ -90,6 +92,7 @@ public class ARView extends View {
                 Trackable trackable = hit.getTrackable();
                 if (trackable instanceof Plane &&
                         ((Plane) trackable).isPoseInPolygon(hit.getHitPose())) {
+                    TouchView(this);
                     isHitting = true;
                     break;
                 }
@@ -100,5 +103,11 @@ public class ARView extends View {
 
     private Point getScreenCenter() {
         return new Point(centerX, centerY);
+    }
+
+    private void TouchView(View view)
+    {
+        view.dispatchTouchEvent(MotionEvent.obtain(SystemClock.uptimeMillis(), SystemClock.uptimeMillis(), MotionEvent.ACTION_DOWN, centerX, centerY, 0));
+        view.dispatchTouchEvent(MotionEvent.obtain(SystemClock.uptimeMillis(), SystemClock.uptimeMillis(), MotionEvent.ACTION_UP, centerX, centerY, 0));
     }
 }
