@@ -11,8 +11,16 @@ import android.support.annotation.Nullable;
 
 public class PointerDrawable extends Drawable {
 
-    private final Paint paint = new Paint();
+    private int centerX;
+    private int centerY;
     private boolean enabled;
+
+    private final Paint paint = new Paint();
+
+    public PointerDrawable(int x, int y) {
+        centerX = x;
+        centerY = y;
+    }
 
     private boolean isEnabled() { return enabled; }
 
@@ -22,14 +30,12 @@ public class PointerDrawable extends Drawable {
 
     @Override
     public void draw(@NonNull Canvas canvas) {
-        float cx = canvas.getWidth()/2;
-        float cy = canvas.getHeight()/2;
         if (isEnabled()) {
             paint.setColor(Color.GREEN);
-            canvas.drawCircle(cx, cy, 10, paint);
+            canvas.drawCircle(centerX, centerY, 10, paint);
         } else {
             paint.setColor(Color.GRAY);
-            canvas.drawText("X", cx, cy, paint);
+            canvas.drawText("X", centerX, centerY, paint);
         }
     }
 
