@@ -1,10 +1,7 @@
 package com.upv.arbe.arcp.views;
 
-import android.content.Context;
 import android.graphics.Point;
 import android.os.SystemClock;
-import android.support.annotation.Nullable;
-import android.util.AttributeSet;
 import android.util.DisplayMetrics;
 import android.view.MotionEvent;
 import android.view.View;
@@ -15,11 +12,13 @@ import com.google.ar.core.Plane;
 import com.google.ar.core.Trackable;
 import com.google.ar.core.TrackingState;
 import com.google.ar.sceneform.ux.ArFragment;
+import com.upv.arbe.arcp.R;
 import com.upv.arbe.arcp.helpers.PointerDrawable;
 
 import java.util.List;
+import java.util.Objects;
 
-public class ARView extends View {
+public class ArView extends ArFragment {
 
     private int centerX;
     private int centerY;
@@ -28,52 +27,43 @@ public class ARView extends View {
 
     private PointerDrawable pointer;
 
-    private ArFragment fragment;
+    private View view;
 
-    public ARView(Context context) {
-        this(context, null);
-    }
-
-    public ARView(Context context, @Nullable AttributeSet attrs) {
-        super(context, attrs);
-    }
-
-    public void init(DisplayMetrics metrics, ArFragment arFragment) {
+    public void init(DisplayMetrics metrics) {
         centerX = metrics.widthPixels / 2;
         centerY = metrics.heightPixels / 2;
 
         pointer = new PointerDrawable();
+        view = getView().findViewById(R.id.sceneform_pointer);
 
-        fragment = arFragment;
-        assert fragment != null;
-        fragment.getArSceneView().getScene().addOnUpdateListener(frameTime -> {
-            fragment.onUpdate(frameTime);
-            onUpdate();
+        getArSceneView().getScene().addOnUpdateListener(frameTime -> {
+            onUpdate(frameTime);
+            updateVIew();
         });
     }
 
-    private void onUpdate() {
+    private void updateVIew() {
         boolean trackingChanged = updateTracking();
         if (trackingChanged) {
             if (isTracking) {
-                this.getOverlay().add(pointer);
+                view.getOverlay().add(pointer);
             } else {
-                this.getOverlay().remove(pointer);
+                view.getOverlay().remove(pointer);
             }
-            this.invalidate();
+            view.invalidate();
         }
 
         if (isTracking) {
             boolean hitTestChanged = updateHitTest();
             if (hitTestChanged) {
                 pointer.setEnabled(isHitting);
-                this.invalidate();
+                view.invalidate();
             }
         }
     }
 
     private boolean updateTracking() {
-        Frame frame = fragment.getArSceneView().getArFrame();
+        Frame frame = getArSceneView().getArFrame();
         boolean wasTracking = isTracking;
         isTracking = frame != null &&
                 frame.getCamera().getTrackingState() == TrackingState.TRACKING;
@@ -81,7 +71,7 @@ public class ARView extends View {
     }
 
     private boolean updateHitTest() {
-        Frame frame = fragment.getArSceneView().getArFrame();
+        Frame frame = getArSceneView().getArFrame();
         Point pt = getScreenCenter();
         List<HitResult> hits;
         boolean wasHitting = isHitting;
@@ -92,7 +82,7 @@ public class ARView extends View {
                 Trackable trackable = hit.getTrackable();
                 if (trackable instanceof Plane &&
                         ((Plane) trackable).isPoseInPolygon(hit.getHitPose())) {
-                    TouchView(this);
+                    // TouchView(view);
                     isHitting = true;
                     break;
                 }
