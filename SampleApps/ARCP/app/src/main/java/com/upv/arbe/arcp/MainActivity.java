@@ -6,8 +6,6 @@ import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.view.MotionEvent;
 import android.view.View;
-import android.widget.LinearLayout;
-import android.widget.Toast;
 
 import com.upv.arbe.arcp.views.ArView;
 import com.upv.arbe.arcp.views.MenuView;
