@@ -92,8 +92,7 @@ public class ArView extends ArFragment {
         }
 
         // Every 2 seconds move the node to a different spot.
-        if (nodeAge > 10
-        00000) {
+        if (nodeAge > 1000000) {
 
             nodeAge = frameTime.getStartSeconds() - nodeAge;
             randomPlacedCube(firstPlane);
