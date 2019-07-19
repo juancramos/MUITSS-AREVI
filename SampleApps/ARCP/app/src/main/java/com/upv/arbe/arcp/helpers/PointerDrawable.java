@@ -34,8 +34,8 @@ public class PointerDrawable extends Drawable {
             paint.setColor(Color.GREEN);
             canvas.drawCircle(centerX, centerY, 10, paint);
         } else {
-            paint.setColor(Color.GRAY);
-            canvas.drawText("X", centerX, centerY, paint);
+            paint.setColor(Color.RED);
+            canvas.drawCircle(centerX, centerY, 15, paint);
         }
     }
 

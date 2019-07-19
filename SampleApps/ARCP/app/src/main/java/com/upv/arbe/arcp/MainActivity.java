@@ -14,34 +14,34 @@ import java.lang.ref.WeakReference;
 
 public class MainActivity extends AppCompatActivity {
 
+    private AppState appState;
     private DisplayMetrics metrics;
-    private ArView arView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        appState = new AppState();
+
         metrics = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(metrics);
 
-        arView = (ArView)
-                getSupportFragmentManager().findFragmentById(R.id.sceneform_fragment);
+        appState.setCenterX(metrics.widthPixels / 2);
+        appState.setCenterY(metrics.heightPixels / 2);
 
+        ArView arView = (ArView) getSupportFragmentManager().findFragmentById(R.id.sceneform_fragment);
         MenuView gallery = findViewById(R.id.gallery_layout);
 
         assert arView != null && gallery != null;
-        arView.init(metrics, new WeakReference<>(this));
-        gallery.init(new WeakReference<>(this));
-    }
 
-    public void setFocusArView() {
-        arView.setIsFocusing(!arView.getIsFocusing());
+        arView.init(new WeakReference<>(this));
+        gallery.init(new WeakReference<>(this));
     }
 
     public void TouchView(View view)
     {
-        if (!arView.getIsFocusing()) return;
+        if (!appState.getIsFocusing()) return;
         
         int centerX = metrics.widthPixels / 2;
         int centerY = metrics.heightPixels / 2;
@@ -49,5 +49,9 @@ public class MainActivity extends AppCompatActivity {
                 SystemClock.uptimeMillis() + 100, MotionEvent.ACTION_DOWN, centerX, centerY, 0));
         view.dispatchTouchEvent(MotionEvent.obtain(SystemClock.uptimeMillis(),
                 SystemClock.uptimeMillis() + 100, MotionEvent.ACTION_UP, centerX, centerY, 0));
+    }
+
+    public AppState getAppState() {
+        return appState;
     }
 }

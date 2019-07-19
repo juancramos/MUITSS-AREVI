@@ -1,7 +1,6 @@
 package com.upv.arbe.arcp.views;
 
 import android.graphics.Point;
-import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
@@ -22,45 +21,38 @@ import com.google.ar.sceneform.math.Vector3;
 import com.google.ar.sceneform.rendering.Color;
 import com.google.ar.sceneform.rendering.MaterialFactory;
 import com.google.ar.sceneform.rendering.ModelRenderable;
-import com.google.ar.sceneform.rendering.Renderable;
 import com.google.ar.sceneform.rendering.ShapeFactory;
-import com.google.ar.sceneform.rendering.ViewRenderable;
 import com.google.ar.sceneform.ux.ArFragment;
+import com.upv.arbe.arcp.AppState;
 import com.upv.arbe.arcp.MainActivity;
 import com.upv.arbe.arcp.R;
 import com.upv.arbe.arcp.helpers.PointerDrawable;
 
-import java.lang.annotation.Target;
 import java.lang.ref.WeakReference;
 import java.util.Collection;
 import java.util.List;
-import java.util.Objects;
 import java.util.Random;
 
 public class ArView extends ArFragment {
 
     private PointerDrawable pointer;
     private View view;
-    private static WeakReference<MainActivity> owner;
     private Plane firstPlane;
     private AnchorNode anchorNode;
+    private static Random rand;
+
+    private static WeakReference<MainActivity> owner;
     private static final String TAG = "ArView";
-    private static Random rand = new Random();
+    private AppState appState;
 
-    private int centerX;
-    private int centerY;
-    private boolean isTracking;
-    private boolean isHitting;
-    private boolean isFocusing;
-    private float nodeAge;
-
-    public void init(DisplayMetrics metrics, WeakReference<MainActivity> pOwner) {
+    public void init(WeakReference<MainActivity> pOwner) {
         owner = pOwner;
         assert owner.get() != null;
-        centerX = metrics.widthPixels / 2;
-        centerY = metrics.heightPixels / 2;
 
-        pointer = new PointerDrawable(centerX, centerY);
+        rand = new Random();
+        appState = owner.get().getAppState();
+        pointer = new PointerDrawable(appState.getCenterX(), appState.getCenterY());
+
         View ownerView = getView();
         assert ownerView != null;
         view = ownerView.findViewById(R.id.sceneform_pointer);
@@ -68,7 +60,6 @@ public class ArView extends ArFragment {
         getArSceneView().getScene().addOnUpdateListener(frameTime -> {
             onUpdate(frameTime);
             onFrame(frameTime);
-            updateVIew();
         });
     }
 
@@ -82,23 +73,34 @@ public class ArView extends ArFragment {
 
         if (firstPlane == null || firstPlane.getTrackingState() != TrackingState.TRACKING) {
             Collection<Plane> planes = session.getAllTrackables(Plane.class);
-            if (!planes.isEmpty()) {
-                firstPlane = planes.iterator().next();
-            }
-            return;
+            if (planes.isEmpty()) return;
+            firstPlane = planes.iterator().next();
         }
         if (firstPlane.getSubsumedBy() != null) {
             firstPlane = firstPlane.getSubsumedBy();
         }
 
-        // Every 2 seconds move the node to a different spot.
-        if (nodeAge > 1000000) {
-
-            nodeAge = frameTime.getStartSeconds() - nodeAge;
-            randomPlacedCube(firstPlane);
+        boolean trackingChanged = updateTracking();
+        if (trackingChanged) {
+            if (appState.getIsTracking()) {
+                view.getOverlay().add(pointer);
+                view.invalidate();
+            }
         }
-        nodeAge += frameTime.getStartSeconds();
-        Log.d(TAG, "" + nodeAge);
+
+        if (appState.getIsTracking()) {
+            boolean hitTestChanged = updateHitTest();
+            if (hitTestChanged) {
+                pointer.setEnabled(appState.getIsHitting());
+                view.invalidate();
+            }
+
+            if (appState.getNodeAge() > 2000000) {
+                appState.setNodeAge(frameTime.getStartSeconds() - appState.getNodeAge());
+                randomPlacedCube(firstPlane);
+            }
+            appState.setNodeAge(appState.getNodeAge() + frameTime.getStartSeconds());
+        }
     }
 
     private void randomPlacedCube(Plane plane) {
@@ -128,7 +130,8 @@ public class ArView extends ArFragment {
             MaterialFactory.makeOpaqueWithColor(owner.get(), new Color(android.graphics.Color.RED))
                     .thenAccept(
                             material -> {
-                                ModelRenderable render = ShapeFactory.makeSphere(0.1f, new Vector3(0.0f, 0.15f, 0.0f)
+                                ModelRenderable render = ShapeFactory.makeSphere(0.1f,
+                                        new Vector3(0.0f, 0.15f, 0.0f)
                                         , material);
                                 Node node = new Node();
                                 node.setRenderable(render);
@@ -148,10 +151,11 @@ public class ArView extends ArFragment {
                                         Log.d(TAG,"handleOnTouch hitTestResult.getNode() != null");
 
                                         Toast.makeText(owner.get(), "We've hit Andy!!", Toast.LENGTH_SHORT).show();
-                                        //getArSceneView().getScene().removeChild(hitNode);
                                         AnchorNode aNode = ((AnchorNode) hitNode.getParent());
                                         assert aNode != null;
-                                        aNode.getAnchor().detach();
+                                        Anchor a = aNode.getAnchor();
+                                        assert a != null;
+                                        a.detach();
                                         aNode.setAnchor(anchor);
                                     }
                                 });
@@ -188,69 +192,43 @@ public class ArView extends ArFragment {
 //
 //                    });
         } else {
-            anchorNode.getAnchor().detach();
+            Anchor a = anchorNode.getAnchor();
+            assert a != null;
+            a.detach();
             anchorNode.setAnchor(anchor);
-        }
-    }
-
-    private void updateVIew() {
-        boolean trackingChanged = updateTracking();
-        if (trackingChanged) {
-            if (isTracking) {
-                view.getOverlay().add(pointer);
-            } else {
-                view.getOverlay().remove(pointer);
-            }
-            view.invalidate();
-        }
-
-        if (isTracking) {
-            boolean hitTestChanged = updateHitTest();
-            if (hitTestChanged) {
-                pointer.setEnabled(isHitting);
-                view.invalidate();
-            }
         }
     }
 
     private boolean updateTracking() {
         Frame frame = getArSceneView().getArFrame();
-        boolean wasTracking = isTracking;
-        isTracking = frame != null &&
-                frame.getCamera().getTrackingState() == TrackingState.TRACKING;
-        return isTracking != wasTracking;
+        boolean wasTracking = appState.getIsTracking();
+        appState.setIsTracking(frame != null &&
+                frame.getCamera().getTrackingState() == TrackingState.TRACKING);
+        return appState.getIsTracking() != wasTracking;
     }
 
     private boolean updateHitTest() {
         Frame frame = getArSceneView().getArFrame();
         Point pt = getScreenCenter();
         List<HitResult> hits;
-        boolean wasHitting = isHitting;
-        isHitting = false;
+        boolean wasHitting = appState.getIsHitting();
+        appState.setIsHitting(false);
         if (frame != null) {
             hits = frame.hitTest(pt.x, pt.y);
             for (HitResult hit : hits) {
                 Trackable trackable = hit.getTrackable();
                 if (trackable instanceof Plane &&
                         ((Plane) trackable).isPoseInPolygon(hit.getHitPose())) {
-                    isHitting = true;
+                    appState.setIsHitting(true);
                     break;
                 }
             }
         }
         owner.get().TouchView(getView());
-        return wasHitting != isHitting;
+        return wasHitting != appState.getIsHitting();
     }
 
     private Point getScreenCenter() {
-        return new Point(centerX, centerY);
-    }
-
-    public void setIsFocusing(boolean pIsFocusing) {
-        isFocusing = pIsFocusing;
-    }
-
-    public boolean getIsFocusing() {
-        return isFocusing;
+        return new Point(appState.getCenterX(), appState.getCenterY());
     }
 }

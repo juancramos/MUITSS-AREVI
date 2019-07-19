@@ -1,6 +1,8 @@
 package com.upv.arbe.arcp.views;
 
 import android.content.Context;
+import android.content.res.Resources;
+import android.graphics.Color;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
 import android.util.DisplayMetrics;
@@ -8,6 +10,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
+import com.upv.arbe.arcp.AppState;
 import com.upv.arbe.arcp.MainActivity;
 import com.upv.arbe.arcp.R;
 
@@ -17,6 +20,7 @@ public class MenuView extends LinearLayout {
 
     private static WeakReference<MainActivity> owner;
     private static final String TAG = "MenuView";
+    private AppState appState;
 
     public MenuView(Context context) {
         this(context, null);
@@ -30,10 +34,16 @@ public class MenuView extends LinearLayout {
         owner = pOwner;
         assert owner.get() != null;
 
+        appState = owner.get().getAppState();
+
         ImageView focus = new ImageView(getContext());
         focus.setImageResource(R.drawable.ic_center_focus_weak_black_60dp);
         focus.setContentDescription("focus");
-        focus.setOnClickListener(view -> owner.get().setFocusArView());
+        focus.setOnClickListener(view -> {
+            appState.setIsFocusing(!appState.getIsFocusing());
+            if (appState.getIsFocusing()) focus.setColorFilter(Color.RED);
+            else focus.setColorFilter(Color.BLACK);
+        });
         this.addView(focus);
     }
 }
