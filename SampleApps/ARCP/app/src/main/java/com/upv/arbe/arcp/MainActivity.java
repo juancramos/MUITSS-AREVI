@@ -46,8 +46,8 @@ public class MainActivity extends AppCompatActivity {
         int centerX = metrics.widthPixels / 2;
         int centerY = metrics.heightPixels / 2;
         view.dispatchTouchEvent(MotionEvent.obtain(SystemClock.uptimeMillis(),
-                SystemClock.uptimeMillis(), MotionEvent.ACTION_DOWN, centerX, centerY, 0));
+                SystemClock.uptimeMillis() + 100, MotionEvent.ACTION_DOWN, centerX, centerY, 0));
         view.dispatchTouchEvent(MotionEvent.obtain(SystemClock.uptimeMillis(),
-                SystemClock.uptimeMillis(), MotionEvent.ACTION_UP, centerX, centerY, 0));
+                SystemClock.uptimeMillis() + 100, MotionEvent.ACTION_UP, centerX, centerY, 0));
     }
 }
