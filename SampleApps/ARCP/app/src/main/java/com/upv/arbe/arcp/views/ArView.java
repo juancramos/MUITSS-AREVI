@@ -21,6 +21,7 @@ import com.google.ar.sceneform.Node;
 import com.google.ar.sceneform.math.Vector3;
 import com.google.ar.sceneform.rendering.Color;
 import com.google.ar.sceneform.rendering.MaterialFactory;
+import com.google.ar.sceneform.rendering.ModelRenderable;
 import com.google.ar.sceneform.rendering.Renderable;
 import com.google.ar.sceneform.rendering.ShapeFactory;
 import com.google.ar.sceneform.rendering.ViewRenderable;
@@ -91,7 +92,8 @@ public class ArView extends ArFragment {
         }
 
         // Every 2 seconds move the node to a different spot.
-        if (nodeAge > 10000000) {
+        if (nodeAge > 10
+        00000) {
 
             nodeAge = frameTime.getStartSeconds() - nodeAge;
             randomPlacedCube(firstPlane);
@@ -124,36 +126,68 @@ public class ArView extends ArFragment {
         Anchor anchor = session.createAnchor(pose);
 
         if (anchorNode == null) {
-            ViewRenderable.builder()
-                .setView(owner.get(), R.layout.menu_layout)
-                .build()
-                .thenAccept(renderable -> {
-                    Node node = new Node();
-                    node.setRenderable(renderable);
-                    anchorNode = new AnchorNode(anchor);
-                    anchorNode.addChild(node);
-                    anchorNode.setParent(getArSceneView().getScene());
+            MaterialFactory.makeOpaqueWithColor(owner.get(), new Color(android.graphics.Color.RED))
+                    .thenAccept(
+                            material -> {
+                                ModelRenderable render = ShapeFactory.makeSphere(0.1f, new Vector3(0.0f, 0.15f, 0.0f)
+                                        , material);
+                                Node node = new Node();
+                                node.setRenderable(render);
+                                anchorNode = new AnchorNode(anchor);
+                                anchorNode.addChild(node);
+                                anchorNode.setParent(getArSceneView().getScene());
 
-                    node.setOnTapListener((hitTestResult, motionEvent) -> {
-                        //We are only interested in the ACTION_UP events - anything else just return
-                        if (motionEvent.getAction() != MotionEvent.ACTION_UP) {
-                            return;
-                        }
+                                node.setOnTapListener((hitTestResult, motionEvent) -> {
+                                    //We are only interested in the ACTION_UP events - anything else just return
+                                    if (motionEvent.getAction() != MotionEvent.ACTION_UP) {
+                                        return;
+                                    }
 
-                        Node hitNode = hitTestResult.getNode();
-                        // Check for touching a Sceneform node
-                        if (hitNode != null) {
-                            Log.d(TAG,"handleOnTouch hitTestResult.getNode() != null");
+                                    Node hitNode = hitTestResult.getNode();
+                                    // Check for touching a Sceneform node
+                                    if (hitNode != null) {
+                                        Log.d(TAG,"handleOnTouch hitTestResult.getNode() != null");
 
-                            Toast.makeText(owner.get(), "We've hit Andy!!", Toast.LENGTH_SHORT).show();
-                            getArSceneView().getScene().removeChild(hitNode);
-                            assert hitNode.getParent() != null;
-                            Objects.requireNonNull(((AnchorNode) hitNode.getParent()).getAnchor()).detach();
-                            hitNode.setParent(null);
-                        }
-                    });
+                                        Toast.makeText(owner.get(), "We've hit Andy!!", Toast.LENGTH_SHORT).show();
+                                        //getArSceneView().getScene().removeChild(hitNode);
+                                        AnchorNode aNode = ((AnchorNode) hitNode.getParent());
+                                        assert aNode != null;
+                                        aNode.getAnchor().detach();
+                                        aNode.setAnchor(anchor);
+                                    }
+                                });
+                            });
 
-                });
+//            ViewRenderable.builder()
+//                    .setView(owner.get(), R.layout.menu_layout)
+//                    .build()
+//                    .thenAccept(renderable -> {
+//                        Node node = new Node();
+//                        node.setRenderable(renderable);
+//                        anchorNode = new AnchorNode(anchor);
+//                        anchorNode.addChild(node);
+//                        anchorNode.setParent(getArSceneView().getScene());
+//
+//                        node.setOnTapListener((hitTestResult, motionEvent) -> {
+//                            //We are only interested in the ACTION_UP events - anything else just return
+//                            if (motionEvent.getAction() != MotionEvent.ACTION_UP) {
+//                                return;
+//                            }
+//
+//                            Node hitNode = hitTestResult.getNode();
+//                            // Check for touching a Sceneform node
+//                            if (hitNode != null) {
+//                                Log.d(TAG,"handleOnTouch hitTestResult.getNode() != null");
+//
+//                                Toast.makeText(owner.get(), "We've hit Andy!!", Toast.LENGTH_SHORT).show();
+//                                getArSceneView().getScene().removeChild(hitNode);
+//                                assert hitNode.getParent() != null;
+//                                Objects.requireNonNull(((AnchorNode) hitNode.getParent()).getAnchor()).detach();
+//                                hitNode.setParent(null);
+//                            }
+//                        });
+//
+//                    });
         } else {
             anchorNode.getAnchor().detach();
             anchorNode.setAnchor(anchor);
@@ -200,12 +234,12 @@ public class ArView extends ArFragment {
                 Trackable trackable = hit.getTrackable();
                 if (trackable instanceof Plane &&
                         ((Plane) trackable).isPoseInPolygon(hit.getHitPose())) {
-                    owner.get().TouchView(view);
                     isHitting = true;
                     break;
                 }
             }
         }
+        owner.get().TouchView(getView());
         return wasHitting != isHitting;
     }
 
