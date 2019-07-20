@@ -15,7 +15,6 @@ import java.lang.ref.WeakReference;
 public class MainActivity extends AppCompatActivity {
 
     private AppState appState;
-    private DisplayMetrics metrics;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,7 +23,7 @@ public class MainActivity extends AppCompatActivity {
 
         appState = new AppState();
 
-        metrics = new DisplayMetrics();
+        DisplayMetrics metrics = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(metrics);
 
         appState.setCenterX(metrics.widthPixels / 2);
@@ -35,16 +34,17 @@ public class MainActivity extends AppCompatActivity {
 
         assert arView != null && gallery != null;
 
-        arView.init(new WeakReference<>(this));
-        gallery.init(new WeakReference<>(this));
+        WeakReference<MainActivity> wr = new WeakReference<>(this);
+        arView.init(wr);
+        gallery.init(wr);
     }
 
     public void TouchView(View view)
     {
         if (!appState.getIsFocusing()) return;
         
-        int centerX = metrics.widthPixels / 2;
-        int centerY = metrics.heightPixels / 2;
+        int centerX = appState.getCenterX();
+        int centerY = appState.getCenterY();
         view.dispatchTouchEvent(MotionEvent.obtain(SystemClock.uptimeMillis(),
                 SystemClock.uptimeMillis() + 100, MotionEvent.ACTION_DOWN, centerX, centerY, 0));
         view.dispatchTouchEvent(MotionEvent.obtain(SystemClock.uptimeMillis(),
