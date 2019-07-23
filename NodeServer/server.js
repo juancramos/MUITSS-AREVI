@@ -1,6 +1,6 @@
-const express = require("express");
 const nodeStatic = require('node-static');
 const https = require("https");
+const http = require("http");
 const socketIo = require("socket.io");
 var fs = require("fs");
 var options = {
@@ -12,10 +12,14 @@ var options = {
 const port = process.env.PORT || 4001;
 
 var fileServer = new (nodeStatic.Server)();
-var server = https.createServer(options, function (req, res) {
+var server = http.createServer(function (req, res) {
     fileServer.serve(req, res);
-
 });
+if (!process.env.PORT) {
+    var server = https.createServer(options, function (req, res) {
+        fileServer.serve(req, res);
+    });
+}
 
 const io = socketIo(server);
 
