@@ -29,7 +29,7 @@ public class MainActivity extends AppCompatActivity {
     private static final int CAPTURE_PERMISSION_REQUEST_CODE = 1;
 
     private DisplayMetrics metrics;
-    private SurfaceViewRenderer localVideoView;
+//    private SurfaceViewRenderer localVideoView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,31 +71,16 @@ public class MainActivity extends AppCompatActivity {
 
         WebRTCModule webRTCModule = new WebRTCModule(weakReference);
 
+        SurfaceViewRenderer remoteVideoView = findViewById(R.id.remote_gl_surface_view);
+        webRTCModule.MountRemoteView(remoteVideoView);
+
         webRTCModule.InitRTC(data);
 
-        //create surface renderer, init it and add the renderer to the track
-        localVideoView = findViewById(R.id.local_gl_surface_view);
-        SurfaceViewRenderer remoteVideoView = findViewById(R.id.remote_gl_surface_view);
-
-        webRTCModule.MountLocalView(localVideoView);
-
-        webRTCModule.MountRemoteView(remoteVideoView);
-    }
-
-    public void updateVideoViews(final boolean remoteVisible) {
-        runOnUiThread(() -> {
-            ViewGroup.LayoutParams params = localVideoView.getLayoutParams();
-            if (remoteVisible) {
-                params.height = dpToPx(100);
-                params.width = dpToPx(100);
-            } else {
-                params = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
-            }
-            localVideoView.setLayoutParams(params);
-        });
+//        localVideoView = findViewById(R.id.local_gl_surface_view);
+//
+//        webRTCModule.MountLocalView(localVideoView);
 
     }
-
 
     public void TouchView(View view)
     {

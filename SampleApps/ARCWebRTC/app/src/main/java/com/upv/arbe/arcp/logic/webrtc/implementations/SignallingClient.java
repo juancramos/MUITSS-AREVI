@@ -55,7 +55,7 @@ class SignallingClient {
         }
         if (instance.roomName == null) {
             //set the room name here
-            instance.roomName = "some_room_name";
+            instance.roomName = "room";
         }
         return instance;
     }
@@ -80,7 +80,7 @@ class SignallingClient {
             IO.Options opts = new IO.Options();
             opts.callFactory = okHttpClient;
             opts.webSocketFactory = okHttpClient;
-            socket = IO.socket("https://192.168.1.67:1794", opts);
+            socket = IO.socket("https://192.168.1.67:4001", opts);
 
             socket.connect();
             Log.d("SignallingClient", "init() called");
