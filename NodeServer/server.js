@@ -11,9 +11,6 @@ var options = {
 //Port from environment variable or default - 4001
 const port = process.env.PORT || 4001;
 
-//Setting up express and adding socketIo middleware
-const app = express();
-
 var fileServer = new (nodeStatic.Server)();
 var server = https.createServer(options, function (req, res) {
     fileServer.serve(req, res);
