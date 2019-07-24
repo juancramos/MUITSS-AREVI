@@ -80,7 +80,7 @@ class SignallingClient {
             IO.Options opts = new IO.Options();
             opts.callFactory = okHttpClient;
             opts.webSocketFactory = okHttpClient;
-            socket = IO.socket("https://192.168.1.67:4001", opts);
+            socket = IO.socket("https://arbertc.azurewebsites.net/", opts);
 
             socket.connect();
             Log.d("SignallingClient", "init() called");
