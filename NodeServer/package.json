@@ -1,24 +1,51 @@
 {
-  "name": "nodeserver",
-  "version": "1.0.0",
+  "name": "featers-server",
   "description": "",
-  "main": "index.js",
+  "version": "0.0.0",
+  "homepage": "",
+  "main": "src",
+  "keywords": [
+    "feathers"
+  ],
+  "author": {
+    "name": "Juan Carlos Hernandez Ramos",
+    "email": "contacto@juancramos.com"
+  },
+  "contributors": [],
+  "bugs": {},
+  "directories": {
+    "lib": "src",
+    "test": "test/",
+    "config": "config/"
+  },
+  "engines": {
+    "node": "^10.0.0",
+    "npm": ">= 3.0.0"
+  },
   "scripts": {
-    "dev": "nodemon ./server.js --exec babel-node -e js",
-    "start": "node server.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "npm run eslint && NODE_ENV= npm run mocha",
+    "eslint": "eslint ./ test/. --config .eslintrc.json",
+    "dev": "nodemon ./",
+    "start": "node ./",
+    "mocha": "mocha test/ --recursive --exit"
+  },
+  "dependencies": {
+    "@feathersjs/configuration": "^2.0.6",
+    "@feathersjs/errors": "^3.3.6",
+    "@feathersjs/express": "^1.3.1",
+    "@feathersjs/feathers": "^3.3.1",
+    "@feathersjs/socketio": "^3.2.9",
+    "compression": "^1.7.4",
+    "cors": "^2.8.5",
+    "helmet": "^3.16.0",
+    "serve-favicon": "^2.5.0",
+    "winston": "^3.2.1"
   },
   "devDependencies": {
-    "babel-cli": "^6.26.0",
-    "babel-preset-es2015": "^6.24.1",
-    "babel-preset-stage-0": "^6.24.1",
-    "nodemon": "^1.15.0"
-  },
-  "author": "",
-  "license": "ISC",
-  "dependencies": {
-    "body-parser": "^1.19.0",
-    "node-static": "^0.7.11",
-    "socket.io": "^2.2.0"
+    "eslint": "^5.16.0",
+    "mocha": "^5.2.0",
+    "nodemon": "^1.19.1",
+    "request": "^2.88.0",
+    "request-promise": "^4.2.4"
   }
 }
