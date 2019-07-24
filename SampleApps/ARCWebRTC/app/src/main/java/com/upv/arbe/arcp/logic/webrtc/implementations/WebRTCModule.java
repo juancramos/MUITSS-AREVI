@@ -2,12 +2,8 @@ package com.upv.arbe.arcp.logic.webrtc.implementations;
 
 import android.content.Intent;
 import android.media.projection.MediaProjection;
-import android.support.annotation.NonNull;
-import android.util.Base64;
 import android.util.Log;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.FrameLayout;
 import android.widget.Toast;
 
 import com.upv.arbe.arcp.MainActivity;
@@ -32,15 +28,9 @@ import org.webrtc.VideoCapturer;
 import org.webrtc.VideoSource;
 import org.webrtc.VideoTrack;
 
-import java.io.UnsupportedEncodingException;
 import java.lang.ref.WeakReference;
-import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
-
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 import static com.upv.arbe.arcp.logic.webrtc.implementations.SignallingClient.*;
 
@@ -57,7 +47,6 @@ public class WebRTCModule implements SignalingInterface {
     private AudioTrack localAudioTrack;
     private SurfaceViewRenderer remoteVideoView;
     private PeerConnection localPeer;
-    private List<IceServer> iceServers;
     private List<PeerConnection.IceServer> peerIceServers = new ArrayList<>();
 
     public WebRTCModule (WeakReference<MainActivity> pOwner) {
@@ -356,38 +345,19 @@ public class WebRTCModule implements SignalingInterface {
     }
 
     private void getIceServers() {
-        //get Ice servers using xirsys
-        byte[] data;
-        data = ("<xirsys_ident>:<xirsys_secret>").getBytes(StandardCharsets.UTF_8);
-        String authToken = "Basic " + Base64.encodeToString(data, Base64.NO_WRAP);
-        Utils.getInstance().getRetrofitInstance().getIceCandidates(authToken).enqueue(new Callback<TurnServerPojo>() {
-            @Override
-            public void onResponse(@NonNull Call<TurnServerPojo> call, @NonNull Response<TurnServerPojo> response) {
-                TurnServerPojo body = response.body();
-                if (body != null) {
-                    iceServers = body.iceServerList.iceServers;
-                }
-                for (IceServer iceServer : iceServers) {
-                    if (iceServer.credential == null) {
-                        PeerConnection.IceServer peerIceServer = PeerConnection.IceServer.builder(iceServer.url).createIceServer();
-                        peerIceServers.add(peerIceServer);
-                    } else {
-                        PeerConnection.IceServer peerIceServer = PeerConnection.IceServer.builder(iceServer.url)
-                                .setUsername(iceServer.username)
-                                .setPassword(iceServer.credential)
-                                .createIceServer();
-                        peerIceServers.add(peerIceServer);
-                    }
-                }
-                Log.d("onApiResponse", "IceServers\n" + iceServers.toString());
+        List<IceServer> iceServers = Utils.getInstance().getIceServerData(owner.get());
+        for (IceServer iceServer : iceServers) {
+            if (iceServer.credential == null) {
+                PeerConnection.IceServer peerIceServer = PeerConnection.IceServer.builder(iceServer.url).createIceServer();
+                peerIceServers.add(peerIceServer);
+            } else {
+                PeerConnection.IceServer peerIceServer = PeerConnection.IceServer.builder(iceServer.url)
+                        .setUsername(iceServer.username)
+                        .setPassword(iceServer.credential)
+                        .createIceServer();
+                peerIceServers.add(peerIceServer);
             }
-
-            @Override
-            public void onFailure(@NonNull Call<TurnServerPojo> call, @NonNull Throwable t) {
-                t.printStackTrace();
-            }
-        });
-
+        }
     }
 
     /**
