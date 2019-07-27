@@ -3,7 +3,6 @@ package com.upv.muitss.arevi;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.media.projection.MediaProjection;
 import android.media.projection.MediaProjectionManager;
 import android.os.SystemClock;
 import android.support.v7.app.AppCompatActivity;
@@ -15,6 +14,7 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.upv.muitss.arevi.helpers.AppState;
+import com.upv.muitss.arevi.logic.webrtc.implementations.WebRTCModule;
 import com.upv.muitss.arevi.views.ArView;
 import com.upv.muitss.arevi.views.MenuView;
 
@@ -28,23 +28,14 @@ public class ArActivity extends AppCompatActivity {
     private WeakReference<ArActivity> weakReference;
     private static final String TAG = "ArActivity";
     private static final int CAPTURE_PERMISSION_REQUEST_CODE = 1;
-    private static final String STATE_RESULT_CODE = "result_code";
-    private static final String STATE_RESULT_DATA = "result_data";
 
-    private MediaProjectionManager mediaProjectionManager;
-    private MediaProjection mMediaProjection;
-    private DisplayMetrics metrics;
-    private int mResultCode;
-    private Intent mResultData;
+    private WebRTCModule webRTCModule;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_ar);
-        if (savedInstanceState != null) {
-            mResultCode = savedInstanceState.getInt(STATE_RESULT_CODE);
-            mResultData = savedInstanceState.getParcelable(STATE_RESULT_DATA);
-        }
+
         // Get the Intent that called for this Activity to open
         //Intent activityThatCalled = getIntent();
         // Get the data that was sent
@@ -52,7 +43,7 @@ public class ArActivity extends AppCompatActivity {
 
         appState = AppState.getInstance();
 
-        metrics = new DisplayMetrics();
+        DisplayMetrics metrics = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(metrics);
 
         appState.setCenterX(metrics.widthPixels / 2);
@@ -71,9 +62,8 @@ public class ArActivity extends AppCompatActivity {
     }
 
     private void startScreenCapture() {
-        mediaProjectionManager =
-                (MediaProjectionManager) getApplication().getSystemService(
-                        Context.MEDIA_PROJECTION_SERVICE);
+        MediaProjectionManager mediaProjectionManager = (MediaProjectionManager) getApplication().getSystemService(
+                Context.MEDIA_PROJECTION_SERVICE);
         Log.i(TAG, "Requesting confirmation");
         // This initiates a prompt dialog for the user to confirm screen projection.
         startActivityForResult(
@@ -93,22 +83,15 @@ public class ArActivity extends AppCompatActivity {
             }
 
             Log.i(TAG, "Starting screen capture");
-            mResultCode = resultCode;
-            mResultData = data;
-            mMediaProjection = mediaProjectionManager.getMediaProjection(mResultCode, mResultData);
 
-//        WebRTCModule webRTCModule = new WebRTCModule(weakReference);
-//
-//        SurfaceViewRenderer remoteVideoView = findViewById(R.id.remote_gl_surface_view);
-//        webRTCModule.MountRemoteView(remoteVideoView);
-//
-//        webRTCModule.InitRTC(data);
+            webRTCModule = new WebRTCModule(weakReference);
 
-//        localVideoView = findViewById(R.id.local_gl_surface_view);
-//
-//        webRTCModule.MountLocalView(localVideoView);
-
+            webRTCModule.InitRTC(data);
         }
+    }
+
+    public void MountViewData(SurfaceViewRenderer remoteVideoView){
+        webRTCModule.MountRemoteView(remoteVideoView);
     }
 
     public void TouchView(View view)
@@ -123,20 +106,12 @@ public class ArActivity extends AppCompatActivity {
                 SystemClock.uptimeMillis() + 100, MotionEvent.ACTION_UP, centerX, centerY, 0));
     }
 
-    public int dpToPx(int dp) {
-        return Math.round(dp * (metrics.xdpi / DisplayMetrics.DENSITY_DEFAULT));
-    }
-
-    private void tearDownMediaProjection() {
-        if (mMediaProjection != null) {
-            mMediaProjection.stop();
-            mMediaProjection = null;
-        }
-    }
+//    public int dpToPx(int dp) {
+//        return Math.round(dp * (metrics.xdpi / DisplayMetrics.DENSITY_DEFAULT));
+//    }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
-        tearDownMediaProjection();
     }
 }

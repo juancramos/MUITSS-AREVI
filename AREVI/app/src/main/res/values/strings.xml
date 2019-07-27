@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">My Application</string>
+    <string name="app_name">AREVI</string>
     <string name="app_title">Hello World!</string>
     <string name="start_ar_scene_button_text">Start ar scene</string>
 </resources>

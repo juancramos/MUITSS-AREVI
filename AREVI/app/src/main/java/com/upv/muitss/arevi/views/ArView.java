@@ -15,18 +15,21 @@ import com.google.ar.core.Session;
 import com.google.ar.core.Trackable;
 import com.google.ar.core.TrackingState;
 import com.google.ar.sceneform.AnchorNode;
-import com.google.ar.sceneform.FrameTime;
 import com.google.ar.sceneform.Node;
+import com.google.ar.sceneform.Scene;
 import com.google.ar.sceneform.math.Vector3;
 import com.google.ar.sceneform.rendering.Color;
 import com.google.ar.sceneform.rendering.MaterialFactory;
 import com.google.ar.sceneform.rendering.ModelRenderable;
 import com.google.ar.sceneform.rendering.ShapeFactory;
+import com.google.ar.sceneform.rendering.ViewRenderable;
 import com.google.ar.sceneform.ux.ArFragment;
 import com.upv.muitss.arevi.ArActivity;
 import com.upv.muitss.arevi.R;
 import com.upv.muitss.arevi.drawables.PointerDrawable;
 import com.upv.muitss.arevi.helpers.AppState;
+
+import org.webrtc.SurfaceViewRenderer;
 
 import java.lang.ref.WeakReference;
 import java.util.Collection;
@@ -57,13 +60,11 @@ public class ArView extends ArFragment {
         assert ownerView != null;
         view = ownerView.findViewById(R.id.sceneform_pointer);
 
-        getArSceneView().getScene().addOnUpdateListener(frameTime -> {
-            onUpdate(frameTime);
-            onFrame(frameTime);
-        });
+        getArSceneView().getScene().addOnUpdateListener(randomRenderListener);
+        getArSceneView().getScene().addOnUpdateListener(webRtcRenderListener);
     }
 
-    private void onFrame(FrameTime frameTime) {
+    private Scene.OnUpdateListener randomRenderListener = frameTime -> {
         // Keep track of the first valid plane detected, update it
         // if the plane is lost or subsumed.
 
@@ -101,7 +102,57 @@ public class ArView extends ArFragment {
             }
             appState.setNodeAge(appState.getNodeAge() + frameTime.getStartSeconds());
         }
+    };
+
+    private Scene.OnUpdateListener webRtcRenderListener = frameTime -> {
+
+        if (!appState.getIsTracking()) return;
+
+        Session session = getArSceneView().getSession();
+
+        assert session != null;
+
+        Frame frame = getArSceneView().getArFrame();
+        if(frame == null) {
+            return;
+        }
+
+        Collection<Plane> planes = frame.getUpdatedTrackables(Plane.class);
+        if (planes.isEmpty()) return;
+        Plane anchorPlane = planes.iterator().next();
+
+        if (anchorPlane.getSubsumedBy() != null) {
+            anchorPlane = anchorPlane.getSubsumedBy();
+        }
+
+        Pose pose = anchorPlane.getCenterPose();
+        Anchor anchor = session.createAnchor(pose);
+
+
+        ViewRenderable.builder()
+                .setView(owner.get(), R.layout.webrtc_view)
+                .build()
+                .thenAccept(renderable -> {
+                    renderable.setShadowCaster(false);
+                    renderable.setShadowReceiver(false);
+                    addViewRenderable(anchor, renderable);
+                });
+    };
+
+    private void addViewRenderable(Anchor anchor, ViewRenderable render) {
+        getArSceneView().getScene()
+                .removeOnUpdateListener(webRtcRenderListener);
+
+        Node node = new Node();
+        node.setRenderable(render);
+        // Create the Sceneform AnchorNode
+        AnchorNode anchorNode = new AnchorNode(anchor);
+        anchorNode.addChild(node);
+        anchorNode.setParent(getArSceneView().getScene());
+
+        owner.get().MountViewData((SurfaceViewRenderer) render.getView());
     }
+
 
     private void randomPlacedCube(Plane plane) {
         //find a random spot on the plane in the X
@@ -160,37 +211,6 @@ public class ArView extends ArFragment {
                                     }
                                 });
                             });
-
-//            ViewRenderable.builder()
-//                    .setView(owner.get(), R.layout.menu_layout)
-//                    .build()
-//                    .thenAccept(renderable -> {
-//                        Node node = new Node();
-//                        node.setRenderable(renderable);
-//                        anchorNode = new AnchorNode(anchor);
-//                        anchorNode.addChild(node);
-//                        anchorNode.setParent(getArSceneView().getScene());
-//
-//                        node.setOnTapListener((hitTestResult, motionEvent) -> {
-//                            //We are only interested in the ACTION_UP events - anything else just return
-//                            if (motionEvent.getAction() != MotionEvent.ACTION_UP) {
-//                                return;
-//                            }
-//
-//                            Node hitNode = hitTestResult.getNode();
-//                            // Check for touching a Sceneform node
-//                            if (hitNode != null) {
-//                                Log.d(TAG,"handleOnTouch hitTestResult.getNode() != null");
-//
-//                                Toast.makeText(owner.get(), "We've hit Andy!!", Toast.LENGTH_SHORT).show();
-//                                getArSceneView().getScene().removeChild(hitNode);
-//                                assert hitNode.getParent() != null;
-//                                Objects.requireNonNull(((AnchorNode) hitNode.getParent()).getAnchor()).detach();
-//                                hitNode.setParent(null);
-//                            }
-//                        });
-//
-//                    });
         } else {
             Anchor a = anchorNode.getAnchor();
             assert a != null;
@@ -229,7 +249,15 @@ public class ArView extends ArFragment {
     }
 
     private Point getScreenCenter() {
-        return new Point(appState.getCenterX(), appState.getCenterY());
+        if(getView() == null) {
+            return new android.graphics.Point(0,0);
+        }
+
+        int w = getView().getWidth()/2;
+        int h = getView().getHeight()/2;
+        return new Point(w, h);
+
+        //return new Point(appState.getCenterX(), appState.getCenterY());
     }
 }
 
