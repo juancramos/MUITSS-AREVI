@@ -27,8 +27,14 @@ public class AppState {
     public void setNodeAge(float pNodeAge) { this.nodeAge = pNodeAge; }
 
 
-    public AppState(){
-        initState();
+    private static AppState instance;
+
+    public static AppState getInstance() {
+        if (instance == null) {
+            instance = new AppState();
+            instance.initState();
+        }
+        return instance;
     }
 
     public void initState(){
