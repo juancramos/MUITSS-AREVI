@@ -23,7 +23,7 @@ import com.google.ar.sceneform.rendering.MaterialFactory;
 import com.google.ar.sceneform.rendering.ModelRenderable;
 import com.google.ar.sceneform.rendering.ShapeFactory;
 import com.google.ar.sceneform.ux.ArFragment;
-import com.upv.muitss.arevi.MainActivity;
+import com.upv.muitss.arevi.ArActivity;
 import com.upv.muitss.arevi.R;
 import com.upv.muitss.arevi.drawables.PointerDrawable;
 import com.upv.muitss.arevi.helpers.AppState;
@@ -41,16 +41,16 @@ public class ArView extends ArFragment {
     private AnchorNode anchorNode;
     private static Random rand;
 
-    private static WeakReference<MainActivity> owner;
+    private static WeakReference<ArActivity> owner;
     private static final String TAG = "ArView";
     private AppState appState;
 
-    public void init(WeakReference<MainActivity> pOwner) {
+    public void init(WeakReference<ArActivity> pOwner) {
         owner = pOwner;
         assert owner.get() != null;
 
         rand = new Random();
-        appState = owner.get().getAppState();
+        appState = AppState.getInstance();
         pointer = new PointerDrawable(appState.getCenterX(), appState.getCenterY());
 
         View ownerView = getView();
