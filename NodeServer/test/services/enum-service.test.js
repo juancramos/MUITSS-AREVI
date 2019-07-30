@@ -1,9 +1,9 @@
 const assert = require('assert');
 const app = require('../../src/app');
 
-describe('\'enum\' service', () => {
+describe('\'enum-service\' service', () => {
   it('registered the service', () => {
-    const service = app.service('enum');
+    const service = app.service('enum-service');
 
     assert.ok(service, 'Registered the service');
   });

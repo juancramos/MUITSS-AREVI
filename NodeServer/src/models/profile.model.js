@@ -16,18 +16,20 @@ module.exports = function (app) {
       allowNull: false
     },
     gender: {
-      type: DataTypes.STRING,
-      allowNull: false,
-      enum: ['Female', 'Male', 'Other (specify)']
+      type: DataTypes.ENUM({
+        values: ['Female', 'Male', 'Other (specify)']
+      }),
+      allowNull: false
     },
     genderOther: {
       type: DataTypes.STRING,
-      allowNull: false
+      allowNull: true
     },
     age: {
-      type: DataTypes.STRING,
-      allowNull: false,
-      enum: ['17 or younger', '18-20', '21-29', '30-39', '40-49', '50-59', '60 or older']
+      type: DataTypes.ENUM({
+        values: ['17 or younger', '18-20', '21-29', '30-39', '40-49', '50-59', '60 or older']
+      }),
+      allowNull: false
     },
     visualIlness: {
       type: DataTypes.STRING,
@@ -38,9 +40,10 @@ module.exports = function (app) {
       allowNull: false
     },
     education: {
-      type: DataTypes.STRING,
-      allowNull: false,
-      enum: ['Less than high school degree', 'High school degree or equivalent', 'Some college but no degree', 'Associate degree', 'Bachelor degree', 'Graduate degree']
+      type: DataTypes.ENUM({
+        values: ['Less than high school degree', 'High school degree or equivalent', 'Some college but no degree', 'Associate degree', 'Bachelor degree', 'Graduate degree']
+      }),
+      allowNull: false
     }
   }, {
       hooks: {
