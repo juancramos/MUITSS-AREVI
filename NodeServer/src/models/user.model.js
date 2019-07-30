@@ -31,6 +31,8 @@ module.exports = function (app) {
   user.associate = function (models) {
     // Define associations here
     // See http://docs.sequelizejs.com/en/latest/docs/associations/
+    user.hasOne(models.user_info, { foreignKey: { allowNull: false }});
+    user.hasMany(models.profile, { foreignKey: { allowNull: false }});
   };
 
   return user;
