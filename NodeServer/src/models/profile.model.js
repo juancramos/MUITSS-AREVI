@@ -5,40 +5,47 @@ const DataTypes = Sequelize.DataTypes;
 
 module.exports = function (app) {
   const sequelizeClient = app.get('sequelizeClient');
-  const profile = sequelizeClient.define('profile', {
-    id: {
-      type: DataTypes.UUID,
-      defaultValue: DataTypes.UUIDV4,
-      primaryKey: true
-    },
-    profileNmae: {
-      type: DataTypes.STRING,
-      allowNull: false
-    },
-    preferences: {
-      type: Sequelize.TEXT,
-      get: function () {
-        return JSON.parse(this.getDataValue('value'));
+  const profile = sequelizeClient.define('profile',
+    {
+      id: {
+        type: DataTypes.UUID,
+        defaultValue: DataTypes.UUIDV4,
+        primaryKey: true
       },
-      set: function (value) {
-        this.setDataValue('value', JSON.stringify(value));
+      profileNmae: {
+        type: DataTypes.STRING,
+        allowNull: false
       },
-      allowNull: false
-    }
-  }, {
+      configuration: {
+        type: Sequelize.TEXT,
+        get: function () {
+          return JSON.parse(this.getDataValue('value'));
+        },
+        set: function (value) {
+          this.setDataValue('value', JSON.stringify(value));
+        },
+        allowNull: false
+      },
+      enabled: {
+        type: DataTypes.BOOLEAN,
+        allowNull: false,
+        defaultValue: true
+      }
+    },
+    {
       hooks: {
         beforeCount(options) {
           options.raw = true;
         }
       }
-    });
+    }
+  );
 
   // eslint-disable-next-line no-unused-vars
   profile.associate = function (models) {
     // Define associations here
     // See http://docs.sequelizejs.com/en/latest/docs/associations/
-    profile.hasMany(models.task, { foreignKey: { allowNull: false }});
-    profile.hasMany(models.round, { foreignKey: { allowNull: false }});
+    profile.hasMany(models.round, { foreignKey: { allowNull: false } });
   };
 
   return profile;
