@@ -6,9 +6,14 @@ class EnumService {
 
   async find(params) {
     const { service, path } = params.query;
-    const values = await this.app.service(service).Model.schema.path(path).enumValues;
+    console.log(service, path);
 
-    return values;
+    console.log(Object.keys(this.app.service(service).Model.attributes[path]));
+
+    
+    const values = await this.app.service(service).Model.attributes[path].values;
+
+    return values || [];
   }
 
   setup(app) {
