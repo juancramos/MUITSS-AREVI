@@ -5,29 +5,37 @@ const DataTypes = Sequelize.DataTypes;
 
 module.exports = function (app) {
   const sequelizeClient = app.get('sequelizeClient');
-  const round = sequelizeClient.define('round', {
-    id: {
-      type: DataTypes.UUID,
-      defaultValue: DataTypes.UUIDV4,
-      primaryKey: true
+  const round = sequelizeClient.define('round',
+    {
+      id: {
+        type: DataTypes.UUID,
+        defaultValue: DataTypes.UUIDV4,
+        primaryKey: true
+      },
+      score: {
+        type: Sequelize.TEXT,
+        get: function () {
+          return JSON.parse(this.getDataValue('value'));
+        },
+        set: function (value) {
+          this.setDataValue('value', JSON.stringify(value));
+        },
+        allowNull: false
+      },
+      completed: {
+        type: DataTypes.BOOLEAN,
+        allowNull: false,
+        defaultValue: false
+      }
     },
-    scores: {
-      type: Sequelize.TEXT,
-      get: function () {
-        return JSON.parse(this.getDataValue('value'));
-      },
-      set: function (value) {
-        this.setDataValue('value', JSON.stringify(value));
-      },
-      allowNull: false
-    }
-  }, {
-    hooks: {
-      beforeCount(options) {
-        options.raw = true;
+    {
+      hooks: {
+        beforeCount(options) {
+          options.raw = true;
+        }
       }
     }
-  });
+  );
 
   // eslint-disable-next-line no-unused-vars
   round.associate = function (models) {
