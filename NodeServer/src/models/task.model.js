@@ -5,17 +5,13 @@ const DataTypes = Sequelize.DataTypes;
 
 module.exports = function (app) {
   const sequelizeClient = app.get('sequelizeClient');
-  const profile = sequelizeClient.define('profile', {
+  const task = sequelizeClient.define('task', {
     id: {
       type: DataTypes.UUID,
       defaultValue: DataTypes.UUIDV4,
       primaryKey: true
     },
-    profileNmae: {
-      type: DataTypes.STRING,
-      allowNull: false
-    },
-    preferences: {
+    score: {
       type: Sequelize.TEXT,
       get: function () {
         return JSON.parse(this.getDataValue('value'));
@@ -26,20 +22,18 @@ module.exports = function (app) {
       allowNull: false
     }
   }, {
-      hooks: {
-        beforeCount(options) {
-          options.raw = true;
-        }
+    hooks: {
+      beforeCount(options) {
+        options.raw = true;
       }
-    });
+    }
+  });
 
   // eslint-disable-next-line no-unused-vars
-  profile.associate = function (models) {
+  task.associate = function (models) {
     // Define associations here
     // See http://docs.sequelizejs.com/en/latest/docs/associations/
-    profile.hasMany(models.task, { foreignKey: { allowNull: false }});
-    profile.hasMany(models.round, { foreignKey: { allowNull: false }});
   };
 
-  return profile;
+  return task;
 };
