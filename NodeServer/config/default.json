@@ -6,5 +6,29 @@
     "default": 10,
     "max": 50
   },
-  "sqlite": "sqlite://arevi.sqlite"
+  "sqlite": "sqlite://arevi.sqlite",
+  "authentication": {
+    "secret": "aa4bab6a46be151e6d3fb8e6295afb22d5d97e926113114a31c4fd16606207de8c8fd74bbfe0d1458ec4738ce3eb80c0f37c50e129518ec24945ab88f804cd59f201b5677a79b0987e90cf746e9e2b4f76da74e41e96c6766e7bde02c15569b2170dc18c3dead0ab3009a32cddb282f4126a9f4d77240282a065e2e48a58d6d29d426f53d19279a450b000f6824b8e8d291ba86a5ee5656a7b52b67dc512658eff8a07409d794779dd533d889efa850b41d14afe812196f16fe1c8c691bd005ca182c0957a397d6d972559c3419efedee6218192d4d565bfb870335591931a63382c07dba8c2dfb732989f52c8c530cb8bf7395f733f9fc1dffbb04853dd8e33",
+    "strategies": [
+      "jwt",
+      "local"
+    ],
+    "path": "/authentication",
+    "service": "user",
+    "jwt": {
+      "header": {
+        "typ": "access"
+      },
+      "audience": "https://yourdomain.com",
+      "subject": "anonymous",
+      "issuer": "feathers",
+      "algorithm": "HS256",
+      "expiresIn": "1d"
+    },
+    "local": {
+      "entity": "user",
+      "usernameField": "email",
+      "passwordField": "password"
+    }
+  }
 }

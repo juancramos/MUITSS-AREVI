@@ -27,7 +27,15 @@ module.exports = function (app) {
       enabled: {
         type: DataTypes.BOOLEAN,
         allowNull: false,
+        // User has to accept license agreement 
         defaultValue: false
+      },
+      role: {
+        type: DataTypes.ENUM({
+          values: ['admin', 'user']
+        }),
+        allowNull: false,
+        defaultValue: 'user'
       }
     },
     {
@@ -45,6 +53,7 @@ module.exports = function (app) {
     // See http://docs.sequelizejs.com/en/latest/docs/associations/
     user.hasOne(models.user_info, { foreignKey: { allowNull: false } });
     user.hasMany(models.profile, { foreignKey: { allowNull: false } });
+    user.hasMany(models.round, { foreignKey: { allowNull: false } });
   };
 
   return user;
