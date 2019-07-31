@@ -2,4 +2,9 @@
     <string name="app_name">AREVI</string>
     <string name="app_title">Hello World!</string>
     <string name="start_ar_scene_button_text">Start ar scene</string>
+    <string name="wizard_activity_button_text">Wizard Activity</string>
+    <string name="frame_description_text">Welcome tutorial</string>
+    <string name="section_format">Page %1$d</string>
+    <string name="pager_skip_button_text">Skip</string>
+    <string name="pager_finish_button_text">Finish</string>
 </resources>

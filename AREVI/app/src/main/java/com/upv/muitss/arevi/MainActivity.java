@@ -18,7 +18,7 @@ import com.upv.muitss.arevi.helpers.AppState;
         AppState.getInstance();
     }
 
-     public void onStartButtonClick(View view) {
+     public void onStartArButtonClick(View view) {
 
          Intent navigateIntent = new Intent(this, ArActivity.class);
          startActivity(navigateIntent);
@@ -26,6 +26,12 @@ import com.upv.muitss.arevi.helpers.AppState;
 //         final int result = 1;
 //         getNameScreenIntent.putExtra("callingActivity", "MainActivity");
 //         startActivityForResult(getNameScreenIntent, result);
+     }
+
+     public void onStartWizardButtonClick(View view) {
+
+         Intent toAct = new Intent(this, PagerActivity.class);
+         startActivity(toAct);
      }
 
      @Override
