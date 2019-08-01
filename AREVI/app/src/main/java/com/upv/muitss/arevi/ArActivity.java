@@ -106,10 +106,6 @@ public class ArActivity extends AppCompatActivity {
                 SystemClock.uptimeMillis() + 100, MotionEvent.ACTION_UP, centerX, centerY, 0));
     }
 
-//    public int dpToPx(int dp) {
-//        return Math.round(dp * (metrics.xdpi / DisplayMetrics.DENSITY_DEFAULT));
-//    }
-
     @Override
     public void onDestroy() {
         super.onDestroy();
