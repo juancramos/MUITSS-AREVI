@@ -2,7 +2,6 @@ package com.upv.muitss.arevi.logic.webrtc.implementations;
 
 import android.annotation.SuppressLint;
 import android.util.Log;
-
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.webrtc.IceCandidate;
@@ -25,11 +24,13 @@ import okhttp3.OkHttpClient;
 class SignallingClient {
     private static SignallingClient instance;
     private String roomName = null;
+    private String signalingServer = null;
     private Socket socket;
+    private SignalingInterface callback;
     boolean isChannelReady = false;
     boolean isInitiator = false;
     boolean isStarted = false;
-    private SignalingInterface callback;
+
 
     private X509TrustManager x509TrustManager = new X509TrustManager() {
         public java.security.cert.X509Certificate[] getAcceptedIssuers() {
@@ -57,13 +58,15 @@ class SignallingClient {
         if (instance.roomName == null) {
             //set the room name here
             instance.roomName = "room";
+            instance.signalingServer = "http://localhost:3030";
         }
         return instance;
     }
 
 
-    void init(SignalingInterface signalingInterface) {
+    void init(SignalingInterface signalingInterface, String pSignalingServer) {
         this.callback = signalingInterface;
+        this.signalingServer = pSignalingServer;
         try {
 
             SSLContext sslcontext = SSLContext.getInstance("TLS");
@@ -81,7 +84,7 @@ class SignallingClient {
             IO.Options opts = new IO.Options();
             opts.callFactory = okHttpClient;
             opts.webSocketFactory = okHttpClient;
-            socket = IO.socket("https://arbertc.azurewebsites.net/", opts);
+            socket = IO.socket(this.signalingServer, opts);
 
             socket.connect();
             Log.d("SignallingClient", "init() called");
@@ -162,12 +165,12 @@ class SignallingClient {
         socket.emit("create or join", message);
     }
 
-    public void emitMessage(String message) {
+    void emitMessage(String message) {
         Log.d("SignallingClient", "emitMessage() called with: message = [" + message + "]");
         socket.emit("message", message);
     }
 
-    public void emitMessage(SessionDescription message) {
+    void emitMessage(SessionDescription message) {
         try {
             Log.d("SignallingClient", "emitMessage() called with: message = [" + message + "]");
             JSONObject obj = new JSONObject();
@@ -196,7 +199,7 @@ class SignallingClient {
 
     }
 
-    public void close() {
+    void close() {
         socket.emit("bye", roomName);
         socket.disconnect();
         socket.close();

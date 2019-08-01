@@ -7,6 +7,9 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.upv.muitss.arevi.ArActivity;
+import com.upv.muitss.arevi.R;
+import com.upv.muitss.arevi.logic.webrtc.models.IceServer;
+import com.upv.muitss.arevi.logic.webrtc.helpers.Utils;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -164,7 +167,6 @@ public class WebRTCModule implements SignalingInterface {
 
     }
 
-
     /**
      * Received local ice candidate. Send it to remote peer through signalling for negotiation
      */
@@ -203,7 +205,18 @@ public class WebRTCModule implements SignalingInterface {
     @Override
     public void onRemoteHangUp(String msg) {
         showToast("Remote Peer hungup");
-        //runOnUiThread(this::hangup);
+        owner.get().runOnUiThread(this::hangup);
+    }
+
+    private void hangup() {
+        try {
+            localPeer.close();
+            localPeer = null;
+            SignallingClient.getInstance().close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
     }
 
     /**
@@ -220,7 +233,6 @@ public class WebRTCModule implements SignalingInterface {
             try {
                 localPeer.setRemoteDescription(new CustomSdpObserver("localSetRemote"), new SessionDescription(SessionDescription.Type.OFFER, data.getString("sdp")));
                 doAnswer();
-                //updateVideoViews(true);
             } catch (JSONException e) {
                 e.printStackTrace();
             }
@@ -266,20 +278,6 @@ public class WebRTCModule implements SignalingInterface {
     }
 
 
-//    private void updateVideoViews(final boolean remoteVisible) {
-//        owner.get().runOnUiThread(() -> {
-//            ViewGroup.LayoutParams params = localVideoView.getLayoutParams();
-//            if (remoteVisible) {
-//                params.height = owner.get().dpToPx(100);
-//                params.width = owner.get().dpToPx(100);
-//            } else {
-//                params = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
-//            }
-//            localVideoView.setLayoutParams(params);
-//        });
-//
-//    }
-
 //    public void MountLocalView(SurfaceViewRenderer videoView) {
 //
 //        videoView.setMirror(false);
@@ -309,7 +307,7 @@ public class WebRTCModule implements SignalingInterface {
                 .createPeerConnectionFactory();
 
         getIceServers();
-        SignallingClient.getInstance().init(this);
+        SignallingClient.getInstance().init(this, owner.get().getString(R.string.signaling_server_url));
 
 
         //Create MediaConstraints - Will be useful for specifying video and audio constraints. More on this later!
@@ -337,7 +335,7 @@ public class WebRTCModule implements SignalingInterface {
 
         videoView.setMirror(false);
         videoView.init(rootEglBase.getEglBaseContext(), null);
-        // videoView.setZOrderMediaOverlay(true);
+        videoView.setZOrderMediaOverlay(true);
 
         remoteVideoView = videoView;
         remoteVideoView.setMirror(true);

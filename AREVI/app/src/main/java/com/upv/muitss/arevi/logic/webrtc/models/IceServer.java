@@ -1,4 +1,6 @@
-package com.upv.muitss.arevi.logic.webrtc.implementations;
+package com.upv.muitss.arevi.logic.webrtc.models;
+
+import android.support.annotation.NonNull;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
@@ -7,14 +9,15 @@ public class IceServer {
 
     @SerializedName("url")
     @Expose
-    String url;
+    public String url;
     @SerializedName("username")
     @Expose
-    String username;
+    public String username;
     @SerializedName("credential")
     @Expose
-    String credential;
+    public String credential;
 
+    @NonNull
     @Override
     public String toString() {
         return "IceServer{" +
