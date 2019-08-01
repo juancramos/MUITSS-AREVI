@@ -45,7 +45,7 @@ public class ArView extends ArFragment {
     private static Random rand;
 
     private static WeakReference<ArActivity> owner;
-    private static final String TAG = "ArView";
+    private final String TAG = this.getClass().getCanonicalName();
     private AppState appState;
 
     public void init(WeakReference<ArActivity> pOwner) {

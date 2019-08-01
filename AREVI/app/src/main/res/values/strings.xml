@@ -1,5 +1,6 @@
 <resources>
     <string name="app_name">AREVI</string>
+    <string name="app_preferences_name">AREVI_Preferences</string>
     <string name="app_title">Hello World!</string>
     <string name="start_ar_scene_button_text">Start ar scene</string>
     <string name="wizard_activity_button_text">Wizard Activity</string>

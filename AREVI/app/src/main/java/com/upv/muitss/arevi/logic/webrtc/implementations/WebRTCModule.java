@@ -38,7 +38,7 @@ import static com.upv.muitss.arevi.logic.webrtc.implementations.SignallingClient
 public class WebRTCModule implements SignalingInterface {
 
     private static WeakReference<ArActivity> owner;
-    private static final String TAG = "WebRTCModule";
+    private final String TAG = this.getClass().getCanonicalName();
 
     private boolean gotUserMedia;
 

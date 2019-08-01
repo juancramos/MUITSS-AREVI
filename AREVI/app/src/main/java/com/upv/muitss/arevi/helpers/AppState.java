@@ -37,7 +37,7 @@ public class AppState {
         return instance;
     }
 
-    public void initState(){
+    private void initState(){
         centerX = 0;
         centerY = 0;
         isTracking = false;
