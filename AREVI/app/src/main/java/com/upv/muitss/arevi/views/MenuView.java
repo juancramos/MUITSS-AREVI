@@ -16,7 +16,7 @@ import java.lang.ref.WeakReference;
 public class MenuView extends LinearLayout {
 
     private static WeakReference<ArActivity> owner;
-    private static final String TAG = "MenuView";
+    private final String TAG = this.getClass().getCanonicalName();
     private AppState appState;
 
     public MenuView(Context context) {

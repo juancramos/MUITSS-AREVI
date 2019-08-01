@@ -26,7 +26,7 @@ public class ArActivity extends AppCompatActivity {
 
     private AppState appState;
     private WeakReference<ArActivity> weakReference;
-    private static final String TAG = "ArActivity";
+    private final String TAG = this.getClass().getCanonicalName();
     private static final int CAPTURE_PERMISSION_REQUEST_CODE = 1;
 
     private WebRTCModule webRTCModule;
