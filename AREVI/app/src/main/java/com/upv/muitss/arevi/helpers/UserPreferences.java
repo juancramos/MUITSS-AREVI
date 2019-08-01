@@ -12,15 +12,14 @@ public class UserPreferences {
     private static UserPreferences instance;
     private SharedPreferences sharedPref;
 
-    public static UserPreferences getInstance(Context context) {
+    public static UserPreferences getInstance() {
         if (instance == null) {
             instance = new UserPreferences();
-            instance.initState(context);
         }
         return instance;
     }
 
-    private void initState(Context context){
+    public void init(Context context){
         sharedPref = context.getSharedPreferences(PREFERENCE_FILE_KEY, Context.MODE_PRIVATE);
         PREFERENCE_FILE_KEY = context.getString(R.string.app_preferences_name);
     }
