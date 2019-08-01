@@ -1,13 +1,12 @@
 package com.upv.muitss.arevi;
 
-import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 
 import com.upv.muitss.arevi.helpers.AppState;
+import com.upv.muitss.arevi.helpers.Constants;
 import com.upv.muitss.arevi.helpers.UserPreferences;
 
 
@@ -18,7 +17,12 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         AppState.getInstance();
-        UserPreferences.getInstance(this);
+        UserPreferences userPreferences = UserPreferences.getInstance();
+        userPreferences.init(this);
+
+        boolean hasProfile = userPreferences.getUserPreferenceBool(Constants.USER_HAS_PROFILE);
+
+        if (!hasProfile) startProfileWizard();
     }
 
     public void onStartArButtonClick(View view) {
@@ -32,7 +36,10 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void onStartWizardButtonClick(View view) {
+        startProfileWizard();
+    }
 
+    private void startProfileWizard(){
         Intent toAct = new Intent(this, PagerActivity.class);
         startActivity(toAct);
     }
