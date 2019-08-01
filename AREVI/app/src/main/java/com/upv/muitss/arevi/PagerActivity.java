@@ -5,7 +5,6 @@ import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.animation.ArgbEvaluator;
-import android.support.design.widget.CoordinatorLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
@@ -19,35 +18,26 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-
 public class PagerActivity extends AppCompatActivity {
 
-
     private ViewPager mViewPager;
-    ImageView zero, one, two;
-    ImageView[] indicators;
-    ImageButton mNextBtn, mBackBtn;
-    Button mFinishBtn, mSkipBtn;
-    CoordinatorLayout mCoordinator;
-    SectionsPagerAdapter mSectionsPagerAdapter;
-    int page = 0;   //  to track page position
-
+    private ImageView[] indicators;
+    private ImageButton mNextBtn, mBackBtn;
+    private Button mFinishBtn, mSkipBtn;
+    private int page = 0;   //  to track page position
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pager);
 
-
         // Create the adapter that will return a fragment for each of the three
         // primary sections of the activity.
-        mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
+        SectionsPagerAdapter mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
 
-        zero = findViewById(R.id.intro_indicator_0);
-        one = findViewById(R.id.intro_indicator_1);
-        two = findViewById(R.id.intro_indicator_2);
-
-        mCoordinator = findViewById(R.id.main_content);
+        ImageView zero = findViewById(R.id.intro_indicator_0);
+        ImageView one = findViewById(R.id.intro_indicator_1);
+        ImageView two = findViewById(R.id.intro_indicator_2);
 
         mNextBtn = findViewById(R.id.intro_btn_next);
         mBackBtn = findViewById(R.id.intro_btn_back);
@@ -149,7 +139,7 @@ public class PagerActivity extends AppCompatActivity {
          */
         private static final String ARG_SECTION_NUMBER = "section_number";
 
-        ImageView img;
+        private ImageView img;
 
         int[] bgs = new int[]{R.drawable.ic_person_add_24dp, R.drawable.ic_content_paste_24dp, R.drawable.ic_accessibility_24dp};
 
@@ -179,11 +169,8 @@ public class PagerActivity extends AppCompatActivity {
             img = rootView.findViewById(R.id.section_img);
             img.setBackgroundResource(bgs[getArguments().getInt(ARG_SECTION_NUMBER) - 1]);
 
-
             return rootView;
         }
-
-
     }
 
     /**
@@ -191,7 +178,6 @@ public class PagerActivity extends AppCompatActivity {
      * one of the sections/tabs/pages.
      */
     public class SectionsPagerAdapter extends FragmentPagerAdapter {
-
 
         SectionsPagerAdapter(FragmentManager fm) {
             super(fm);
