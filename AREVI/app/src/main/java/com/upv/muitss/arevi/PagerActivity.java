@@ -167,7 +167,7 @@ public class PagerActivity extends AppCompatActivity {
             textView.setText(getString(R.string.section_format, getArguments().getInt(ARG_SECTION_NUMBER)));
 
             img = rootView.findViewById(R.id.section_img);
-            img.setBackgroundResource(bgs[getArguments().getInt(ARG_SECTION_NUMBER) - 1]);
+            img.setImageResource(bgs[getArguments().getInt(ARG_SECTION_NUMBER) - 1]);
 
             return rootView;
         }

@@ -1,54 +1,61 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
-
-    <FrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-        <ImageView
-            android:id="@+id/section_img"
-            android:layout_width="192dp"
-            android:layout_height="192dp"
-            android:layout_gravity="center"
-            android:adjustViewBounds="true"
-            android:alpha="0.30"
-            android:background="@drawable/ic_accessibility_24dp"
-            android:scaleType="fitCenter" />
-
-
-    </FrameLayout>
-
+    android:layout_height="wrap_content"
+    android:layout_width="match_parent">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="bottom"
-        android:gravity="center"
-        android:orientation="vertical"
-        android:padding="@dimen/activity_horizontal_margin">
+        android:orientation="vertical">
 
-        <TextView
-            android:id="@+id/section_label"
-            style="@style/TextAppearance.AppCompat.Headline"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textColor="@android:color/white"
-            tools:text="Page One" />
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
 
-        <TextView
-            style="@style/TextAppearance.AppCompat.Body1"
-            android:layout_width="wrap_content"
+            <ImageView
+                android:id="@+id/section_img"
+                android:layout_width="250dp"
+                android:layout_height="250dp"
+                android:layout_gravity="center"
+                android:adjustViewBounds="true"
+                android:layout_marginTop="@dimen/activity_margin_half"
+                android:src="@drawable/ic_accessibility_24dp"
+                android:scaleType="fitCenter"
+                android:tint="@color/colorPrimary"
+                android:contentDescription="@string/indicator_of_context_action_image_text" />
+        </FrameLayout>
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/activity_horizontal_margin"
-            android:alpha="0.7"
+            android:layout_gravity="bottom"
             android:gravity="center"
-            android:text="@string/frame_description_text"
-            android:textColor="@android:color/white" />
+            android:orientation="vertical"
+            android:padding="@dimen/activity_horizontal_margin">
 
+            <TextView
+                android:id="@+id/section_label"
+                style="@style/TextAppearance.AppCompat.Headline"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@android:color/white"
+                tools:text="Page One" />
+
+            <TextView
+                style="@style/TextAppearance.AppCompat.Body1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/activity_horizontal_margin"
+                android:gravity="center"
+                android:text="@string/frame_description_text"
+                android:textColor="@android:color/white" />
+
+
+        </LinearLayout>
 
     </LinearLayout>
 
-</FrameLayout>
+</ScrollView>
+

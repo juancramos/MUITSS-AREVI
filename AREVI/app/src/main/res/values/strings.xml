@@ -9,4 +9,5 @@
     <string name="pager_finish_button_text">Finish</string>
     <string name="ice_candidates_file_name">ice_servers.json</string>
     <string name="signaling_server_url">https://arbertc.azurewebsites.net/</string>
+    <string name="indicator_of_context_action_image_text">Indicator of context action</string>
 </resources>
