@@ -8,6 +8,7 @@ import android.view.View;
 import com.upv.muitss.arevi.helpers.AppState;
 import com.upv.muitss.arevi.helpers.Constants;
 import com.upv.muitss.arevi.helpers.UserPreferences;
+import com.upv.muitss.arevi.helpers.Utils;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -15,6 +16,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        Utils.overrideFont(getApplicationContext(), "SERIF", "fonts/Roboto-Regular.ttf");
 
         AppState.getInstance();
         UserPreferences userPreferences = UserPreferences.getInstance();
