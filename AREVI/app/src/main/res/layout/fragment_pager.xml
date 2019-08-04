@@ -21,7 +21,6 @@
                 android:layout_marginTop="@dimen/activity_margin_half"
                 android:src="@drawable/ic_accessibility_24dp"
                 android:scaleType="fitCenter"
-                android:tint="@color/colorPrimary"
                 android:contentDescription="@string/indicator_of_context_action_image_text" />
         </FrameLayout>
 
@@ -29,7 +28,6 @@
             android:id="@+id/section_label"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textColor="@android:color/white"
             android:text="@string/pager_tittle_text"
             android:ellipsize="end"
             android:gravity="top|center"

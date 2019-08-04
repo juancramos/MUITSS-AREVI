@@ -35,6 +35,15 @@ public class Utils {
             case Constants.APP_THEME_LARGE_FONT_SIZE:
                 theme = R.style.FontSizeLarge;
                 break;
+            case Constants.APP_DARK_THEME_DEFAULT_FONT_SIZE:
+                theme = R.style.AppThemeDark;
+                break;
+            case Constants.APP_DARK_THEME_MEDIUM_FONT_SIZE:
+                theme = R.style.FontSizeMediumDark;
+                break;
+            case Constants.APP_DARK_THEME_LARGE_FONT_SIZE:
+                theme = R.style.FontSizeLargeDark;
+                break;
         }
         return theme;
     }
