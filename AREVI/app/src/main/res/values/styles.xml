@@ -8,11 +8,25 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
     
-    <style name="FontSizeMedium">
+    <style name="FontSizeMedium" parent="AppTheme">
         <item name="android:textSize">19sp</item>
     </style>
 
     <style name="FontSizeLarge" parent="AppTheme">
+        <item name="android:textSize">29sp</item>
+    </style>
+
+    <style name="AppThemeDark" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="colorPrimary">@color/colorPrimaryDark</item>
+        <item name="colorPrimaryDark">@color/colorSecondary</item>
+        <item name="colorAccent">@color/colorAccent</item>
+    </style>
+
+    <style name="FontSizeMediumDark" parent="AppThemeDark">
+        <item name="android:textSize">19sp</item>
+    </style>
+
+    <style name="FontSizeLargeDark" parent="AppThemeDark">
         <item name="android:textSize">29sp</item>
     </style>
 </resources>

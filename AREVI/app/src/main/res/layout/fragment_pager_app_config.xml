@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:gravity="center"
+    android:padding="@dimen/activity_horizontal_margin">
+
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/activity_horizontal_margin"
+        android:gravity="center"
+        android:text="@string/frame_description_text"
+        android:textColor="@android:color/white"
+        android:ellipsize="end"
+        android:hyphenationFrequency="normal"
+        android:breakStrategy="simple"
+        android:scrollHorizontally="false"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/activity_horizontal_margin"
+        android:gravity="center"
+        android:text="@string/frame_app_font_size_text"
+        android:textColor="@android:color/white"
+        android:ellipsize="end"
+        android:hyphenationFrequency="normal"
+        android:breakStrategy="simple"
+        android:scrollHorizontally="false"/>
+
+    <RadioGroup
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:ellipsize="end"
+        android:hyphenationFrequency="normal"
+        android:breakStrategy="simple"
+        android:scrollHorizontally="false">
+
+        <RadioButton
+            android:id="@+id/APP_THEME_NORMAL_FONT_SIZE"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Normal"
+            android:onClick="onSetAppFontSizeClick"/>
+
+        <RadioButton
+            android:id="@+id/APP_THEME_MEDIUM_FONT_SIZE"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Medium"
+            android:onClick="onSetAppFontSizeClick"/>
+
+        <RadioButton
+            android:id="@+id/APP_THEME_LARGE_FONT_SIZE"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Large"
+            android:onClick="onSetAppFontSizeClick"/>
+    </RadioGroup>
+
+</LinearLayout>

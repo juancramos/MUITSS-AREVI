@@ -11,12 +11,14 @@
         android:id="@+id/ar_view"
         layout="@layout/ar_view"
         android:layout_width="match_parent"
-        android:layout_height="600dp" />
+        android:layout_height="match_parent"
+        android:layout_marginBottom="@dimen/ar_activity_ar_scene_margin_bottom" />
 
     <com.upv.muitss.arevi.views.MenuView
         android:id="@+id/gallery_layout"
         android:layout_width="match_parent"
-        android:layout_height="50dp"
+        android:layout_height="@dimen/ar_activity_menu_layout_height"
+        android:layout_marginTop="@dimen/ar_activity_menu_margin_top"
         android:orientation="horizontal" />
 
 </LinearLayout>
