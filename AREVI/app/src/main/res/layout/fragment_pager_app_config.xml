@@ -13,7 +13,6 @@
         android:layout_marginTop="@dimen/activity_horizontal_margin"
         android:gravity="center"
         android:text="@string/frame_description_text"
-        android:textColor="@android:color/white"
         android:ellipsize="end"
         android:hyphenationFrequency="normal"
         android:breakStrategy="simple"
@@ -24,14 +23,52 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/activity_horizontal_margin"
         android:gravity="center"
-        android:text="@string/frame_app_font_size_text"
-        android:textColor="@android:color/white"
+        android:text="Set color theme"
         android:ellipsize="end"
         android:hyphenationFrequency="normal"
         android:breakStrategy="simple"
         android:scrollHorizontally="false"/>
 
     <RadioGroup
+        android:id="@+id/APP_THEME_RADIO"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:ellipsize="end"
+        android:hyphenationFrequency="normal"
+        android:breakStrategy="simple"
+        android:scrollHorizontally="false">
+
+        <RadioButton
+            android:id="@+id/APP_THEME"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Light"
+            android:onClick="onSetAppFontSizeClick"/>
+
+        <RadioButton
+            android:id="@+id/APP_THEME_DARK"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Dark"
+            android:onClick="onSetAppFontSizeClick"/>
+
+    </RadioGroup>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/activity_horizontal_margin"
+        android:gravity="center"
+        android:text="@string/frame_app_font_size_text"
+        android:ellipsize="end"
+        android:hyphenationFrequency="normal"
+        android:breakStrategy="simple"
+        android:scrollHorizontally="false"/>
+
+    <RadioGroup
+        android:id="@+id/APP_THEME_SIZE_RADIO"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"

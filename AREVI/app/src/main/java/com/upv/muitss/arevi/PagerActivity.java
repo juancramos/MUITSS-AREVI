@@ -16,6 +16,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 
 import com.upv.muitss.arevi.helpers.Constants;
@@ -57,9 +58,11 @@ public class PagerActivity extends AppCompatActivity {
         mViewPager.setCurrentItem(page);
         updateIndicators(page);
 
-        final int color1 = ContextCompat.getColor(this, R.color.colorOnPrimary);
-        final int color2 = ContextCompat.getColor(this, R.color.colorOnPrimaryDark);
-        final int color3 = ContextCompat.getColor(this, R.color.colorOnSecondaryDark);
+        int theme = Utils.getSavedTheme();
+
+        final int color1 = theme == R.style.AppThemeDark ? ContextCompat.getColor(this, R.color.colorPrimaryDark) : ContextCompat.getColor(this, R.color.colorPrimary);
+        final int color2 = theme == R.style.AppThemeDark ? ContextCompat.getColor(this, R.color.colorOnPrimaryDark) : ContextCompat.getColor(this, R.color.colorOnPrimary);
+        final int color3 = theme == R.style.AppThemeDark ? ContextCompat.getColor(this, R.color.colorOnSecondaryDark) : ContextCompat.getColor(this, R.color.colorOnSecondary);
 
         final int[] colorList = new int[]{color1, color2, color3};
 
@@ -126,17 +129,37 @@ public class PagerActivity extends AppCompatActivity {
     }
 
     public void onSetAppFontSizeClick(View view) {
+        RadioGroup rgTheme = findViewById(R.id.APP_THEME_RADIO);
+        int rbThemeId = rgTheme.getCheckedRadioButtonId();
 
-        switch (view.getId()) {
-            case R.id.APP_THEME_MEDIUM_FONT_SIZE:
-                Utils.saveTheme(this, Constants.APP_THEME_MEDIUM_FONT_SIZE);
-                break;
-            case R.id.APP_THEME_LARGE_FONT_SIZE:
-                Utils.saveTheme(this, Constants.APP_THEME_LARGE_FONT_SIZE);
-                break;
-            default:
-                Utils.saveTheme(this, Constants.APP_THEME_DEFAULT_FONT_SIZE);
-                break;
+        RadioGroup rgThemeSize = findViewById(R.id.APP_THEME_SIZE_RADIO);
+        int rbThemeSizeId = rgThemeSize.getCheckedRadioButtonId();
+
+        if (rbThemeId == R.id.APP_THEME) {
+            switch (rbThemeSizeId) {
+                case R.id.APP_THEME_MEDIUM_FONT_SIZE:
+                    Utils.saveTheme(this, Constants.APP_THEME_MEDIUM_FONT_SIZE);
+                    break;
+                case R.id.APP_THEME_LARGE_FONT_SIZE:
+                    Utils.saveTheme(this, Constants.APP_THEME_LARGE_FONT_SIZE);
+                    break;
+                case R.id.APP_THEME_NORMAL_FONT_SIZE:
+                    Utils.saveTheme(this, Constants.APP_THEME_DEFAULT_FONT_SIZE);
+                    break;
+            }
+        }
+        else if (rbThemeId == R.id.APP_THEME_DARK) {
+            switch (rbThemeSizeId) {
+                case R.id.APP_THEME_MEDIUM_FONT_SIZE:
+                    Utils.saveTheme(this, Constants.APP_DARK_THEME_MEDIUM_FONT_SIZE);
+                    break;
+                case R.id.APP_THEME_LARGE_FONT_SIZE:
+                    Utils.saveTheme(this, Constants.APP_DARK_THEME_LARGE_FONT_SIZE);
+                    break;
+                case R.id.APP_THEME_NORMAL_FONT_SIZE:
+                    Utils.saveTheme(this, Constants.APP_DARK_THEME_DEFAULT_FONT_SIZE);
+                    break;
+            }
         }
     }
 
