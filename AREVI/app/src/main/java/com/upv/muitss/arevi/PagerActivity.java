@@ -18,6 +18,9 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.upv.muitss.arevi.helpers.Constants;
+import com.upv.muitss.arevi.helpers.Utils;
+
 public class PagerActivity extends AppCompatActivity {
 
     private ViewPager mViewPager;
@@ -29,6 +32,7 @@ public class PagerActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setTheme(Utils.getSavedTheme());
         setContentView(R.layout.activity_pager);
 
         // Create the adapter that will return a fragment for each of the three
@@ -119,6 +123,21 @@ public class PagerActivity extends AppCompatActivity {
     public void onBackButtonClick(View view) {
         page -= 1;
         mViewPager.setCurrentItem(page, true);
+    }
+
+    public void onSetAppFontSizeClick(View view) {
+
+        switch (view.getId()) {
+            case R.id.APP_THEME_MEDIUM_FONT_SIZE:
+                Utils.saveTheme(this, Constants.APP_THEME_MEDIUM_FONT_SIZE);
+                break;
+            case R.id.APP_THEME_LARGE_FONT_SIZE:
+                Utils.saveTheme(this, Constants.APP_THEME_LARGE_FONT_SIZE);
+                break;
+            default:
+                Utils.saveTheme(this, Constants.APP_THEME_DEFAULT_FONT_SIZE);
+                break;
+        }
     }
 
     void updateIndicators(int position) {

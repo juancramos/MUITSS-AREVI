@@ -6,8 +6,13 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
-        <item name="android:typeface">serif</item>
-        <item name="android:textSize">40sp</item>
+    </style>
+    
+    <style name="FontSizeMedium">
+        <item name="android:textSize">19sp</item>
     </style>
 
+    <style name="FontSizeLarge" parent="AppTheme">
+        <item name="android:textSize">29sp</item>
+    </style>
 </resources>
