@@ -14,6 +14,7 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.upv.muitss.arevi.helpers.AppState;
+import com.upv.muitss.arevi.helpers.Utils;
 import com.upv.muitss.arevi.logic.webrtc.implementations.WebRTCModule;
 import com.upv.muitss.arevi.views.ArView;
 import com.upv.muitss.arevi.views.MenuView;
@@ -34,6 +35,7 @@ public class ArActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setTheme(Utils.getSavedTheme());
         setContentView(R.layout.activity_ar);
 
         // Get the Intent that called for this Activity to open

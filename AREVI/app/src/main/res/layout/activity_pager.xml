@@ -13,7 +13,6 @@
         android:layout_height="match_parent"
         android:paddingBottom="?attr/actionBarSize" />
 
-
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
@@ -30,20 +29,22 @@
         android:paddingRight="@dimen/activity_horizontal_margin"
         android:paddingStart="@dimen/activity_horizontal_margin">
 
-
         <Button
             android:id="@+id/intro_btn_skip"
-            style="@style/Widget.AppCompat.Button.Borderless"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="start|center"
             android:text="@string/pager_skip_button_text"
             android:textColor="@android:color/white"
-            android:onClick="onSkipButtonClick"/>
+            android:onClick="onSkipButtonClick"
+            style="@style/Widget.AppCompat.Button.Borderless"
+            android:ellipsize="end"
+            android:hyphenationFrequency="normal"
+            android:breakStrategy="simple"
+            android:scrollHorizontally="false"/>
 
         <ImageButton
             android:id="@+id/intro_btn_back"
-            style="@style/Widget.AppCompat.Button.Borderless"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="start|center"
@@ -51,7 +52,12 @@
             android:src="@drawable/ic_chevron_left_24dp"
             android:tint="@android:color/white"
             android:visibility="gone"
-            android:onClick="onBackButtonClick"/>
+            android:onClick="onBackButtonClick"
+            style="@style/Widget.AppCompat.Button.Borderless"
+            android:ellipsize="end"
+            android:hyphenationFrequency="normal"
+            android:breakStrategy="simple"
+            android:scrollHorizontally="false" />
 
         <LinearLayout
             android:layout_width="wrap_content"
@@ -82,29 +88,35 @@
 
         </LinearLayout>
 
-
         <Button
             android:id="@+id/intro_btn_finish"
-            style="@style/Widget.AppCompat.Button.Borderless"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="end|center"
             android:text="@string/pager_finish_button_text"
             android:textColor="@android:color/white"
             android:visibility="gone"
-            android:onClick="onFinishButtonClick"/>
+            android:onClick="onFinishButtonClick"
+            style="@style/Widget.AppCompat.Button.Borderless"
+            android:ellipsize="end"
+            android:hyphenationFrequency="normal"
+            android:breakStrategy="simple"
+            android:scrollHorizontally="false" />
 
         <ImageButton
             android:id="@+id/intro_btn_next"
-            style="@style/Widget.AppCompat.Button.Borderless"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="end|center"
             android:padding="@dimen/activity_horizontal_margin"
             android:src="@drawable/ic_chevron_right_24dp"
             android:tint="@android:color/white"
-            android:onClick="onNextButtonClick"/>
-
+            android:onClick="onNextButtonClick"
+            style="@style/Widget.AppCompat.Button.Borderless"
+            android:ellipsize="end"
+            android:hyphenationFrequency="normal"
+            android:breakStrategy="simple"
+            android:scrollHorizontally="false" />
 
     </FrameLayout>
 

@@ -30,7 +30,7 @@ public class UserPreferences {
         editor.apply();
     }
 
-    public String getUserPreferencString(String key) {
+    public String getUserPreferenceString(String key) {
         return sharedPref.getString(key, null);
     }
 

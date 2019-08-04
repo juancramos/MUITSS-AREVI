@@ -1,13 +1,43 @@
 package com.upv.muitss.arevi.helpers;
 
+import android.app.Activity;
 import android.content.Context;
 import android.graphics.Typeface;
 import android.util.Log;
+
+import com.upv.muitss.arevi.R;
 
 import java.lang.reflect.Field;
 
 public class Utils {
     private static final String TAG = "Utils";
+
+    public static void saveTheme(Activity context, String value) {
+        UserPreferences userPreferences = UserPreferences.getInstance();
+        userPreferences.saveUserPreferenceString(Constants.USER_SELECTED_THEME, value);
+        context.recreate();
+    }
+
+    public static int getSavedTheme() {
+        UserPreferences userPreferences = UserPreferences.getInstance();
+        String selectedTheme = userPreferences.getUserPreferenceString(Constants.USER_SELECTED_THEME);
+        int theme = -1;
+
+        if (selectedTheme == null) return R.style.AppTheme;
+
+        switch (selectedTheme) {
+            case Constants.APP_THEME_DEFAULT_FONT_SIZE:
+                theme = R.style.AppTheme;
+                break;
+            case Constants.APP_THEME_MEDIUM_FONT_SIZE:
+                theme = R.style.FontSizeMedium;
+                break;
+            case Constants.APP_THEME_LARGE_FONT_SIZE:
+                theme = R.style.FontSizeLarge;
+                break;
+        }
+        return theme;
+    }
 
     /**
      * Using reflection to override default typeface

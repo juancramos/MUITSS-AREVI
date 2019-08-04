@@ -15,12 +15,12 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-        Utils.overrideFont(getApplicationContext(), "SERIF", "fonts/Roboto-Regular.ttf");
-
-        AppState.getInstance();
         UserPreferences userPreferences = UserPreferences.getInstance();
         userPreferences.init(this);
+        setTheme(Utils.getSavedTheme());
+        setContentView(R.layout.activity_main);
+
+        AppState.getInstance();
 
         boolean hasProfile = userPreferences.getUserPreferenceBool(Constants.USER_HAS_PROFILE);
 
