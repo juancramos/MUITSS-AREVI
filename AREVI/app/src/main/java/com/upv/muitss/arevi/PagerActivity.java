@@ -10,18 +10,19 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
-import android.view.LayoutInflater;
+import android.util.SparseArray;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.RadioButton;
 import android.widget.RadioGroup;
-import android.widget.TextView;
 
 import com.upv.muitss.arevi.helpers.Constants;
 import com.upv.muitss.arevi.helpers.Utils;
+import com.upv.muitss.arevi.views.AppConfigurationFragmentView;
+import com.upv.muitss.arevi.views.ProfileConfigurationFragmentView;
+
 
 public class PagerActivity extends AppCompatActivity {
 
@@ -59,8 +60,6 @@ public class PagerActivity extends AppCompatActivity {
         mViewPager.setCurrentItem(page);
         updateIndicators(page);
 
-        Class<?> theme = getApplication().getTheme().getClass().getSuperclass();
-
         boolean isDark = Utils.isDarkTheme();
 
         final int color1 = isDark ? ContextCompat.getColor(this, R.color.colorPrimaryDark) : ContextCompat.getColor(this, R.color.colorPrimary);
@@ -85,9 +84,12 @@ public class PagerActivity extends AppCompatActivity {
 
             @Override
             public void onPageSelected(int position) {
+                Fragment fragment = mSectionsPagerAdapter.getFragment(position);
+                if (fragment != null) {
+                    fragment.onResume();
+                }
 
                 page = position;
-
                 updateIndicators(page);
 
                 switch (position) {
@@ -175,110 +177,67 @@ public class PagerActivity extends AppCompatActivity {
     }
 
     /**
-     * A placeholder fragment containing a simple view.
-     */
-    public static class PlaceholderFragment extends Fragment {
-        /**
-         * The fragment argument representing the section number for this
-         * fragment.
-         */
-        private static final String ARG_SECTION_NUMBER = "section_number";
-
-        private ImageView img;
-
-        int[] bgs = new int[]{R.drawable.ic_person_add_24dp, R.drawable.ic_content_paste_24dp, R.drawable.ic_accessibility_24dp};
-
-        public PlaceholderFragment() {
-        }
-
-        /**
-         * Returns a new instance of this fragment for the given section
-         * number.
-         */
-        public static PlaceholderFragment newInstance(int sectionNumber) {
-            PlaceholderFragment fragment = new PlaceholderFragment();
-            Bundle args = new Bundle();
-            args.putInt(ARG_SECTION_NUMBER, sectionNumber);
-            fragment.setArguments(args);
-            return fragment;
-        }
-
-        @Override
-        public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
-                                 Bundle savedInstanceState) {
-            View rootView = inflater.inflate(R.layout.fragment_pager, container, false);
-            TextView textView = rootView.findViewById(R.id.section_label);
-            assert getArguments() != null;
-            textView.setText(getString(R.string.section_format, getArguments().getInt(ARG_SECTION_NUMBER)));
-
-            img = rootView.findViewById(R.id.section_img);
-            img.setImageResource(bgs[getArguments().getInt(ARG_SECTION_NUMBER) - 1]);
-
-            boolean isDark = Utils.isDarkTheme();
-            int sizeTheme = Utils.getSavedThemeStyle();
-
-            if (isDark){
-                ((RadioButton)rootView.findViewById(R.id.APP_THEME_DARK)).setChecked(true);
-            }
-            else {
-                ((RadioButton)rootView.findViewById(R.id.APP_THEME)).setChecked(true);
-            }
-            switch (sizeTheme){
-                case R.style.AppTheme:
-                case R.style.AppThemeDark:
-                    ((RadioButton)rootView.findViewById(R.id.APP_THEME_NORMAL_FONT_SIZE)).setChecked(true);
-                    break;
-                case R.style.FontSizeMedium:
-                case R.style.FontSizeMediumDark:
-                    ((RadioButton)rootView.findViewById(R.id.APP_THEME_MEDIUM_FONT_SIZE)).setChecked(true);
-                    break;
-                case R.style.FontSizeLarge:
-                case R.style.FontSizeLargeDark:
-                    ((RadioButton)rootView.findViewById(R.id.APP_THEME_LARGE_FONT_SIZE)).setChecked(true);
-                    break;
-            }
-
-            return rootView;
-        }
-    }
-
-    /**
      * A {@link FragmentPagerAdapter} that returns a fragment corresponding to
      * one of the sections/tabs/pages.
      */
     public class SectionsPagerAdapter extends FragmentPagerAdapter {
+        private int NUM_ITEMS = 3;
+        private SparseArray<String> mFragmentTags;
+        private FragmentManager mFragmentManager;
 
-        SectionsPagerAdapter(FragmentManager fm) {
-            super(fm);
+        SectionsPagerAdapter(FragmentManager fragmentManager) {
+            super(fragmentManager);
+            mFragmentManager = fragmentManager;
+            mFragmentTags = new SparseArray<>();
         }
 
-        @Override
-        public Fragment getItem(int position) {
-            // getItem is called to instantiate the fragment for the given page.
-            // Return a PlaceholderFragment (defined as a static inner class below).
-            return PlaceholderFragment.newInstance(position + 1);
-
-        }
-
+        // Returns total number of pages
         @Override
         public int getCount() {
-            // Show 3 total pages.
-            return 3;
+            return NUM_ITEMS;
         }
 
+        // Returns the fragment to display for that page
         @Override
-        public CharSequence getPageTitle(int position) {
+        public Fragment getItem(int position) {
             switch (position) {
                 case 0:
-                    return "SECTION 1";
+                    return AppConfigurationFragmentView.newInstance(position + 1);
                 case 1:
-                    return "SECTION 2";
+                    return ProfileConfigurationFragmentView.newInstance(position + 1);
                 case 2:
-                    return "SECTION 3";
+                    return AppConfigurationFragmentView.newInstance(position + 1);
+                default:
+                    return null;
             }
-            return null;
         }
 
+        // Returns the page title for the top indicator
+        @Override
+        public CharSequence getPageTitle(int position) {
+            return "Page " + position;
+        }
+
+        @NonNull
+        @Override
+        public Object instantiateItem(@NonNull ViewGroup container, int position) {
+            Object object = super.instantiateItem(container, position);
+            if (object instanceof Fragment) {
+                Fragment fragment = (Fragment) object;
+                String tag = fragment.getTag();
+                mFragmentTags.put(position, tag);
+            }
+            return object;
+        }
+
+        Fragment getFragment(int position) {
+            Fragment fragment = null;
+            String tag = mFragmentTags.get(position);
+            if (tag != null) {
+                fragment = mFragmentManager.findFragmentByTag(tag);
+            }
+            return fragment;
+        }
     }
 
 

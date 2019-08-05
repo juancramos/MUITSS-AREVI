@@ -1,103 +1,145 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_height="wrap_content"
-    android:orientation="vertical"
-    android:gravity="center"
-    android:padding="@dimen/activity_horizontal_margin">
+    android:layout_width="match_parent"
+    android:id="@+id/fragment_pager_app_config">
 
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/activity_horizontal_margin"
-        android:gravity="center"
-        android:text="@string/frame_description_text"
-        android:ellipsize="end"
-        android:hyphenationFrequency="normal"
-        android:breakStrategy="simple"
-        android:scrollHorizontally="false"/>
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/activity_horizontal_margin"
-        android:gravity="center"
-        android:text="Set color theme"
-        android:ellipsize="end"
-        android:hyphenationFrequency="normal"
-        android:breakStrategy="simple"
-        android:scrollHorizontally="false"/>
-
-    <RadioGroup
-        android:id="@+id/APP_THEME_RADIO"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="center"
-        android:orientation="vertical"
-        android:ellipsize="end"
-        android:hyphenationFrequency="normal"
-        android:breakStrategy="simple"
-        android:scrollHorizontally="false">
+        android:orientation="vertical">
 
-        <RadioButton
-            android:id="@+id/APP_THEME"
-            android:layout_width="wrap_content"
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <ImageView
+                android:id="@+id/section_img"
+                android:layout_width="200dp"
+                android:layout_height="200dp"
+                android:layout_gravity="center"
+                android:adjustViewBounds="true"
+                android:layout_marginTop="@dimen/activity_margin_half"
+                android:src="@drawable/ic_person_add_24dp"
+                android:scaleType="fitCenter"
+                android:contentDescription="@string/indicator_of_context_action_image_text" />
+        </FrameLayout>
+
+        <TextView
+            android:id="@+id/section_label"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Light"
-            android:onClick="onSetAppFontSizeClick"/>
+            android:text="App configuration"
+            android:ellipsize="end"
+            android:gravity="top|center"
+            android:hyphenationFrequency="normal"
+            android:breakStrategy="simple"
+            android:scrollHorizontally="false"/>
 
-        <RadioButton
-            android:id="@+id/APP_THEME_DARK"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Dark"
-            android:onClick="onSetAppFontSizeClick"/>
+            android:orientation="vertical"
+            android:gravity="center"
+            android:padding="@dimen/activity_horizontal_margin">
 
-    </RadioGroup>
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/activity_horizontal_margin"
-        android:gravity="center"
-        android:text="@string/frame_app_font_size_text"
-        android:ellipsize="end"
-        android:hyphenationFrequency="normal"
-        android:breakStrategy="simple"
-        android:scrollHorizontally="false"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/activity_horizontal_margin"
+                android:gravity="center"
+                android:text="@string/frame_description_text"
+                android:ellipsize="end"
+                android:hyphenationFrequency="normal"
+                android:breakStrategy="simple"
+                android:scrollHorizontally="false"/>
 
-    <RadioGroup
-        android:id="@+id/APP_THEME_SIZE_RADIO"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:orientation="vertical"
-        android:ellipsize="end"
-        android:hyphenationFrequency="normal"
-        android:breakStrategy="simple"
-        android:scrollHorizontally="false">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/activity_horizontal_margin"
+                android:gravity="center"
+                android:text="Set color theme"
+                android:ellipsize="end"
+                android:hyphenationFrequency="normal"
+                android:breakStrategy="simple"
+                android:scrollHorizontally="false"/>
 
-        <RadioButton
-            android:id="@+id/APP_THEME_NORMAL_FONT_SIZE"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Normal"
-            android:onClick="onSetAppFontSizeClick"/>
+            <RadioGroup
+                android:id="@+id/APP_THEME_RADIO"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:orientation="vertical"
+                android:ellipsize="end"
+                android:hyphenationFrequency="normal"
+                android:breakStrategy="simple"
+                android:scrollHorizontally="false">
 
-        <RadioButton
-            android:id="@+id/APP_THEME_MEDIUM_FONT_SIZE"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Medium"
-            android:onClick="onSetAppFontSizeClick"/>
+                <RadioButton
+                    android:id="@+id/APP_THEME"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Light"
+                    android:onClick="onSetAppFontSizeClick"/>
 
-        <RadioButton
-            android:id="@+id/APP_THEME_LARGE_FONT_SIZE"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Large"
-            android:onClick="onSetAppFontSizeClick"/>
-    </RadioGroup>
+                <RadioButton
+                    android:id="@+id/APP_THEME_DARK"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Dark"
+                    android:onClick="onSetAppFontSizeClick"/>
 
-</LinearLayout>
+            </RadioGroup>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/activity_horizontal_margin"
+                android:gravity="center"
+                android:text="@string/frame_app_font_size_text"
+                android:ellipsize="end"
+                android:hyphenationFrequency="normal"
+                android:breakStrategy="simple"
+                android:scrollHorizontally="false"/>
+
+            <RadioGroup
+                android:id="@+id/APP_THEME_SIZE_RADIO"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:orientation="vertical"
+                android:ellipsize="end"
+                android:hyphenationFrequency="normal"
+                android:breakStrategy="simple"
+                android:scrollHorizontally="false">
+
+                <RadioButton
+                    android:id="@+id/APP_THEME_NORMAL_FONT_SIZE"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Normal"
+                    android:onClick="onSetAppFontSizeClick"/>
+
+                <RadioButton
+                    android:id="@+id/APP_THEME_MEDIUM_FONT_SIZE"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Medium"
+                    android:onClick="onSetAppFontSizeClick"/>
+
+                <RadioButton
+                    android:id="@+id/APP_THEME_LARGE_FONT_SIZE"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Large"
+                    android:onClick="onSetAppFontSizeClick"/>
+            </RadioGroup>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</ScrollView>
+

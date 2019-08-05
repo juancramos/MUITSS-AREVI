@@ -19,7 +19,7 @@
                 android:layout_gravity="center"
                 android:adjustViewBounds="true"
                 android:layout_marginTop="@dimen/activity_margin_half"
-                android:src="@drawable/ic_accessibility_24dp"
+                android:src="@drawable/ic_content_paste_24dp"
                 android:scaleType="fitCenter"
                 android:contentDescription="@string/indicator_of_context_action_image_text" />
         </FrameLayout>
@@ -28,16 +28,34 @@
             android:id="@+id/section_label"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/pager_tittle_text"
+            android:text="Create profile"
             android:ellipsize="end"
             android:gravity="top|center"
             android:hyphenationFrequency="normal"
             android:breakStrategy="simple"
             android:scrollHorizontally="false"/>
 
-        <include
-            android:id="@+id/fragment_pager_app_config"
-            layout="@layout/fragment_pager_app_config" />
+        <LinearLayout
+            android:id="@+id/fragment_pager_profile_config"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="center"
+            android:padding="@dimen/activity_horizontal_margin">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/activity_horizontal_margin"
+                android:gravity="center"
+                android:text="Full name"
+                android:ellipsize="end"
+                android:hyphenationFrequency="normal"
+                android:breakStrategy="simple"
+                android:scrollHorizontally="false"/>
+
+
+        </LinearLayout>
 
     </LinearLayout>
 
