@@ -15,12 +15,15 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        UserPreferences userPreferences = UserPreferences.getInstance();
-        userPreferences.init(this);
-        setTheme(Utils.getSavedTheme());
-        setContentView(R.layout.activity_main);
 
         AppState.getInstance();
+
+        UserPreferences userPreferences = UserPreferences.getInstance();
+        userPreferences.init(this);
+
+        setTheme(Utils.getSavedThemeStyle());
+        setContentView(R.layout.activity_main);
+
 
         boolean hasProfile = userPreferences.getUserPreferenceBool(Constants.USER_HAS_PROFILE);
 
@@ -44,6 +47,13 @@ public class MainActivity extends AppCompatActivity {
     private void startProfileWizard(){
         Intent toAct = new Intent(this, PagerActivity.class);
         startActivity(toAct);
+    }
+
+    @Override
+    public void onRestart() {
+
+        super.onRestart();
+
     }
 
     @Override

@@ -20,8 +20,10 @@ public class UserPreferences {
     }
 
     public void init(Context context){
-        sharedPref = context.getSharedPreferences(PREFERENCE_FILE_KEY, Context.MODE_PRIVATE);
-        PREFERENCE_FILE_KEY = context.getString(R.string.app_preferences_name);
+        if (sharedPref == null){
+            sharedPref = context.getSharedPreferences(PREFERENCE_FILE_KEY, Context.MODE_PRIVATE);
+            PREFERENCE_FILE_KEY = context.getString(R.string.app_preferences_name);
+        }
     }
 
     public void saveUserPreferenceString(String key, String val){

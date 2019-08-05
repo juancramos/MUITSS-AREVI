@@ -12,17 +12,34 @@ import java.lang.reflect.Field;
 public class Utils {
     private static final String TAG = "Utils";
 
+
+
     public static void saveTheme(Activity context, String value) {
         UserPreferences userPreferences = UserPreferences.getInstance();
         userPreferences.saveUserPreferenceString(Constants.USER_SELECTED_THEME, value);
         context.recreate();
     }
 
-    public static int getSavedTheme() {
-        UserPreferences userPreferences = UserPreferences.getInstance();
-        String selectedTheme = userPreferences.getUserPreferenceString(Constants.USER_SELECTED_THEME);
-        int theme = -1;
+    public static boolean isDarkTheme(){
+        String selectedTheme = getSavedTheme();
+        switch (selectedTheme){
+            case Constants.APP_DARK_THEME_DEFAULT_FONT_SIZE:
+            case Constants.APP_DARK_THEME_MEDIUM_FONT_SIZE:
+            case Constants.APP_DARK_THEME_LARGE_FONT_SIZE:
+                return true;
+            default:
+                return false;
+        }
+    }
 
+    public static String getSavedTheme(){
+        UserPreferences userPreferences = UserPreferences.getInstance();
+        return userPreferences.getUserPreferenceString(Constants.USER_SELECTED_THEME);
+    }
+
+    public static int getSavedThemeStyle() {
+        int theme = -1;
+        String selectedTheme = getSavedTheme();
         if (selectedTheme == null) return R.style.AppTheme;
 
         switch (selectedTheme) {

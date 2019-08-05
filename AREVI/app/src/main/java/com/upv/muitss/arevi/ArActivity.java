@@ -35,7 +35,7 @@ public class ArActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setTheme(Utils.getSavedTheme());
+        setTheme(Utils.getSavedThemeStyle());
         setContentView(R.layout.activity_ar);
 
         // Get the Intent that called for this Activity to open
