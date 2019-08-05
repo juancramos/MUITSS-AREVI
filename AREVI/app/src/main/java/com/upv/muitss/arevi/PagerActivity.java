@@ -16,6 +16,8 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 
 import com.upv.muitss.arevi.helpers.Constants;
@@ -130,22 +132,37 @@ public class PagerActivity extends AppCompatActivity {
     }
 
     public void onSetAppFontSizeClick(View view) {
-        switch (view.getId()) {
-            case R.id.APP_THEME:
-                Utils.saveTheme(this, Constants.APP_THEME_DEFAULT_FONT_SIZE);
-                break;
-            case R.id.APP_THEME_DARK:
-                Utils.saveTheme(this, Constants.APP_DARK_THEME_DEFAULT_FONT_SIZE);
-                break;
-            case R.id.APP_THEME_MEDIUM_FONT_SIZE:
-                Utils.saveTheme(this, Constants.APP_DARK_THEME_MEDIUM_FONT_SIZE);
-                break;
-            case R.id.APP_THEME_LARGE_FONT_SIZE:
-                Utils.saveTheme(this, Constants.APP_DARK_THEME_LARGE_FONT_SIZE);
-                break;
-            case R.id.APP_THEME_NORMAL_FONT_SIZE:
-                Utils.saveTheme(this, Constants.APP_DARK_THEME_DEFAULT_FONT_SIZE);
-                break;
+        RadioGroup rgTheme = findViewById(R.id.APP_THEME_RADIO);
+        int rbThemeId = rgTheme.getCheckedRadioButtonId();
+
+        RadioGroup rgThemeSize = findViewById(R.id.APP_THEME_SIZE_RADIO);
+        int rbThemeSizeId = rgThemeSize.getCheckedRadioButtonId();
+
+        if (rbThemeId == R.id.APP_THEME) {
+            switch (rbThemeSizeId) {
+                case R.id.APP_THEME_MEDIUM_FONT_SIZE:
+                    Utils.saveTheme(this, Constants.APP_THEME_MEDIUM_FONT_SIZE);
+                    break;
+                case R.id.APP_THEME_LARGE_FONT_SIZE:
+                    Utils.saveTheme(this, Constants.APP_THEME_LARGE_FONT_SIZE);
+                    break;
+                case R.id.APP_THEME_NORMAL_FONT_SIZE:
+                    Utils.saveTheme(this, Constants.APP_THEME_DEFAULT_FONT_SIZE);
+                    break;
+            }
+        }
+        else if (rbThemeId == R.id.APP_THEME_DARK) {
+            switch (rbThemeSizeId) {
+                case R.id.APP_THEME_MEDIUM_FONT_SIZE:
+                    Utils.saveTheme(this, Constants.APP_DARK_THEME_MEDIUM_FONT_SIZE);
+                    break;
+                case R.id.APP_THEME_LARGE_FONT_SIZE:
+                    Utils.saveTheme(this, Constants.APP_DARK_THEME_LARGE_FONT_SIZE);
+                    break;
+                case R.id.APP_THEME_NORMAL_FONT_SIZE:
+                    Utils.saveTheme(this, Constants.APP_DARK_THEME_DEFAULT_FONT_SIZE);
+                    break;
+            }
         }
     }
 
@@ -196,6 +213,30 @@ public class PagerActivity extends AppCompatActivity {
 
             img = rootView.findViewById(R.id.section_img);
             img.setImageResource(bgs[getArguments().getInt(ARG_SECTION_NUMBER) - 1]);
+
+            boolean isDark = Utils.isDarkTheme();
+            int sizeTheme = Utils.getSavedThemeStyle();
+
+            if (isDark){
+                ((RadioButton)rootView.findViewById(R.id.APP_THEME_DARK)).setChecked(true);
+            }
+            else {
+                ((RadioButton)rootView.findViewById(R.id.APP_THEME)).setChecked(true);
+            }
+            switch (sizeTheme){
+                case R.style.AppTheme:
+                case R.style.AppThemeDark:
+                    ((RadioButton)rootView.findViewById(R.id.APP_THEME_NORMAL_FONT_SIZE)).setChecked(true);
+                    break;
+                case R.style.FontSizeMedium:
+                case R.style.FontSizeMediumDark:
+                    ((RadioButton)rootView.findViewById(R.id.APP_THEME_MEDIUM_FONT_SIZE)).setChecked(true);
+                    break;
+                case R.style.FontSizeLarge:
+                case R.style.FontSizeLargeDark:
+                    ((RadioButton)rootView.findViewById(R.id.APP_THEME_LARGE_FONT_SIZE)).setChecked(true);
+                    break;
+            }
 
             return rootView;
         }
