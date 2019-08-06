@@ -20,7 +20,7 @@
                 android:layout_gravity="center"
                 android:adjustViewBounds="true"
                 android:layout_marginTop="@dimen/activity_margin_half"
-                android:src="@drawable/ic_person_add_24dp"
+                android:src="@drawable/ic_format_size_black_24dp"
                 android:scaleType="fitCenter"
                 android:contentDescription="@string/indicator_of_context_action_image_text" />
         </FrameLayout>
@@ -29,7 +29,7 @@
             android:id="@+id/section_label"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="App configuration"
+            android:text="@string/frame_app_config_title_text"
             android:ellipsize="end"
             android:gravity="top|center"
             android:hyphenationFrequency="normal"
@@ -49,7 +49,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/activity_horizontal_margin"
                 android:gravity="center"
-                android:text="@string/frame_description_text"
+                android:text="@string/frame_app_config_description_text"
                 android:ellipsize="end"
                 android:hyphenationFrequency="normal"
                 android:breakStrategy="simple"
@@ -60,7 +60,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/activity_horizontal_margin"
                 android:gravity="center"
-                android:text="Set color theme"
+                android:text="@string/frame_app_config_theme_rbtn_text"
                 android:ellipsize="end"
                 android:hyphenationFrequency="normal"
                 android:breakStrategy="simple"
@@ -81,14 +81,14 @@
                     android:id="@+id/APP_THEME"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Light"
+                    android:text="@string/frame_app_config_light_theme_rbtn_text"
                     android:onClick="onSetAppFontSizeClick"/>
 
                 <RadioButton
                     android:id="@+id/APP_THEME_DARK"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Dark"
+                    android:text="@string/frame_app_config_dark_theme_rbtn_text"
                     android:onClick="onSetAppFontSizeClick"/>
 
             </RadioGroup>
@@ -116,24 +116,24 @@
                 android:scrollHorizontally="false">
 
                 <RadioButton
-                    android:id="@+id/APP_THEME_NORMAL_FONT_SIZE"
+                    android:id="@+id/APP_THEME_DEFAULT_FONT_SIZE"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Normal"
+                    android:text="@string/frame_app_font_default_size_text"
                     android:onClick="onSetAppFontSizeClick"/>
 
                 <RadioButton
                     android:id="@+id/APP_THEME_MEDIUM_FONT_SIZE"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Medium"
+                    android:text="@string/frame_app_font_medium_size_text"
                     android:onClick="onSetAppFontSizeClick"/>
 
                 <RadioButton
                     android:id="@+id/APP_THEME_LARGE_FONT_SIZE"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Large"
+                    android:text="@string/frame_app_font_large_size_text"
                     android:onClick="onSetAppFontSizeClick"/>
             </RadioGroup>
 
