@@ -20,6 +20,7 @@ import android.widget.RadioGroup;
 
 import com.upv.muitss.arevi.helpers.Constants;
 import com.upv.muitss.arevi.helpers.Utils;
+import com.upv.muitss.arevi.views.ARConfigurationFragmentView;
 import com.upv.muitss.arevi.views.AppConfigurationFragmentView;
 import com.upv.muitss.arevi.views.ProfileConfigurationFragmentView;
 
@@ -148,7 +149,7 @@ public class PagerActivity extends AppCompatActivity {
                 case R.id.APP_THEME_LARGE_FONT_SIZE:
                     Utils.saveTheme(this, Constants.APP_THEME_LARGE_FONT_SIZE);
                     break;
-                case R.id.APP_THEME_NORMAL_FONT_SIZE:
+                case R.id.APP_THEME_DEFAULT_FONT_SIZE:
                     Utils.saveTheme(this, Constants.APP_THEME_DEFAULT_FONT_SIZE);
                     break;
             }
@@ -161,7 +162,7 @@ public class PagerActivity extends AppCompatActivity {
                 case R.id.APP_THEME_LARGE_FONT_SIZE:
                     Utils.saveTheme(this, Constants.APP_DARK_THEME_LARGE_FONT_SIZE);
                     break;
-                case R.id.APP_THEME_NORMAL_FONT_SIZE:
+                case R.id.APP_THEME_DEFAULT_FONT_SIZE:
                     Utils.saveTheme(this, Constants.APP_DARK_THEME_DEFAULT_FONT_SIZE);
                     break;
             }
@@ -206,7 +207,7 @@ public class PagerActivity extends AppCompatActivity {
                 case 1:
                     return ProfileConfigurationFragmentView.newInstance(position + 1);
                 case 2:
-                    return AppConfigurationFragmentView.newInstance(position + 1);
+                    return ARConfigurationFragmentView.newInstance(position + 1);
                 default:
                     return null;
             }

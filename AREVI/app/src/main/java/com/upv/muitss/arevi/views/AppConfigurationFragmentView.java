@@ -51,7 +51,7 @@ public class AppConfigurationFragmentView extends Fragment {
         switch (sizeTheme){
             case R.style.AppTheme:
             case R.style.AppThemeDark:
-                ((RadioButton)rootView.findViewById(R.id.APP_THEME_NORMAL_FONT_SIZE)).setChecked(true);
+                ((RadioButton)rootView.findViewById(R.id.APP_THEME_DEFAULT_FONT_SIZE)).setChecked(true);
                 break;
             case R.style.FontSizeMedium:
             case R.style.FontSizeMediumDark:
