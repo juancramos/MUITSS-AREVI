@@ -23,4 +23,7 @@
     <string name="frame_app_font_medium_size_text">Medium</string>
     <string name="frame_app_font_large_size_text">Large</string>
     <string name="frame_ar_config_title_text">AREVI augmented reality user interface</string>
+    <string name="frame_profile_config_user_genre_text">What is your genre?</string>
+    <string name="frame_profile_config_male_genre_text">Male</string>
+    <string name="frame_profile_config_female_genre_text">Female</string>
 </resources>

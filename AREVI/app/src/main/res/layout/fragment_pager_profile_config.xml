@@ -35,6 +35,12 @@
             android:breakStrategy="simple"
             android:scrollHorizontally="false"/>
 
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_gravity="bottom"
+            android:background="?attr/fillPrimaryColor"  />
+
         <LinearLayout
             android:id="@+id/fragment_pager_profile_config"
             android:layout_width="match_parent"
@@ -54,6 +60,41 @@
                 android:breakStrategy="simple"
                 android:scrollHorizontally="false"/>
 
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/activity_horizontal_margin"
+                android:gravity="center"
+                android:text="@string/frame_profile_config_user_genre_text"
+                android:ellipsize="end"
+                android:hyphenationFrequency="normal"
+                android:breakStrategy="simple"
+                android:scrollHorizontally="false"/>
+
+            <RadioGroup
+                android:id="@+id/USER_GENDER_RADIO"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:orientation="vertical"
+                android:ellipsize="end"
+                android:hyphenationFrequency="normal"
+                android:breakStrategy="simple"
+                android:scrollHorizontally="false">
+
+                <RadioButton
+                    android:id="@+id/USER_MALE"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/frame_profile_config_male_genre_text"/>
+
+                <RadioButton
+                    android:id="@+id/USER_FEMALE"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/frame_profile_config_female_genre_text"/>
+
+            </RadioGroup>
 
         </LinearLayout>
 

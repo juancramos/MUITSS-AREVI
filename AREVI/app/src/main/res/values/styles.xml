@@ -1,7 +1,7 @@
 <resources>
 
-    <attr name="vectorPrimaryColor" format="color" />
-    <attr name="vectorSecondaryColor" format="color" />
+    <attr name="fillPrimaryColor" format="color" />
+    <attr name="fillSecondaryColor" format="color" />
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <!-- Customize your theme here. -->
@@ -9,8 +9,8 @@
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
         <item name="android:textColor">@color/colorSecondary</item>
-        <item name="vectorPrimaryColor">@color/colorSecondary</item>
-        <item name="vectorSecondaryColor">@color/colorPrimary</item>
+        <item name="fillPrimaryColor">@color/colorSecondary</item>
+        <item name="fillSecondaryColor">@color/colorPrimary</item>
     </style>
     
     <style name="FontSizeMedium" parent="AppTheme">
@@ -40,8 +40,8 @@
         <item name="checkboxStyle">@style/MyCheckBoxStyle</item>
         <item name="android:checkboxStyle">@style/MyCheckBoxStyle</item>
         <item name="android:imageButtonStyle">@style/MyImageButtonStyle</item>
-        <item name="vectorPrimaryColor">@color/colorPrimary</item>
-        <item name="vectorSecondaryColor">@color/colorSecondary</item>
+        <item name="fillPrimaryColor">@color/colorPrimary</item>
+        <item name="fillSecondaryColor">@color/colorSecondary</item>
     </style>
 
     <style name="FontSizeMediumDark" parent="AppThemeDark">

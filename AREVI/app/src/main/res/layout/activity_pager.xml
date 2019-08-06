@@ -16,7 +16,8 @@
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:layout_gravity="bottom"
-        android:layout_marginBottom="?attr/actionBarSize" />
+        android:layout_marginBottom="?attr/actionBarSize"
+        android:background="?attr/fillPrimaryColor"  />
 
     <FrameLayout
         android:layout_width="match_parent"
