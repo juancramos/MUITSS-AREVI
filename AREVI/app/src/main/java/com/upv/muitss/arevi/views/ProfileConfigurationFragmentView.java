@@ -9,7 +9,9 @@ import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
+import android.widget.Spinner;
 
 import com.upv.muitss.arevi.R;
 import com.upv.muitss.arevi.helpers.Utils;
@@ -45,11 +47,10 @@ public class ProfileConfigurationFragmentView extends Fragment {
 
         View rootView =  inflater.inflate(R.layout.fragment_pager_profile_config, container, false);
 
-        EditText mEmailtxt = rootView.findViewById(R.id.text_input_email);
+        EditText mEmailTxt = rootView.findViewById(R.id.text_input_email);
         mEmailLayout = rootView.findViewById(R.id.text_input_layout_email);
 
-
-        mEmailtxt.addTextChangedListener(new TextWatcher() {
+        mEmailTxt.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
@@ -66,11 +67,21 @@ public class ProfileConfigurationFragmentView extends Fragment {
                 validate(textFromEditView);
             }
         });
+
+        Spinner spinner = rootView.findViewById(R.id.input_spinner_education);
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(rootView.getContext(),
+                R.array.input_spinner_education_list, android.R.layout.simple_spinner_item);
+        adapter.setDropDownViewResource(R.layout.spinner_wrap_text_adapter);
+        spinner.setAdapter(adapter);
+
+
         return rootView;
     }
 
 
     private boolean validate(String email) {
+
+        if (Utils.emptyValidation(email)) return true;
 
         // Reset errors.
         mEmailLayout.setError(null);

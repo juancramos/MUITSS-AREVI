@@ -24,6 +24,33 @@
     <string name="frame_app_font_large_size_text">Large</string>
     <string name="frame_ar_config_title_text">AREVI augmented reality user interface</string>
     <string name="frame_profile_config_user_genre_text">What is your genre?</string>
-    <string name="frame_profile_config_male_genre_text">Male</string>
-    <string name="frame_profile_config_female_genre_text">Female</string>
+    <string name="text_input_txt_email_text">Email</string>
+    <string name="text_input_txt_password_text">Password</string>
+    <string name="text_input_txt_full_name_text">Full name</string>
+    <string name="text_input_txt_age_text">Age</string>
+    <string name="text_input_txt_education_text">Education</string>
+    <string name="text_input_txt_occupation_text">Occupation</string>
+    <string name="text_input_txt_genre_text">Genre</string>
+    <string-array name="input_spinner_genre_list">
+        <item>Male</item>
+        <item>Female</item>
+        <item>Other (specify)</item>
+    </string-array>
+    <string-array name="input_spinner_age_list">
+        <item>17 or younger</item>
+        <item>18–20</item>
+        <item>21–29</item>
+        <item>30–39</item>
+        <item>40–49</item>
+        <item>50–59</item>
+        <item>60 or older</item>
+    </string-array>
+    <string-array name="input_spinner_education_list">
+        <item>Less than high school degree</item>
+        <item>High school degree or equivalent</item>
+        <item>Some college but no degree</item>
+        <item>Associate degree</item>
+        <item>Bachelor degree</item>
+        <item>Graduate degree</item>
+    </string-array>
 </resources>
