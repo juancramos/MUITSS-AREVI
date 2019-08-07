@@ -74,7 +74,6 @@ public class ProfileConfigurationFragmentView extends Fragment {
         adapter.setDropDownViewResource(R.layout.spinner_wrap_text_adapter);
         spinner.setAdapter(adapter);
 
-
         return rootView;
     }
 
