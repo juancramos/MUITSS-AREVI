@@ -33,11 +33,15 @@
             android:gravity="top|center"
             android:hyphenationFrequency="normal"
             android:breakStrategy="simple"
-            android:scrollHorizontally="false"/>
+            android:scrollHorizontally="false"
+            android:textSize="?attr/titleTextSize"
+            android:textStyle="bold"/>
 
         <View
             android:layout_width="match_parent"
-            android:layout_height="1dp"
+            android:layout_height="2dp"
+            android:layout_marginLeft="@dimen/activity_margin_border"
+            android:layout_marginRight="@dimen/activity_margin_border"
             android:layout_gravity="bottom"
             android:background="?attr/fillPrimaryColor"  />
 
@@ -46,7 +50,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:gravity="center"
+            android:gravity="left"
             android:padding="@dimen/activity_horizontal_margin">
 
             <TextView
@@ -59,6 +63,25 @@
                 android:hyphenationFrequency="normal"
                 android:breakStrategy="simple"
                 android:scrollHorizontally="false"/>
+
+
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/text_input_layout_email"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:hyphenationFrequency="normal"
+                android:breakStrategy="simple"
+                android:scrollHorizontally="false">
+
+                <EditText
+                    android:id="@+id/text_input_email"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="textEmailAddress"
+                    android:hint="email"/>
+
+            </android.support.design.widget.TextInputLayout>
 
             <TextView
                 android:layout_width="wrap_content"
@@ -75,7 +98,6 @@
                 android:id="@+id/USER_GENDER_RADIO"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:gravity="center"
                 android:orientation="vertical"
                 android:ellipsize="end"
                 android:hyphenationFrequency="normal"

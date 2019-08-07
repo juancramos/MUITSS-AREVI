@@ -34,11 +34,15 @@
             android:gravity="top|center"
             android:hyphenationFrequency="normal"
             android:breakStrategy="simple"
-            android:scrollHorizontally="false"/>
+            android:scrollHorizontally="false"
+            android:textSize="?attr/titleTextSize"
+            android:textStyle="bold"/>
 
         <View
             android:layout_width="match_parent"
-            android:layout_height="1dp"
+            android:layout_height="2dp"
+            android:layout_marginLeft="@dimen/activity_margin_border"
+            android:layout_marginRight="@dimen/activity_margin_border"
             android:layout_gravity="bottom"
             android:background="?attr/fillPrimaryColor"  />
 

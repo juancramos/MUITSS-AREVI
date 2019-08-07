@@ -1,20 +1,18 @@
 package com.upv.muitss.arevi.helpers;
 
 import android.app.Activity;
-import android.content.Context;
-import android.graphics.Typeface;
-import android.util.Log;
+import android.support.annotation.NonNull;
+import android.util.Patterns;
 
 import com.upv.muitss.arevi.R;
 
-import java.lang.reflect.Field;
+import java.util.regex.Pattern;
 
 public class Utils {
     private static final String TAG = "Utils";
 
 
-
-    public static void saveTheme(Activity context, String value) {
+    public static void saveTheme(@NonNull Activity context, String value) {
         UserPreferences userPreferences = UserPreferences.getInstance();
         userPreferences.saveUserPreferenceString(Constants.USER_SELECTED_THEME, value);
         context.recreate();
@@ -65,22 +63,13 @@ public class Utils {
         return theme;
     }
 
-    /**
-     * Using reflection to override default typeface
-     * NOTICE: DO NOT FORGET TO SET TYPEFACE FOR APP THEME AS DEFAULT TYPEFACE WHICH WILL BE OVERRIDDEN
-     * @param context to work with assets
-     * @param defaultFontNameToOverride for example "monospace"
-     * @param customFontFileNameInAssets file name of the font from assets
-     */
-    public static void overrideFont(Context context, String defaultFontNameToOverride, String customFontFileNameInAssets) {
-        try {
-            final Typeface customFontTypeface = Typeface.createFromAsset(context.getAssets(), customFontFileNameInAssets);
-
-            final Field defaultFontTypefaceField = Typeface.class.getDeclaredField(defaultFontNameToOverride);
-            defaultFontTypefaceField.setAccessible(true);
-            defaultFontTypefaceField.set(null, customFontTypeface);
-        } catch (Exception e) {
-            Log.d(TAG ,"Can not set custom font " + customFontFileNameInAssets + " instead of " + defaultFontNameToOverride);
+    public static boolean emailValidation(String email){
+        if(email.isEmpty()) {
+            return false;
+        }else {
+            Pattern pattern = Patterns.EMAIL_ADDRESS;
+            return pattern.matcher(email.trim()).matches();
         }
     }
+
 }
