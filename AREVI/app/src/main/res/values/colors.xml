@@ -10,5 +10,5 @@
     <color name="colorBackground">#FFFFFF</color>
     <color name="colorBackgroundDark">#000000</color>
     <color name="colorError">#B00020</color>
-    <color name="colorAccent">#D81B60</color>
+    <color name="colorAccent">#e53575</color>
 </resources>

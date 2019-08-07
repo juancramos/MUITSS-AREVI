@@ -2,6 +2,8 @@
 
     <attr name="fillPrimaryColor" format="color" />
     <attr name="fillSecondaryColor" format="color" />
+    <attr name="titleTextSize" format="dimension" />
+    <attr name="editTextSize" format="dimension" />
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <!-- Customize your theme here. -->
@@ -11,17 +13,38 @@
         <item name="android:textColor">@color/colorSecondary</item>
         <item name="fillPrimaryColor">@color/colorSecondary</item>
         <item name="fillSecondaryColor">@color/colorPrimary</item>
+        <item name="titleTextSize">17sp</item>
+        <item name="editTextSize">12sp</item>
     </style>
-    
+
+    <style name="Widget.Design.TextInputLayout" parent="Widget.MaterialComponents.TextInputLayout.FilledBox.Dense">
+        <item name="hintTextAppearance">@style/AppTheme.TextFloatLabelAppearance</item>
+        <item name="errorTextAppearance">@style/AppTheme.TextErrorAppearance</item>
+        <item name="boxBackgroundMode">none</item>
+        <item name="android:textColorHint">?attr/fillPrimaryColor</item>
+    </style>
+
+    <style name="AppTheme.TextFloatLabelAppearance" parent="TextAppearance.Design.Hint">
+        <item name="android:textSize">?attr/editTextSize</item>
+    </style>
+
+    <style name="AppTheme.TextErrorAppearance" parent="TextAppearance.Design.Error">
+        <item name="android:textSize">?attr/editTextSize</item>
+    </style>
+
     <style name="FontSizeMedium" parent="AppTheme">
+        <item name="titleTextSize">23sp</item>
+        <item name="editTextSize">19sp</item>
         <item name="android:textSize">19sp</item>
     </style>
 
     <style name="FontSizeLarge" parent="AppTheme">
+        <item name="titleTextSize">33sp</item>
+        <item name="editTextSize">29sp</item>
         <item name="android:textSize">29sp</item>
     </style>
 
-    <style name="AppThemeDark" parent="Theme.AppCompat.Light.NoActionBar">
+    <style name="AppThemeDark" parent="AppTheme">
         <item name="colorPrimary">@color/colorPrimaryDark</item>
         <item name="colorPrimaryDark">@color/colorSecondary</item>
         <item name="android:colorBackground">@color/colorSecondary</item>
@@ -35,20 +58,24 @@
         <item name="android:textColorPrimaryInverse">@color/colorPrimary</item>
         <item name="android:textColorSecondaryInverse">@color/colorPrimary</item>
         <item name="android:textColorTertiaryInverse">@color/colorPrimary</item>
+        <item name="fillPrimaryColor">@color/colorPrimary</item>
+        <item name="fillSecondaryColor">@color/colorSecondary</item>
         <item name="radioButtonStyle">@style/MyRadioButtonStyle</item>
         <item name="android:radioButtonStyle">@style/MyRadioButtonStyle</item>
         <item name="checkboxStyle">@style/MyCheckBoxStyle</item>
         <item name="android:checkboxStyle">@style/MyCheckBoxStyle</item>
         <item name="android:imageButtonStyle">@style/MyImageButtonStyle</item>
-        <item name="fillPrimaryColor">@color/colorPrimary</item>
-        <item name="fillSecondaryColor">@color/colorSecondary</item>
     </style>
 
     <style name="FontSizeMediumDark" parent="AppThemeDark">
+        <item name="titleTextSize">23sp</item>
+        <item name="editTextSize">19sp</item>
         <item name="android:textSize">19sp</item>
     </style>
 
     <style name="FontSizeLargeDark" parent="AppThemeDark">
+        <item name="titleTextSize">33sp</item>
+        <item name="editTextSize">29sp</item>
         <item name="android:textSize">29sp</item>
     </style>
 
@@ -65,4 +92,5 @@
     <style name="MyRadioButtonStyle" parent="Widget.AppCompat.CompoundButton.RadioButton">
         <item name="android:textColor">@color/colorPrimary</item>
     </style>
+
 </resources>
