@@ -53,7 +53,6 @@
             android:gravity="center"
             android:padding="@dimen/activity_horizontal_margin">
 
-
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -64,12 +63,19 @@
                 android:hyphenationFrequency="normal"
                 android:breakStrategy="simple"
                 android:scrollHorizontally="false"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="start"
+            android:padding="@dimen/activity_horizontal_margin">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/activity_horizontal_margin"
-                android:gravity="center"
                 android:text="@string/frame_app_config_theme_rbtn_text"
                 android:ellipsize="end"
                 android:hyphenationFrequency="normal"
@@ -80,7 +86,6 @@
                 android:id="@+id/APP_THEME_RADIO"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:gravity="center"
                 android:orientation="vertical"
                 android:ellipsize="end"
                 android:hyphenationFrequency="normal"
@@ -107,7 +112,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/activity_horizontal_margin"
-                android:gravity="center"
                 android:text="@string/frame_app_font_size_text"
                 android:ellipsize="end"
                 android:hyphenationFrequency="normal"
@@ -118,7 +122,6 @@
                 android:id="@+id/APP_THEME_SIZE_RADIO"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:gravity="center"
                 android:orientation="vertical"
                 android:ellipsize="end"
                 android:hyphenationFrequency="normal"

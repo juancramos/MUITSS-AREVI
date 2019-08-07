@@ -63,13 +63,13 @@ public class Utils {
         return theme;
     }
 
+    public static boolean emptyValidation(String text) {
+        return text.isEmpty();
+    }
+
     public static boolean emailValidation(String email){
-        if(email.isEmpty()) {
-            return false;
-        }else {
-            Pattern pattern = Patterns.EMAIL_ADDRESS;
-            return pattern.matcher(email.trim()).matches();
-        }
+        Pattern pattern = Patterns.EMAIL_ADDRESS;
+        return pattern.matcher(email.trim()).matches();
     }
 
 }
