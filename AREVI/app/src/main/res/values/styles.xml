@@ -9,7 +9,7 @@
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
-        <item name="colorAccent">@color/colorAccent</item>
+        <item name="colorAccent">@color/colorAccentPrimary</item>
         <item name="android:textColor">@color/colorSecondary</item>
         <item name="fillPrimaryColor">@color/colorSecondary</item>
         <item name="fillSecondaryColor">@color/colorPrimary</item>
@@ -45,11 +45,11 @@
     </style>
 
     <style name="AppThemeDark" parent="AppTheme">
-        <item name="colorPrimary">@color/colorPrimaryDark</item>
-        <item name="colorPrimaryDark">@color/colorSecondary</item>
+        <item name="colorPrimary">@color/colorSecondary</item>
+        <item name="colorPrimaryDark">@color/colorSecondaryDark</item>
         <item name="android:colorBackground">@color/colorSecondary</item>
         <item name="android:colorButtonNormal">@color/colorPrimaryDark</item>
-        <item name="colorAccent">@color/colorAccent</item>
+        <item name="colorAccent">@color/colorAccentSecondary</item>
         <item name="android:textColor">@color/colorPrimary</item>
         <item name="android:editTextColor">@color/colorPrimary</item>
         <item name="android:textColorPrimary">@color/colorPrimary</item>
