@@ -22,12 +22,13 @@ import com.upv.muitss.arevi.helpers.Constants;
 import com.upv.muitss.arevi.helpers.Utils;
 import com.upv.muitss.arevi.views.ARConfigurationFragmentView;
 import com.upv.muitss.arevi.views.AppConfigurationFragmentView;
+import com.upv.muitss.arevi.views.CustomViewPager;
 import com.upv.muitss.arevi.views.ProfileConfigurationFragmentView;
 
 
 public class PagerActivity extends AppCompatActivity {
 
-    private ViewPager mViewPager;
+    private CustomViewPager mViewPager;
     private ImageView[] indicators;
     private ImageButton mNextBtn, mBackBtn;
     private Button mFinishBtn, mSkipBtn;
@@ -55,7 +56,7 @@ public class PagerActivity extends AppCompatActivity {
         indicators = new ImageView[]{zero, one, two};
 
         // Set up the ViewPager with the sections adapter.
-        mViewPager = findViewById(R.id.container);
+        mViewPager = findViewById(R.id.view_pager_container);
         mViewPager.setAdapter(mSectionsPagerAdapter);
 
         mViewPager.setCurrentItem(page);
@@ -75,6 +76,7 @@ public class PagerActivity extends AppCompatActivity {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
 
+                if (position == 1) mViewPager.setPagingEnabled(false);
                 /*
                 color update
                  */
@@ -90,20 +92,21 @@ public class PagerActivity extends AppCompatActivity {
                     fragment.onResume();
                 }
 
-                page = position;
-                updateIndicators(page);
-
                 switch (position) {
                     case 0:
                         mViewPager.setBackgroundColor(color1);
                         break;
                     case 1:
+                        mViewPager.setPagingEnabled(false);
                         mViewPager.setBackgroundColor(color2);
                         break;
                     case 2:
                         mViewPager.setBackgroundColor(color3);
                         break;
                 }
+                page = position;
+                updateIndicators(page);
+
                 mNextBtn.setVisibility(position == 2 ? View.GONE : View.VISIBLE);
                 mFinishBtn.setVisibility(position == 2 ? View.VISIBLE : View.GONE);
                 mBackBtn.setVisibility(position == 0 ? View.GONE : View.VISIBLE);
@@ -118,6 +121,7 @@ public class PagerActivity extends AppCompatActivity {
     }
 
     public void onNextButtonClick(View view) {
+        if (page == 1 && !validateProfileForm()) return;
         page += 1;
         mViewPager.setCurrentItem(page, true);
     }
@@ -132,6 +136,10 @@ public class PagerActivity extends AppCompatActivity {
     public void onBackButtonClick(View view) {
         page -= 1;
         mViewPager.setCurrentItem(page, true);
+    }
+
+    public boolean validateProfileForm(){
+        return false;
     }
 
     public void onSetAppFontSizeClick(View view) {
