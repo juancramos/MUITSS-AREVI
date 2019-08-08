@@ -1,12 +1,14 @@
 package com.upv.muitss.arevi.helpers;
 
 import android.app.Activity;
+import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.design.widget.TextInputLayout;
 import android.text.InputType;
 import android.util.Patterns;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 
 import com.upv.muitss.arevi.R;
@@ -110,5 +112,10 @@ public class Utils {
             return textFromEditView;
         }
         return null;
+    }
+
+    public static void hideKeyboardFrom(Context context, View view) {
+        InputMethodManager imm = (InputMethodManager) context.getSystemService(Activity.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
     }
 }

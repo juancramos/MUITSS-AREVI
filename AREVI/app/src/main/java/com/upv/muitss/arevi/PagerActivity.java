@@ -18,6 +18,8 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.RadioGroup;
 
+import com.upv.muitss.arevi.entities.User;
+import com.upv.muitss.arevi.entities.UserInfo;
 import com.upv.muitss.arevi.helpers.AppState;
 import com.upv.muitss.arevi.helpers.Constants;
 import com.upv.muitss.arevi.helpers.Utils;
@@ -48,6 +50,9 @@ public class PagerActivity extends AppCompatActivity {
         ImageView zero = findViewById(R.id.intro_indicator_0);
         ImageView one = findViewById(R.id.intro_indicator_1);
         ImageView two = findViewById(R.id.intro_indicator_2);
+
+        AppState.getInstance().setUser(new User());
+        AppState.getInstance().setUserInfo(new UserInfo());
 
         mNextBtn = findViewById(R.id.intro_btn_next);
         mBackBtn = findViewById(R.id.intro_btn_back);
@@ -101,6 +106,7 @@ public class PagerActivity extends AppCompatActivity {
 
                 switch (position) {
                     case 0:
+                        Utils.hideKeyboardFrom(getBaseContext(), mViewPager);
                         mViewPager.setBackgroundColor(color1);
                         break;
                     case 1:
@@ -111,7 +117,9 @@ public class PagerActivity extends AppCompatActivity {
                             position = position - 1;
                             mViewPager.setCurrentItem(page, true);
                             mViewPager.setPagingEnabled(false);
+                            break;
                         }
+                        Utils.hideKeyboardFrom(getBaseContext(), mViewPager);
                         mViewPager.setBackgroundColor(color3);
                         break;
                 }
@@ -126,6 +134,13 @@ public class PagerActivity extends AppCompatActivity {
 
             @Override
             public void onPageScrollStateChanged(int state) {
+                if (page == 1) {
+                    mViewPager.setFocusable(true);
+                    mViewPager.setFocusableInTouchMode(true);
+                    mViewPager.requestFocus();
+                    mViewPager.setFocusable(false);
+                    mViewPager.setFocusableInTouchMode(false);
+                }
             }
         });
     }
