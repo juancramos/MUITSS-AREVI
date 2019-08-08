@@ -13,6 +13,8 @@ import android.widget.EditText;
 import android.widget.Spinner;
 
 import com.upv.muitss.arevi.R;
+import com.upv.muitss.arevi.entities.User;
+import com.upv.muitss.arevi.entities.UserInfo;
 import com.upv.muitss.arevi.helpers.AppState;
 import com.upv.muitss.arevi.helpers.Utils;
 
@@ -45,46 +47,54 @@ public class ProfileConfigurationFragmentView extends Fragment {
 
         View rootView =  inflater.inflate(R.layout.fragment_pager_profile_config, container, false);
         AppState appState = AppState.getInstance();
+        User user = appState.getUser();
+        UserInfo userInfo = appState.getUserInfo();
 
         EditText mEmailTxt = rootView.findViewById(R.id.text_input_email);
+        mEmailTxt.setText(user.email);
         mEmailTxt.setOnFocusChangeListener((v, hasFocus) -> {
             if (!hasFocus) {
-                appState.getUser().email = Utils.validateInput(mEmailTxt);
+                user.email = Utils.validateInput(mEmailTxt);
             }
         });
 
         EditText passwordTxt = rootView.findViewById(R.id.text_input_password);
+        passwordTxt.setText(user.email);
         passwordTxt.setOnFocusChangeListener((v, hasFocus) -> {
             if (!hasFocus) {
-                appState.getUser().password = Utils.validateInput(passwordTxt);
+                user.password = Utils.validateInput(passwordTxt);
             }
         });
 
         EditText fullNameTxt = rootView.findViewById(R.id.text_input_full_name);
+        fullNameTxt.setText(userInfo.fullName);
         fullNameTxt.setOnFocusChangeListener((v, hasFocus) -> {
             if (!hasFocus) {
-                appState.getUserInfo().fullName = Utils.validateInput(fullNameTxt);
+                userInfo.fullName = Utils.validateInput(fullNameTxt);
             }
         });
 
         EditText otherGenderNameTxt = rootView.findViewById(R.id.text_input_gender);
+        otherGenderNameTxt.setText(userInfo.genderOther);
         otherGenderNameTxt.setOnFocusChangeListener((v, hasFocus) -> {
             if (!hasFocus) {
-                appState.getUserInfo().genderOther = Utils.validateInput(otherGenderNameTxt);
+                userInfo.genderOther = Utils.validateInput(otherGenderNameTxt);
             }
         });
 
         EditText occupationTxt = rootView.findViewById(R.id.text_input_occupation);
+        occupationTxt.setText(userInfo.occupation);
         occupationTxt.setOnFocusChangeListener((v, hasFocus) -> {
             if (!hasFocus) {
-                appState.getUserInfo().occupation = Utils.validateInput(occupationTxt);
+                userInfo.occupation = Utils.validateInput(occupationTxt);
             }
         });
 
         EditText visualIllnessTxt = rootView.findViewById(R.id.text_input_visual_illness);
+        visualIllnessTxt.setText(userInfo.visualIllness);
         visualIllnessTxt.setOnFocusChangeListener((v, hasFocus) -> {
             if (!hasFocus) {
-                appState.getUserInfo().visualIllness =  Utils.validateInput(visualIllnessTxt);
+                userInfo.visualIllness =  Utils.validateInput(visualIllnessTxt);
             }
         });
 
@@ -101,7 +111,6 @@ public class ProfileConfigurationFragmentView extends Fragment {
             public void onNothingSelected(AdapterView<?> parent) {
             }
         });
-
 
         Spinner ageSpinner = rootView.findViewById(R.id.input_spinner_age);
         ageSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {

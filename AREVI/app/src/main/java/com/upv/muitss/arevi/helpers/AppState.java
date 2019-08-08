@@ -31,9 +31,11 @@ public class AppState {
 
     private User user;
     public User getUser() { return this.user; }
+    public void setUser(User pUser) { this.user = pUser; }
 
     private UserInfo userInfo;
     public UserInfo getUserInfo() { return this.userInfo; }
+    public void setUserInfo(UserInfo pUserInfo) { this.userInfo = pUserInfo; }
 
     private static AppState instance;
 
