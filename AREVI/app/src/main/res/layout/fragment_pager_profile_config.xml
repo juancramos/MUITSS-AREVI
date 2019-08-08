@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_height="wrap_content"
-    android:layout_width="match_parent">
+    android:layout_width="match_parent"
+    android:id="@+id/fragment_pager_profile_config">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -65,98 +66,129 @@
         </LinearLayout>
 
         <LinearLayout
-            android:id="@+id/fragment_pager_profile_config"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:gravity="start"
-            android:padding="@dimen/activity_horizontal_margin">
+            android:padding="@dimen/activity_horizontal_margin"
+            android:id="@+id/fragment_pager_profile_config_form">
 
-            <android.support.design.widget.TextInputLayout
-                android:id="@+id/text_input_layout_email"
-                android:layout_width="match_parent"
+            <TextView
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:text="@string/text_input_txt_email_text"
                 android:ellipsize="end"
                 android:hyphenationFrequency="normal"
                 android:breakStrategy="simple"
-                android:scrollHorizontally="false">
+                android:scrollHorizontally="false"/>
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/text_input_layout_email"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content">
 
                 <EditText
                     android:id="@+id/text_input_email"
-                    android:layout_width="match_parent"
+                    android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
-                    android:inputType="textEmailAddress"
-                    android:hint="@string/text_input_txt_email_text" />
-
-            </android.support.design.widget.TextInputLayout>
-
-            <android.support.design.widget.TextInputLayout
-                android:id="@+id/text_input_layout_password"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:ellipsize="end"
-                android:hyphenationFrequency="normal"
-                android:breakStrategy="simple"
-                android:scrollHorizontally="false">
-
-                <EditText
-                    android:id="@+id/text_input_password"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:inputType="textPassword"
-                    android:hint="@string/text_input_txt_password_text"/>
-
-            </android.support.design.widget.TextInputLayout>
-
-            <android.support.design.widget.TextInputLayout
-                android:id="@+id/text_input_layout_full_name"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:ellipsize="end"
-                android:hyphenationFrequency="normal"
-                android:breakStrategy="simple"
-                android:scrollHorizontally="false">
-
-                <EditText
-                    android:id="@+id/text_input_full_name"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:inputType="textCapWords"
-                    android:hint="@string/text_input_txt_full_name_text"/>
+                    android:inputType="textEmailAddress"/>
 
             </android.support.design.widget.TextInputLayout>
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/frame_profile_config_user_genre_text"
+                android:text="@string/text_input_txt_password_text"
                 android:ellipsize="end"
                 android:hyphenationFrequency="normal"
                 android:breakStrategy="simple"
                 android:scrollHorizontally="false"/>
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/text_input_layout_password"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content">
 
+                <EditText
+                    android:id="@+id/text_input_password"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="textPassword"/>
+
+            </android.support.design.widget.TextInputLayout>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/text_input_txt_full_name_text"
+                android:ellipsize="end"
+                android:hyphenationFrequency="normal"
+                android:breakStrategy="simple"
+                android:scrollHorizontally="false"/>
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/text_input_layout_full_name"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content">
+
+                <EditText
+                    android:id="@+id/text_input_full_name"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="textCapWords"/>
+
+            </android.support.design.widget.TextInputLayout>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/text_input_txt_occupation_text"
+                android:ellipsize="end"
+                android:hyphenationFrequency="normal"
+                android:breakStrategy="simple"
+                android:scrollHorizontally="false"/>
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/text_input_layout_occupation"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content">
+
+                <EditText
+                    android:id="@+id/text_input_occupation"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="text"/>
+
+            </android.support.design.widget.TextInputLayout>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/frame_profile_config_user_gender_text"
+                android:ellipsize="end"
+                android:hyphenationFrequency="normal"
+                android:breakStrategy="simple"
+                android:scrollHorizontally="false"/>
             <Spinner
                 android:id="@+id/input_spinner_gender"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:entries="@array/input_spinner_genre_list"/>
+                android:entries="@array/input_spinner_gender_list"/>
 
-            <android.support.design.widget.TextInputLayout
-                android:id="@+id/text_input_layout_genre"
-                android:layout_width="match_parent"
+            <TextView
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:text="@string/text_input_txt_gender_text"
                 android:ellipsize="end"
                 android:hyphenationFrequency="normal"
                 android:breakStrategy="simple"
-                android:scrollHorizontally="false"
-                android:visibility="gone">
+                android:scrollHorizontally="false"/>
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/text_input_layout_gender"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content">
 
                 <EditText
-                    android:id="@+id/text_input_genre"
-                    android:layout_width="match_parent"
+                    android:id="@+id/text_input_gender"
+                    android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
-                    android:inputType="text"
-                    android:hint="@string/text_input_txt_genre_text"/>
+                    android:inputType="text"/>
 
             </android.support.design.widget.TextInputLayout>
 
@@ -168,31 +200,11 @@
                 android:hyphenationFrequency="normal"
                 android:breakStrategy="simple"
                 android:scrollHorizontally="false"/>
-
             <Spinner
                 android:id="@+id/input_spinner_age"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:entries="@array/input_spinner_age_list"/>
-
-            <android.support.design.widget.TextInputLayout
-                android:id="@+id/text_input_layout_occupation"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:ellipsize="end"
-                android:hyphenationFrequency="normal"
-                android:breakStrategy="simple"
-                android:scrollHorizontally="false">
-
-                <EditText
-                    android:id="@+id/text_input_occupation"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:inputType="text"
-                    android:hint="@string/text_input_txt_occupation_text"/>
-
-            </android.support.design.widget.TextInputLayout>
-
 
             <TextView
                 android:layout_width="wrap_content"
@@ -202,7 +214,6 @@
                 android:hyphenationFrequency="normal"
                 android:breakStrategy="simple"
                 android:scrollHorizontally="false"/>
-
             <Spinner
                 android:id="@+id/input_spinner_education"
                 android:layout_width="fill_parent"
@@ -210,6 +221,49 @@
                 android:spinnerMode="dialog"
                 android:entries="@array/input_spinner_education_list"/>
 
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/text_input_txt_visual_illness_text"
+                android:ellipsize="end"
+                android:hyphenationFrequency="normal"
+                android:breakStrategy="simple"
+                android:scrollHorizontally="false"/>
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/text_input_layout_visual_illness"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content">
+
+                <EditText
+                    android:id="@+id/text_input_visual_illness"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="textMultiLine"
+                    android:lines="6"
+                    android:minLines="4"
+                    android:scrollbars="vertical"/>
+
+            </android.support.design.widget.TextInputLayout>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="center"
+            android:padding="@dimen/activity_horizontal_margin">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/activity_horizontal_margin"
+                android:gravity="center"
+                android:text="@string/frame_profile_config_privacy_compliance_text"
+                android:ellipsize="end"
+                android:hyphenationFrequency="normal"
+                android:breakStrategy="simple"
+                android:scrollHorizontally="false"/>
         </LinearLayout>
 
     </LinearLayout>

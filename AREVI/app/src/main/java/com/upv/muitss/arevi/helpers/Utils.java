@@ -2,15 +2,21 @@ package com.upv.muitss.arevi.helpers;
 
 import android.app.Activity;
 import android.support.annotation.NonNull;
+import android.support.design.widget.TextInputLayout;
+import android.text.InputType;
 import android.util.Patterns;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.EditText;
 
 import com.upv.muitss.arevi.R;
+
+import org.jetbrains.annotations.Contract;
 
 import java.util.regex.Pattern;
 
 public class Utils {
     private static final String TAG = "Utils";
-
 
     public static void saveTheme(@NonNull Activity context, String value) {
         UserPreferences userPreferences = UserPreferences.getInstance();
@@ -63,13 +69,46 @@ public class Utils {
         return theme;
     }
 
+    @Contract(value = "null -> true", pure = true)
     public static boolean isNullOrEmpty(String text) {
         return text == null || text.isEmpty();
     }
 
-    public static boolean emailValidation(String email){
+    public static boolean emailValidation(@NonNull String email){
         Pattern pattern = Patterns.EMAIL_ADDRESS;
         return !pattern.matcher(email.trim()).matches();
     }
 
+    public static void validateForm(View view) {
+        if (view instanceof ViewGroup) {
+            ViewGroup viewGroup = (ViewGroup)view;
+            for (int i = 0; i < viewGroup.getChildCount(); i++) {
+                View v = viewGroup.getChildAt(i);
+                if (v instanceof EditText) {
+                    validateInput(v);
+                } else{
+                    validateForm(v);
+                }
+            }
+        }
+    }
+
+    @Contract("null, _ -> null")
+    public static String validateInput(View view) {
+        if (view instanceof EditText){
+            EditText editText = (EditText)view;
+            String textFromEditView = editText.getText().toString();
+            // Reset errors.
+            TextInputLayout parent = (TextInputLayout) view.getParent().getParent();
+            parent.setError(null);
+            if (Utils.isNullOrEmpty(textFromEditView)) {
+                parent.setError("Can not be empty");
+            }
+            else if (editText.getInputType() == (InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS) && Utils.emailValidation(textFromEditView)){
+                parent.setError("Enter a valid email");
+            }
+            return textFromEditView;
+        }
+        return null;
+    }
 }

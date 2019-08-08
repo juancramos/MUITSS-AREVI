@@ -27,7 +27,6 @@
     <style name="Widget.Design.TextInputLayout" parent="Widget.MaterialComponents.TextInputLayout.FilledBox.Dense">
         <item name="hintTextAppearance">@style/AppTheme.TextFloatLabelAppearance</item>
         <item name="errorTextAppearance">@style/AppTheme.TextErrorAppearance</item>
-        <item name="boxBackgroundMode">none</item>
         <item name="android:textColorHint">?attr/fillPrimaryColor</item>
     </style>
 

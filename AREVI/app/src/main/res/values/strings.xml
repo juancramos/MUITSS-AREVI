@@ -23,15 +23,16 @@
     <string name="frame_app_font_medium_size_text">Medium</string>
     <string name="frame_app_font_large_size_text">Large</string>
     <string name="frame_ar_config_title_text">AREVI augmented reality user interface</string>
-    <string name="frame_profile_config_user_genre_text">Genre</string>
+    <string name="frame_profile_config_user_gender_text">Gender</string>
     <string name="text_input_txt_email_text">Email</string>
     <string name="text_input_txt_password_text">Password</string>
     <string name="text_input_txt_full_name_text">Full name</string>
     <string name="text_input_txt_age_text">Age</string>
     <string name="text_input_txt_education_text">Education</string>
     <string name="text_input_txt_occupation_text">Occupation</string>
-    <string name="text_input_txt_genre_text">Specify genre</string>
-    <string-array name="input_spinner_genre_list">
+    <string name="text_input_txt_visual_illness_text">Describe your visual illness</string>
+    <string name="text_input_txt_gender_text">Specify gender</string>
+    <string-array name="input_spinner_gender_list">
         <item>Male</item>
         <item>Female</item>
         <item>Other (specify)</item>
@@ -53,4 +54,5 @@
         <item>Bachelor degree</item>
         <item>Graduate degree</item>
     </string-array>
+    <string name="frame_profile_config_privacy_compliance_text">By continuing you are accepting to share your information for investigation purposes</string>
 </resources>

@@ -1,5 +1,8 @@
 package com.upv.muitss.arevi.helpers;
 
+import com.upv.muitss.arevi.entities.User;
+import com.upv.muitss.arevi.entities.UserInfo;
+
 public class AppState {
 
     private int centerX;
@@ -26,9 +29,11 @@ public class AppState {
     public float getNodeAge() { return this.nodeAge; }
     public void setNodeAge(float pNodeAge) { this.nodeAge = pNodeAge; }
 
-    private boolean profileFormHasError;
-    public boolean getprofileFormHasError() { return this.profileFormHasError; }
-    public void setprofileFormHasError(boolean hasError) { this.profileFormHasError = hasError; }
+    private User user;
+    public User getUser() { return this.user; }
+
+    private UserInfo userInfo;
+    public UserInfo getUserInfo() { return this.userInfo; }
 
     private static AppState instance;
 
@@ -47,7 +52,8 @@ public class AppState {
         isHitting = false;
         isFocusing = false;
         nodeAge = 0;
-        profileFormHasError = false;
+        user = new User();
+        userInfo = new UserInfo();
     }
 }
 

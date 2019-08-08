@@ -14,12 +14,11 @@ import android.util.SparseArray;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.RadioGroup;
-import android.widget.Spinner;
 
+import com.upv.muitss.arevi.helpers.AppState;
 import com.upv.muitss.arevi.helpers.Constants;
 import com.upv.muitss.arevi.helpers.Utils;
 import com.upv.muitss.arevi.views.ARConfigurationFragmentView;
@@ -79,7 +78,11 @@ public class PagerActivity extends AppCompatActivity {
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
                 mViewPager.setPagingEnabled(true);
 
-                if (position == 1) mViewPager.setPagingEnabled(false);
+                if (position == 2 && validateProfileFormError()) {
+                    mViewPager.setPagingEnabled(false);
+                    page = page == 2 ? page - 1 : page;
+                    mViewPager.setCurrentItem(page, true);
+                }
                 /*
                 color update
                  */
@@ -101,10 +104,14 @@ public class PagerActivity extends AppCompatActivity {
                         mViewPager.setBackgroundColor(color1);
                         break;
                     case 1:
-                        mViewPager.setPagingEnabled(false);
                         mViewPager.setBackgroundColor(color2);
                         break;
                     case 2:
+                        if (validateProfileFormError()){
+                            position = position - 1;
+                            mViewPager.setCurrentItem(page, true);
+                            mViewPager.setPagingEnabled(false);
+                        }
                         mViewPager.setBackgroundColor(color3);
                         break;
                 }
@@ -119,13 +126,22 @@ public class PagerActivity extends AppCompatActivity {
 
             @Override
             public void onPageScrollStateChanged(int state) {
-
             }
         });
     }
 
     public void onNextButtonClick(View view) {
-        if (page == 1 && !validateProfileForm()) return;
+        if (page == 1){
+            view.setFocusable(true);
+            view.setFocusableInTouchMode(true);
+            view.requestFocus();
+
+            boolean notComplete = validateProfileFormError();
+
+            view.setFocusable(false);
+            view.setFocusableInTouchMode(false);
+            if (notComplete) return;
+        }
         page += 1;
         mViewPager.setCurrentItem(page, true);
     }
@@ -142,33 +158,12 @@ public class PagerActivity extends AppCompatActivity {
         mViewPager.setCurrentItem(page, true);
     }
 
-    public boolean validateProfileForm(){
-        String email = getValueFromView(R.id.text_input_email);
-        String password = getValueFromView(R.id.text_input_password);
+    public boolean validateProfileFormError(){
+        AppState appState = AppState.getInstance();
 
-        if (!Utils.isNullOrEmpty(email) && Utils.emailValidation(email)) return false;
+        Utils.validateForm(findViewById(R.id.fragment_pager_profile_config_form));
 
-
-
-        String fullName = getValueFromView(R.id.text_input_full_name);
-        String genre = getValueFromView(R.id.input_spinner_gender);
-        String otherGenre = getValueFromView(R.id.text_input_genre);
-        String age = getValueFromView(R.id.input_spinner_age);
-        String occupation = getValueFromView(R.id.text_input_occupation);
-        String education = getValueFromView(R.id.input_spinner_education);
-
-        return false;
-    }
-
-    private String getValueFromView(int viewId){
-        View view = findViewById(viewId);
-
-        if (view instanceof EditText){
-            return ((EditText)view).getText().toString();
-        } else if (view instanceof Spinner) {
-            return ((Spinner)view).getSelectedItem().toString();
-        }
-        return null;
+        return !appState.getUser().isValidState() || !appState.getUserInfo().isValidState();
     }
 
     public void onSetAppFontSizeClick(View view) {
