@@ -4,8 +4,6 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.Fragment;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -49,72 +47,54 @@ public class ProfileConfigurationFragmentView extends Fragment {
         AppState appState = AppState.getInstance();
 
         EditText mEmailTxt = rootView.findViewById(R.id.text_input_email);
-        TextInputLayout mEmailLayout = rootView.findViewById(R.id.text_input_layout_email);
         mEmailTxt.setOnFocusChangeListener((v, hasFocus) -> {
             if (!hasFocus) {
-                appState.setprofileFormHasError(false);
-                String textFromEditView = ((EditText)v).getText().toString();
-
-                // Reset errors.
-                mEmailLayout.setError(null);
-                if (Utils.isNullOrEmpty(textFromEditView) || Utils.emailValidation(textFromEditView)) {
-                    appState.setprofileFormHasError(true);
-                    mEmailLayout.setError("Enter a valid email");
-                }
-
+                appState.getUser().email = Utils.validateInput(mEmailTxt);
             }
         });
 
         EditText passwordTxt = rootView.findViewById(R.id.text_input_password);
-        TextInputLayout passwordLayout = rootView.findViewById(R.id.text_input_layout_password);
         passwordTxt.setOnFocusChangeListener((v, hasFocus) -> {
             if (!hasFocus) {
-                appState.setprofileFormHasError(false);
-                String textFromEditView = ((EditText)v).getText().toString();
-                // Reset errors.
-                passwordLayout.setError(null);
-                if (Utils.isNullOrEmpty(textFromEditView)) {
-                    appState.setprofileFormHasError(true);
-                    passwordLayout.setError("Can not be empty");
-                }
+                appState.getUser().password = Utils.validateInput(passwordTxt);
             }
         });
 
         EditText fullNameTxt = rootView.findViewById(R.id.text_input_full_name);
-        TextInputLayout fullNameLayout = rootView.findViewById(R.id.text_input_layout_full_name);
         fullNameTxt.setOnFocusChangeListener((v, hasFocus) -> {
             if (!hasFocus) {
-                appState.setprofileFormHasError(false);
-                String textFromEditView = ((EditText)v).getText().toString();
-                // Reset errors.
-                fullNameLayout.setError(null);
-                if (Utils.isNullOrEmpty(textFromEditView)) {
-                    appState.setprofileFormHasError(true);
-                    fullNameLayout.setError("Can not be empty");
-                }
+                appState.getUserInfo().fullName = Utils.validateInput(fullNameTxt);
             }
         });
 
-        EditText otherGenreNameTxt = rootView.findViewById(R.id.text_input_genre);
-        TextInputLayout otherGenreLayout = rootView.findViewById(R.id.text_input_layout_genre);
-        otherGenreNameTxt.setOnFocusChangeListener((v, hasFocus) -> {
+        EditText otherGenderNameTxt = rootView.findViewById(R.id.text_input_gender);
+        otherGenderNameTxt.setOnFocusChangeListener((v, hasFocus) -> {
             if (!hasFocus) {
-                appState.setprofileFormHasError(false);
-                String textFromEditView = ((EditText)v).getText().toString();
-                // Reset errors.
-                otherGenreLayout.setError(null);
-                if (otherGenreLayout.getVisibility() == View.VISIBLE && Utils.isNullOrEmpty(textFromEditView)) {
-                    appState.setprofileFormHasError(true);
-                    otherGenreLayout.setError("Can not be empty");
-                }
+                appState.getUserInfo().genderOther = Utils.validateInput(otherGenderNameTxt);
             }
         });
 
-        Spinner genreSpinner = rootView.findViewById(R.id.input_spinner_gender);
-        genreSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        EditText occupationTxt = rootView.findViewById(R.id.text_input_occupation);
+        occupationTxt.setOnFocusChangeListener((v, hasFocus) -> {
+            if (!hasFocus) {
+                appState.getUserInfo().occupation = Utils.validateInput(occupationTxt);
+            }
+        });
+
+        EditText visualIllnessTxt = rootView.findViewById(R.id.text_input_visual_illness);
+        visualIllnessTxt.setOnFocusChangeListener((v, hasFocus) -> {
+            if (!hasFocus) {
+                appState.getUserInfo().visualIllness =  Utils.validateInput(visualIllnessTxt);
+            }
+        });
+
+        Spinner genderSpinner = rootView.findViewById(R.id.input_spinner_gender);
+        TextInputLayout otherGenderLayout = rootView.findViewById(R.id.text_input_layout_gender);
+        genderSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                otherGenreLayout.setVisibility(position == 2 ? View.VISIBLE : View.GONE);
+                otherGenderLayout.setVisibility(position == 2 ? View.VISIBLE : View.GONE);
+                appState.getUserInfo().gender = parent.getItemAtPosition(position).toString();
             }
 
             @Override
@@ -122,26 +102,34 @@ public class ProfileConfigurationFragmentView extends Fragment {
             }
         });
 
-        EditText occupationTxt = rootView.findViewById(R.id.text_input_occupation);
-        TextInputLayout occupationLayout = rootView.findViewById(R.id.text_input_layout_occupation);
-        occupationTxt.setOnFocusChangeListener((v, hasFocus) -> {
-            if (!hasFocus) {
-                appState.setprofileFormHasError(false);
-                String textFromEditView = ((EditText)v).getText().toString();
-                // Reset errors.
-                occupationLayout.setError(null);
-                if (Utils.isNullOrEmpty(textFromEditView)) {
-                    appState.setprofileFormHasError(true);
-                    occupationLayout.setError("Can not be empty");
-                }
+
+        Spinner ageSpinner = rootView.findViewById(R.id.input_spinner_age);
+        ageSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                appState.getUserInfo().age = parent.getItemAtPosition(position).toString();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
             }
         });
 
-        Spinner spinner = rootView.findViewById(R.id.input_spinner_education);
+        Spinner educationSpinner = rootView.findViewById(R.id.input_spinner_education);
+        educationSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                appState.getUserInfo().education = parent.getItemAtPosition(position).toString();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+            }
+        });
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(rootView.getContext(),
                 R.array.input_spinner_education_list, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(R.layout.spinner_wrap_text_adapter);
-        spinner.setAdapter(adapter);
+        educationSpinner.setAdapter(adapter);
 
         return rootView;
     }
