@@ -9,11 +9,13 @@ import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Spinner;
 
 import com.upv.muitss.arevi.R;
+import com.upv.muitss.arevi.helpers.AppState;
 import com.upv.muitss.arevi.helpers.Utils;
 
 public class ProfileConfigurationFragmentView extends Fragment {
@@ -22,8 +24,6 @@ public class ProfileConfigurationFragmentView extends Fragment {
      * fragment.
      */
     private static final String ARG_SECTION_NUMBER = "section_number";
-
-    private TextInputLayout mEmailLayout;
 
     public ProfileConfigurationFragmentView() {
     }
@@ -46,25 +46,94 @@ public class ProfileConfigurationFragmentView extends Fragment {
                              Bundle savedInstanceState) {
 
         View rootView =  inflater.inflate(R.layout.fragment_pager_profile_config, container, false);
+        AppState appState = AppState.getInstance();
 
         EditText mEmailTxt = rootView.findViewById(R.id.text_input_email);
-        mEmailLayout = rootView.findViewById(R.id.text_input_layout_email);
+        TextInputLayout mEmailLayout = rootView.findViewById(R.id.text_input_layout_email);
+        mEmailTxt.setOnFocusChangeListener((v, hasFocus) -> {
+            if (!hasFocus) {
+                appState.setprofileFormHasError(false);
+                String textFromEditView = ((EditText)v).getText().toString();
 
-        mEmailTxt.addTextChangedListener(new TextWatcher() {
+                // Reset errors.
+                mEmailLayout.setError(null);
+                if (Utils.isNullOrEmpty(textFromEditView) || Utils.emailValidation(textFromEditView)) {
+                    appState.setprofileFormHasError(true);
+                    mEmailLayout.setError("Enter a valid email");
+                }
+
+            }
+        });
+
+        EditText passwordTxt = rootView.findViewById(R.id.text_input_password);
+        TextInputLayout passwordLayout = rootView.findViewById(R.id.text_input_layout_password);
+        passwordTxt.setOnFocusChangeListener((v, hasFocus) -> {
+            if (!hasFocus) {
+                appState.setprofileFormHasError(false);
+                String textFromEditView = ((EditText)v).getText().toString();
+                // Reset errors.
+                passwordLayout.setError(null);
+                if (Utils.isNullOrEmpty(textFromEditView)) {
+                    appState.setprofileFormHasError(true);
+                    passwordLayout.setError("Can not be empty");
+                }
+            }
+        });
+
+        EditText fullNameTxt = rootView.findViewById(R.id.text_input_full_name);
+        TextInputLayout fullNameLayout = rootView.findViewById(R.id.text_input_layout_full_name);
+        fullNameTxt.setOnFocusChangeListener((v, hasFocus) -> {
+            if (!hasFocus) {
+                appState.setprofileFormHasError(false);
+                String textFromEditView = ((EditText)v).getText().toString();
+                // Reset errors.
+                fullNameLayout.setError(null);
+                if (Utils.isNullOrEmpty(textFromEditView)) {
+                    appState.setprofileFormHasError(true);
+                    fullNameLayout.setError("Can not be empty");
+                }
+            }
+        });
+
+        EditText otherGenreNameTxt = rootView.findViewById(R.id.text_input_genre);
+        TextInputLayout otherGenreLayout = rootView.findViewById(R.id.text_input_layout_genre);
+        otherGenreNameTxt.setOnFocusChangeListener((v, hasFocus) -> {
+            if (!hasFocus) {
+                appState.setprofileFormHasError(false);
+                String textFromEditView = ((EditText)v).getText().toString();
+                // Reset errors.
+                otherGenreLayout.setError(null);
+                if (otherGenreLayout.getVisibility() == View.VISIBLE && Utils.isNullOrEmpty(textFromEditView)) {
+                    appState.setprofileFormHasError(true);
+                    otherGenreLayout.setError("Can not be empty");
+                }
+            }
+        });
+
+        Spinner genreSpinner = rootView.findViewById(R.id.input_spinner_gender);
+        genreSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                otherGenreLayout.setVisibility(position == 2 ? View.VISIBLE : View.GONE);
             }
 
             @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-
+            public void onNothingSelected(AdapterView<?> parent) {
             }
+        });
 
-            @Override
-            public void afterTextChanged(Editable s) {
-                String textFromEditView = s.toString();
-                validate(textFromEditView);
+        EditText occupationTxt = rootView.findViewById(R.id.text_input_occupation);
+        TextInputLayout occupationLayout = rootView.findViewById(R.id.text_input_layout_occupation);
+        occupationTxt.setOnFocusChangeListener((v, hasFocus) -> {
+            if (!hasFocus) {
+                appState.setprofileFormHasError(false);
+                String textFromEditView = ((EditText)v).getText().toString();
+                // Reset errors.
+                occupationLayout.setError(null);
+                if (Utils.isNullOrEmpty(textFromEditView)) {
+                    appState.setprofileFormHasError(true);
+                    occupationLayout.setError("Can not be empty");
+                }
             }
         });
 
@@ -75,20 +144,5 @@ public class ProfileConfigurationFragmentView extends Fragment {
         spinner.setAdapter(adapter);
 
         return rootView;
-    }
-
-
-    private boolean validate(String email) {
-
-        if (Utils.emptyValidation(email)) return true;
-
-        // Reset errors.
-        mEmailLayout.setError(null);
-        if (!Utils.emailValidation(email)) {
-            mEmailLayout.setError("Enter a valid email");
-            return false;
-        }
-
-        return true;
     }
 }

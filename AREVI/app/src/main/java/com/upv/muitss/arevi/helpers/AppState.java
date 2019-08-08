@@ -26,6 +26,9 @@ public class AppState {
     public float getNodeAge() { return this.nodeAge; }
     public void setNodeAge(float pNodeAge) { this.nodeAge = pNodeAge; }
 
+    private boolean profileFormHasError;
+    public boolean getprofileFormHasError() { return this.profileFormHasError; }
+    public void setprofileFormHasError(boolean hasError) { this.profileFormHasError = hasError; }
 
     private static AppState instance;
 
@@ -44,6 +47,7 @@ public class AppState {
         isHitting = false;
         isFocusing = false;
         nodeAge = 0;
+        profileFormHasError = false;
     }
 }
 
