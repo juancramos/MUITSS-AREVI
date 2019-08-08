@@ -23,14 +23,14 @@
     <string name="frame_app_font_medium_size_text">Medium</string>
     <string name="frame_app_font_large_size_text">Large</string>
     <string name="frame_ar_config_title_text">AREVI augmented reality user interface</string>
-    <string name="frame_profile_config_user_genre_text">What is your genre?</string>
+    <string name="frame_profile_config_user_genre_text">Genre</string>
     <string name="text_input_txt_email_text">Email</string>
     <string name="text_input_txt_password_text">Password</string>
     <string name="text_input_txt_full_name_text">Full name</string>
     <string name="text_input_txt_age_text">Age</string>
     <string name="text_input_txt_education_text">Education</string>
     <string name="text_input_txt_occupation_text">Occupation</string>
-    <string name="text_input_txt_genre_text">Genre</string>
+    <string name="text_input_txt_genre_text">Specify genre</string>
     <string-array name="input_spinner_genre_list">
         <item>Male</item>
         <item>Female</item>

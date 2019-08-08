@@ -14,9 +14,11 @@ import android.util.SparseArray;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.RadioGroup;
+import android.widget.Spinner;
 
 import com.upv.muitss.arevi.helpers.Constants;
 import com.upv.muitss.arevi.helpers.Utils;
@@ -75,6 +77,7 @@ public class PagerActivity extends AppCompatActivity {
         mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+                mViewPager.setPagingEnabled(true);
 
                 if (position == 1) mViewPager.setPagingEnabled(false);
                 /*
@@ -87,6 +90,7 @@ public class PagerActivity extends AppCompatActivity {
 
             @Override
             public void onPageSelected(int position) {
+                mViewPager.setPagingEnabled(true);
                 Fragment fragment = mSectionsPagerAdapter.getFragment(position);
                 if (fragment != null) {
                     fragment.onResume();
@@ -139,7 +143,32 @@ public class PagerActivity extends AppCompatActivity {
     }
 
     public boolean validateProfileForm(){
+        String email = getValueFromView(R.id.text_input_email);
+        String password = getValueFromView(R.id.text_input_password);
+
+        if (!Utils.isNullOrEmpty(email) && Utils.emailValidation(email)) return false;
+
+
+
+        String fullName = getValueFromView(R.id.text_input_full_name);
+        String genre = getValueFromView(R.id.input_spinner_gender);
+        String otherGenre = getValueFromView(R.id.text_input_genre);
+        String age = getValueFromView(R.id.input_spinner_age);
+        String occupation = getValueFromView(R.id.text_input_occupation);
+        String education = getValueFromView(R.id.input_spinner_education);
+
         return false;
+    }
+
+    private String getValueFromView(int viewId){
+        View view = findViewById(viewId);
+
+        if (view instanceof EditText){
+            return ((EditText)view).getText().toString();
+        } else if (view instanceof Spinner) {
+            return ((Spinner)view).getSelectedItem().toString();
+        }
+        return null;
     }
 
     public void onSetAppFontSizeClick(View view) {
