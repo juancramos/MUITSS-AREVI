@@ -166,8 +166,6 @@ public class PagerActivity extends AppCompatActivity {
         finish();
     }
     public void onFinishButtonClick(View view) {
-        UserRepository.getInstance().getUser(AppState.getInstance().getUser().id);
-
         Intent toMain = new Intent(PagerActivity.this, MainActivity.class);
         startActivity(toMain);
         finish();
