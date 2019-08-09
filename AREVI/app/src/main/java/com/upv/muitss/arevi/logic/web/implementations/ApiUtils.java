@@ -1,15 +1,34 @@
 package com.upv.muitss.arevi.logic.web.implementations;
 
-import com.upv.muitss.arevi.logic.web.interfaces.APIService;
+import android.text.TextUtils;
 
-public class ApiUtils {
+import com.upv.muitss.arevi.logic.web.interfaces.AuthenticationInterceptor;
+
+import okhttp3.OkHttpClient;
+
+class ApiUtils {
+
+    private static OkHttpClient.Builder httpClient = new OkHttpClient.Builder();
 
     private ApiUtils() {}
 
-    private static final String BASE_URL = "http://192.168.0.105:3030/";
-
-    public static APIService getAPIService() {
-
-        return RetrofitClient.getClient(BASE_URL).create(APIService.class);
+    static <S> S createService(Class<S> serviceClass) {
+        return createService(serviceClass, null);
     }
+
+    static <S> S createService(Class<S> serviceClass, final String authToken) {
+        if (!TextUtils.isEmpty(authToken)) {
+            AuthenticationInterceptor interceptor =
+                    new AuthenticationInterceptor(authToken);
+
+            if (!httpClient.interceptors().contains(interceptor)) {
+                httpClient.addInterceptor(interceptor);
+
+                return RetrofitClient.getClient(httpClient.build()).create(serviceClass);
+            }
+        }
+
+        return RetrofitClient.getClient().create(serviceClass);
+    }
+
 }

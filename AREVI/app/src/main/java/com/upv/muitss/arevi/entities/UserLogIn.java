@@ -5,36 +5,31 @@ import android.support.annotation.NonNull;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class User {
-    @SerializedName("id")
+public class UserLogIn {
+
+    @SerializedName("strategy")
     @Expose
-    public String id;
+    public String strategy = "local";
     @SerializedName("email")
     @Expose
     public String email;
     @SerializedName("password")
     @Expose
     public String password;
-    @SerializedName("enabled")
-    @Expose
-    public String enabled;
-    public boolean fetchingData;
 
+
+    public UserLogIn(String email, String password) {
+        this.email = email;
+        this.password = password;
+    }
 
     @NonNull
     @Override
     public String toString() {
-        return "user{" +
-                "id='" + id + '\'' +
+        return '{' +
+                ", strategy='" + strategy + '\'' +
                 ", email='" + email + '\'' +
                 ", password='" + password + '\'' +
-                ", enabled='" + enabled + '\'' +
                 '}';
     }
-
-    public boolean isValidState() {
-        return email != null && !email.isEmpty() && password != null && !password.isEmpty();
-    }
 }
-
-

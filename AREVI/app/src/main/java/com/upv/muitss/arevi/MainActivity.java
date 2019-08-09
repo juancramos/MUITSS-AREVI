@@ -5,13 +5,16 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 
+import com.upv.muitss.arevi.entities.UserLogIn;
 import com.upv.muitss.arevi.helpers.AppState;
 import com.upv.muitss.arevi.helpers.Constants;
 import com.upv.muitss.arevi.helpers.UserPreferences;
 import com.upv.muitss.arevi.helpers.Utils;
+import com.upv.muitss.arevi.logic.web.implementations.UserRepository;
+import com.upv.muitss.arevi.logic.web.interfaces.ActivityMessage;
 
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements ActivityMessage {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -24,10 +27,10 @@ public class MainActivity extends AppCompatActivity {
         setTheme(Utils.getSavedThemeStyle());
         setContentView(R.layout.activity_main);
 
-
-        boolean hasProfile = userPreferences.getUserPreferenceBool(Constants.USER_HAS_PROFILE);
-
-        if (!hasProfile) startProfileWizard();
+        runOnUiThread(()->{
+            Utils.popProgressDialog(this, "Loading...");
+            UserRepository.getInstance().logIn(this);
+        });
     }
 
     public void onStartArButtonClick(View view) {
@@ -64,5 +67,15 @@ public class MainActivity extends AppCompatActivity {
         startActivity(intent);
         finish();
         System.exit(0);
+    }
+
+    @Override
+    public <T> void onResponse(T response) {
+        if (response == null){
+            startProfileWizard();
+        }
+        else if(response instanceof String && ((String)response).isEmpty()){
+            startProfileWizard();
+        }
     }
 }
