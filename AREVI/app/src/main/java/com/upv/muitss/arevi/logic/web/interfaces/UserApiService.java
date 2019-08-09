@@ -18,14 +18,14 @@ public interface UserApiService {
     String AUTH_API_ROUTE = "/authentication";
 
     @GET(USER_API_ROUTE)
-    Call<DataResponse<User>> getUser(@Query("") String id);
+    Call<DataResponse<User>> getApiUser(@Query("") String id);
 
     @POST(USER_API_ROUTE)
     @Headers({ "Content-Type: application/json;charset=UTF-8"})
-    Call<User> postUser(@Body User pUser);
+    Call<User> postApiUser(@Body User pUser);
 
     @POST(AUTH_API_ROUTE)
     @Headers({ "Content-Type: application/json;charset=UTF-8"})
-    Call<AccessToken> auth(@Body UserLogIn logIn);
+    Call<AccessToken> authApi(@Body UserLogIn logIn);
 }
 

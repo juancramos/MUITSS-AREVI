@@ -1,6 +1,5 @@
 package com.upv.muitss.arevi.logic.web.implementations;
 
-import android.app.Activity;
 import android.support.annotation.NonNull;
 import android.text.TextUtils;
 import android.util.Log;
@@ -34,7 +33,7 @@ public class UserRepository {
 
     public void registerUser(User user) {
         AppState.getInstance().getUser().fetchingData = true;
-        mUserApiService.postUser(user).enqueue(new Callback<User>() {
+        mUserApiService.postApiUser(user).enqueue(new Callback<User>() {
             @Override
             public void onResponse(@NonNull Call<User> call, @NonNull Response<User> response) {
 
@@ -71,7 +70,7 @@ public class UserRepository {
         if (!TextUtils.isEmpty(userLogIn.email) && !TextUtils.isEmpty(userLogIn.password)){
 
             AppState.getInstance().getUser().fetchingData = true;
-            mUserApiService.auth(new UserLogIn(userLogIn.email, userLogIn.password)).enqueue(new Callback<AccessToken>() {
+            mUserApiService.authApi(new UserLogIn(userLogIn.email, userLogIn.password)).enqueue(new Callback<AccessToken>() {
                 @Override
                 public void onResponse(@NonNull Call<AccessToken> call, @NonNull Response<AccessToken> response) {
 
@@ -84,9 +83,11 @@ public class UserRepository {
 
                         mUserApiService = ApiUtils.createService(UserApiService.class, token.accessToken);
                         AppState.getInstance().getUser().fetchingData = false;
-                        Utils.popProgressDialog(null, null);
+                        getApiUser(null);
 
                         if (caller != null) caller.onResponse(token.accessToken);
+
+                        Utils.popProgressDialog(null, null);
                     }
                     else {
                         Utils.popProgressDialog(null, null);
@@ -108,9 +109,9 @@ public class UserRepository {
         }
     }
 
-    public void getUser(String userId) {
+    public void getApiUser(String userId) {
         AppState.getInstance().getUser().fetchingData = true;
-        mUserApiService.getUser(userId).enqueue(new Callback<DataResponse<User>>() {
+        mUserApiService.getApiUser(userId).enqueue(new Callback<DataResponse<User>>() {
             @Override
             public void onResponse(@NonNull Call<DataResponse<User>> call, @NonNull Response<DataResponse<User>> response) {
 
