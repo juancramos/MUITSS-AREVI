@@ -1,6 +1,7 @@
 package com.upv.muitss.arevi.helpers;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.design.widget.TextInputLayout;
@@ -19,6 +20,7 @@ import java.util.regex.Pattern;
 
 public class Utils {
     private static final String TAG = "Utils";
+    private static ProgressDialog progressDialog = null;
 
     public static void saveTheme(@NonNull Activity context, String value) {
         UserPreferences userPreferences = UserPreferences.getInstance();
@@ -117,5 +119,17 @@ public class Utils {
     public static void hideKeyboardFrom(Context context, View view) {
         InputMethodManager imm = (InputMethodManager) context.getSystemService(Activity.INPUT_METHOD_SERVICE);
         imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+    }
+
+    public static void popProgressDialog(Context context, String message){
+        if (progressDialog == null) {
+            progressDialog = new ProgressDialog(context);
+            progressDialog.setMessage(message);
+            progressDialog.show();
+        }
+        else {
+            progressDialog.dismiss();
+            progressDialog = null;
+        }
     }
 }

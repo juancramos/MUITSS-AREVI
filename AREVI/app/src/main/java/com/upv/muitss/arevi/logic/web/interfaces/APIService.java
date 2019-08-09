@@ -17,6 +17,6 @@ public interface APIService {
 
     @POST(USER_API_ROUTE)
     @Headers({ "Content-Type: application/json;charset=UTF-8"})
-    Call<User> savePost(@Body User pUser);
+    Call<User> postUser(@Body User pUser);
 }
 

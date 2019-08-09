@@ -18,6 +18,8 @@ public class User {
     @SerializedName("enabled")
     @Expose
     public boolean enabled;
+    public boolean fetchingData;
+
 
     @NonNull
     @Override
