@@ -32,7 +32,7 @@ module.exports = function (app) {
         }),
         allowNull: false
       },
-      visualIlness: {
+      visualIllness: {
         type: DataTypes.STRING,
         allowNull: false
       },
