@@ -166,6 +166,8 @@ public class PagerActivity extends AppCompatActivity {
         finish();
     }
     public void onFinishButtonClick(View view) {
+        UserRepository.getInstance().getUser(AppState.getInstance().getUser().id);
+
         Intent toMain = new Intent(PagerActivity.this, MainActivity.class);
         startActivity(toMain);
         finish();
@@ -184,8 +186,9 @@ public class PagerActivity extends AppCompatActivity {
 
         if (!hasErrors) {
             Utils.popProgressDialog(this, "Loading...");
-            User user = AppState.getInstance().getUser();
-            if (!user.fetchingData) UserRepository.getInstance().authenticateUser(user);
+            if (!AppState.getInstance().getUser().fetchingData) {
+                UserRepository.getInstance().registerUser(AppState.getInstance().getUser());
+            }
         }
 
         return hasErrors;

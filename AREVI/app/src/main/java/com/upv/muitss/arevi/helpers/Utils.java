@@ -13,6 +13,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 
 import com.upv.muitss.arevi.R;
+import com.upv.muitss.arevi.entities.UserLogIn;
 
 import org.jetbrains.annotations.Contract;
 
@@ -30,6 +31,9 @@ public class Utils {
 
     public static boolean isDarkTheme(){
         String selectedTheme = getSavedTheme();
+
+        if(selectedTheme == null) return false;
+
         switch (selectedTheme){
             case Constants.APP_DARK_THEME_DEFAULT_FONT_SIZE:
             case Constants.APP_DARK_THEME_MEDIUM_FONT_SIZE:
@@ -97,7 +101,6 @@ public class Utils {
         }
     }
 
-    @Contract("null, _ -> null")
     public static String validateInput(View view) {
         if (view instanceof EditText){
             EditText editText = (EditText)view;
@@ -122,14 +125,26 @@ public class Utils {
     }
 
     public static void popProgressDialog(Context context, String message){
-        if (progressDialog == null) {
+        if (progressDialog == null && context != null) {
             progressDialog = new ProgressDialog(context);
             progressDialog.setMessage(message);
             progressDialog.show();
         }
-        else {
+        else if (progressDialog != null) {
             progressDialog.dismiss();
             progressDialog = null;
         }
+    }
+
+    public static void saveLogIn(String email, String password) {
+        UserPreferences userPreferences = UserPreferences.getInstance();
+        userPreferences.saveUserPreferenceString(Constants.USER_EMAIL, email);
+        userPreferences.saveUserPreferenceString(Constants.USER_PASSWORD, password);
+    }
+
+    public static UserLogIn getLogIn(){
+        UserPreferences userPreferences = UserPreferences.getInstance();
+        return new UserLogIn(userPreferences.getUserPreferenceString(Constants.USER_EMAIL),
+                userPreferences.getUserPreferenceString(Constants.USER_PASSWORD));
     }
 }
