@@ -10,7 +10,6 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
-import android.util.Log;
 import android.util.SparseArray;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,16 +23,11 @@ import com.upv.muitss.arevi.entities.UserInfo;
 import com.upv.muitss.arevi.helpers.AppState;
 import com.upv.muitss.arevi.helpers.Constants;
 import com.upv.muitss.arevi.helpers.Utils;
-import com.upv.muitss.arevi.logic.web.implementations.ApiUtils;
-import com.upv.muitss.arevi.logic.web.interfaces.APIService;
+import com.upv.muitss.arevi.logic.web.implementations.UserRepository;
 import com.upv.muitss.arevi.views.ARConfigurationFragmentView;
 import com.upv.muitss.arevi.views.AppConfigurationFragmentView;
 import com.upv.muitss.arevi.views.CustomViewPager;
 import com.upv.muitss.arevi.views.ProfileConfigurationFragmentView;
-
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 
 public class PagerActivity extends AppCompatActivity {
@@ -44,7 +38,6 @@ public class PagerActivity extends AppCompatActivity {
     private ImageButton mNextBtn, mBackBtn;
     private Button mFinishBtn, mSkipBtn;
     private int page = 0;   //  to track page position
-    private APIService mAPIService;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,8 +69,6 @@ public class PagerActivity extends AppCompatActivity {
 
         mViewPager.setCurrentItem(page);
         updateIndicators(page);
-
-        mAPIService = ApiUtils.getAPIService();
 
         boolean isDark = Utils.isDarkTheme();
 
@@ -164,9 +155,6 @@ public class PagerActivity extends AppCompatActivity {
 
             boolean notComplete = validateProfileFormError();
 
-            if (!notComplete) {
-                sendPost(AppState.getInstance().getUser());
-            }
             view.setFocusable(false);
             view.setFocusableInTouchMode(false);
             if (notComplete) return;
@@ -194,25 +182,13 @@ public class PagerActivity extends AppCompatActivity {
 
         boolean hasErrors = !appState.getUser().isValidState() || !appState.getUserInfo().isValidState();
 
+        if (!hasErrors) {
+            Utils.popProgressDialog(this, "Loading...");
+            User user = AppState.getInstance().getUser();
+            if (!user.fetchingData) UserRepository.getInstance().authenticateUser(user);
+        }
 
         return hasErrors;
-    }
-
-    public void sendPost(User user) {
-        mAPIService.savePost(user).enqueue(new Callback<User>() {
-            @Override
-            public void onResponse(Call<User> call, Response<User> response) {
-
-                if(response.isSuccessful()) {
-                    Log.i(TAG, "post submitted to API." + response.body().toString());
-                }
-            }
-
-            @Override
-            public void onFailure(Call<User> call, Throwable t) {
-                Log.e(TAG, "Unable to submit post to API.");
-            }
-        });
     }
 
     public void onSetAppFontSizeClick(View view) {
