@@ -6,6 +6,7 @@ import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.design.widget.TextInputLayout;
 import android.text.InputType;
+import android.text.TextUtils;
 import android.util.Patterns;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,14 +15,17 @@ import android.widget.EditText;
 
 import com.upv.muitss.arevi.R;
 import com.upv.muitss.arevi.entities.UserLogIn;
-
-import org.jetbrains.annotations.Contract;
+import com.upv.muitss.arevi.logic.web.implementations.AuthenticationInterceptor;
+import com.upv.muitss.arevi.logic.web.implementations.RetrofitClient;
 
 import java.util.regex.Pattern;
+
+import okhttp3.OkHttpClient;
 
 public class Utils {
     private static final String TAG = "Utils";
     private static ProgressDialog progressDialog = null;
+    private static OkHttpClient.Builder httpClient = new OkHttpClient.Builder();
 
     public static void saveTheme(@NonNull Activity context, String value) {
         UserPreferences userPreferences = UserPreferences.getInstance();
@@ -42,11 +46,6 @@ public class Utils {
             default:
                 return false;
         }
-    }
-
-    public static String getSavedTheme(){
-        UserPreferences userPreferences = UserPreferences.getInstance();
-        return userPreferences.getUserPreferenceString(Constants.USER_SELECTED_THEME);
     }
 
     public static int getSavedThemeStyle() {
@@ -75,16 +74,6 @@ public class Utils {
                 break;
         }
         return theme;
-    }
-
-    @Contract(value = "null -> true", pure = true)
-    public static boolean isNullOrEmpty(String text) {
-        return text == null || text.isEmpty();
-    }
-
-    public static boolean emailValidation(@NonNull String email){
-        Pattern pattern = Patterns.EMAIL_ADDRESS;
-        return !pattern.matcher(email.trim()).matches();
     }
 
     public static void validateForm(View view) {
@@ -146,5 +135,48 @@ public class Utils {
         UserPreferences userPreferences = UserPreferences.getInstance();
         return new UserLogIn(userPreferences.getUserPreferenceString(Constants.USER_EMAIL),
                 userPreferences.getUserPreferenceString(Constants.USER_PASSWORD));
+    }
+
+    public static void saveUserId(String userId) {
+        UserPreferences userPreferences = UserPreferences.getInstance();
+        userPreferences.saveUserPreferenceString(Constants.USER_ID, userId);
+    }
+
+    public static String getUserId(){
+        UserPreferences userPreferences = UserPreferences.getInstance();
+        return userPreferences.getUserPreferenceString(Constants.USER_ID);
+    }
+
+    public static <S> S createService(Class<S> serviceClass) {
+        return createService(serviceClass, null);
+    }
+
+    public static <S> S createService(Class<S> serviceClass, final String authToken) {
+        if (!TextUtils.isEmpty(authToken)) {
+            AuthenticationInterceptor interceptor =
+                    new AuthenticationInterceptor(authToken);
+
+            if (!httpClient.interceptors().contains(interceptor)) {
+                httpClient.addInterceptor(interceptor);
+
+                return RetrofitClient.getClient(httpClient.build()).create(serviceClass);
+            }
+        }
+
+        return RetrofitClient.getClient().create(serviceClass);
+    }
+
+    private static boolean isNullOrEmpty(String text) {
+        return text == null || text.isEmpty();
+    }
+
+    private static boolean emailValidation(@NonNull String email){
+        Pattern pattern = Patterns.EMAIL_ADDRESS;
+        return !pattern.matcher(email.trim()).matches();
+    }
+
+    private static String getSavedTheme(){
+        UserPreferences userPreferences = UserPreferences.getInstance();
+        return userPreferences.getUserPreferenceString(Constants.USER_SELECTED_THEME);
     }
 }

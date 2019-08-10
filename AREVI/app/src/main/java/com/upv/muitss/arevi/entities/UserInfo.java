@@ -30,6 +30,9 @@ public class UserInfo {
     @SerializedName("education")
     @Expose
     public String education;
+    @SerializedName("userId")
+    @Expose
+    public String userId;
 
     @NonNull
     @Override
@@ -43,6 +46,7 @@ public class UserInfo {
                 ", visualIllness='" + visualIllness + '\'' +
                 ", occupation='" + occupation + '\'' +
                 ", education='" + education + '\'' +
+                ", userId='" + userId + '\'' +
                 '}';
     }
 

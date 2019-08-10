@@ -16,13 +16,13 @@ const restrict = [
 
 module.exports = {
   before: {
-    all: [...restrict],
-    find: [],
-    get: [],
+    all: [],
+    find: [...restrict],
+    get: [...restrict],
     create: [],
-    update: [],
-    patch: [],
-    remove: []
+    update: [...restrict],
+    patch: [...restrict],
+    remove: [...restrict]
   },
 
   after: {

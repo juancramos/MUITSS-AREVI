@@ -17,7 +17,8 @@ public class User {
     public String password;
     @SerializedName("enabled")
     @Expose
-    public String enabled;
+    private String enabled;
+    private boolean enabledBoolean;
     public boolean fetchingData;
 
 
@@ -30,6 +31,15 @@ public class User {
                 ", password='" + password + '\'' +
                 ", enabled='" + enabled + '\'' +
                 '}';
+    }
+
+    public String getEnabled() {
+        return enabled;
+    }
+
+    public void setEnabled(String pEnabled) {
+        enabled = pEnabled;
+        enabledBoolean = Boolean.valueOf(pEnabled);
     }
 
     public boolean isValidState() {

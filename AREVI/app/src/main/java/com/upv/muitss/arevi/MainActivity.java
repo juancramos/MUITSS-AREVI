@@ -1,23 +1,25 @@
 package com.upv.muitss.arevi;
 
+import android.content.Context;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 
-import com.upv.muitss.arevi.entities.UserLogIn;
 import com.upv.muitss.arevi.helpers.AppState;
-import com.upv.muitss.arevi.helpers.Constants;
 import com.upv.muitss.arevi.helpers.UserPreferences;
 import com.upv.muitss.arevi.helpers.Utils;
-import com.upv.muitss.arevi.logic.web.implementations.UserRepository;
+import com.upv.muitss.arevi.logic.web.implementations.AREVIRepository;
 import com.upv.muitss.arevi.logic.web.interfaces.ActivityMessage;
-
 
 public class MainActivity extends AppCompatActivity implements ActivityMessage {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        if (!isOnline()) return;
 
         AppState.getInstance();
 
@@ -29,7 +31,7 @@ public class MainActivity extends AppCompatActivity implements ActivityMessage {
 
         runOnUiThread(()->{
             Utils.popProgressDialog(this, "Loading...");
-            UserRepository.getInstance().logIn(this);
+            AREVIRepository.getInstance().logIn(this);
         });
     }
 
@@ -45,11 +47,6 @@ public class MainActivity extends AppCompatActivity implements ActivityMessage {
 
     public void onStartWizardButtonClick(View view) {
         startProfileWizard();
-    }
-
-    private void startProfileWizard(){
-        Intent toAct = new Intent(this, PagerActivity.class);
-        startActivity(toAct);
     }
 
     @Override
@@ -77,5 +74,20 @@ public class MainActivity extends AppCompatActivity implements ActivityMessage {
         else if(response instanceof String && ((String)response).isEmpty()){
             startProfileWizard();
         }
+    }
+
+    private void startProfileWizard(){
+        Intent toAct = new Intent(this, PagerActivity.class);
+        startActivity(toAct);
+    }
+
+    protected boolean isOnline() {
+
+        ConnectivityManager cm = (ConnectivityManager)getSystemService(Context.CONNECTIVITY_SERVICE);
+
+        NetworkInfo netInfo = cm.getActiveNetworkInfo();
+
+        return netInfo != null && netInfo.isConnectedOrConnecting();
+
     }
 }

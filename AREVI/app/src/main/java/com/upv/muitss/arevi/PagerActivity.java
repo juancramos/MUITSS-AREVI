@@ -10,6 +10,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
+import android.text.TextUtils;
 import android.util.SparseArray;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,14 +24,15 @@ import com.upv.muitss.arevi.entities.UserInfo;
 import com.upv.muitss.arevi.helpers.AppState;
 import com.upv.muitss.arevi.helpers.Constants;
 import com.upv.muitss.arevi.helpers.Utils;
-import com.upv.muitss.arevi.logic.web.implementations.UserRepository;
+import com.upv.muitss.arevi.logic.web.implementations.AREVIRepository;
+import com.upv.muitss.arevi.logic.web.interfaces.ActivityMessage;
 import com.upv.muitss.arevi.views.ARConfigurationFragmentView;
 import com.upv.muitss.arevi.views.AppConfigurationFragmentView;
 import com.upv.muitss.arevi.views.CustomViewPager;
 import com.upv.muitss.arevi.views.ProfileConfigurationFragmentView;
 
 
-public class PagerActivity extends AppCompatActivity {
+public class PagerActivity extends AppCompatActivity implements ActivityMessage {
 
     private final String TAG = this.getClass().getCanonicalName();
     private CustomViewPager mViewPager;
@@ -52,9 +54,6 @@ public class PagerActivity extends AppCompatActivity {
         ImageView zero = findViewById(R.id.intro_indicator_0);
         ImageView one = findViewById(R.id.intro_indicator_1);
         ImageView two = findViewById(R.id.intro_indicator_2);
-
-        AppState.getInstance().setUser(new User());
-        AppState.getInstance().setUserInfo(new UserInfo());
 
         mNextBtn = findViewById(R.id.intro_btn_next);
         mBackBtn = findViewById(R.id.intro_btn_back);
@@ -185,7 +184,7 @@ public class PagerActivity extends AppCompatActivity {
         if (!hasErrors) {
             Utils.popProgressDialog(this, "Loading...");
             if (!AppState.getInstance().getUser().fetchingData) {
-                UserRepository.getInstance().registerUser(AppState.getInstance().getUser());
+                AREVIRepository.getInstance().registerUser(AppState.getInstance().getUser(), this);
             }
         }
 
@@ -299,5 +298,10 @@ public class PagerActivity extends AppCompatActivity {
         }
     }
 
-
+    @Override
+    public <T> void onResponse(T response) {
+        if (response instanceof String && !(TextUtils.isEmpty((String) response))){
+            AREVIRepository.getInstance().postUserInfo(AppState.getInstance().getUserInfo());
+        }
+    }
 }
