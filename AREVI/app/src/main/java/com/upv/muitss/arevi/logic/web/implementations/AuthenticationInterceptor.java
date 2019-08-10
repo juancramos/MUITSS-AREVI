@@ -1,4 +1,4 @@
-package com.upv.muitss.arevi.logic.web.interfaces;
+package com.upv.muitss.arevi.logic.web.implementations;
 
 import android.support.annotation.NonNull;
 

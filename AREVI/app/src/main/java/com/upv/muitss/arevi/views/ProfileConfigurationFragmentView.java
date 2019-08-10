@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.Fragment;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,13 +18,19 @@ import com.upv.muitss.arevi.entities.User;
 import com.upv.muitss.arevi.entities.UserInfo;
 import com.upv.muitss.arevi.helpers.AppState;
 import com.upv.muitss.arevi.helpers.Utils;
+import com.upv.muitss.arevi.logic.web.implementations.AREVIRepository;
+import com.upv.muitss.arevi.logic.web.interfaces.ActivityMessage;
 
-public class ProfileConfigurationFragmentView extends Fragment {
+public class ProfileConfigurationFragmentView extends Fragment implements ActivityMessage {
     /**
      * The fragment argument representing the section number for this
      * fragment.
      */
     private static final String ARG_SECTION_NUMBER = "section_number";
+
+    private View rootView;
+    private User user;
+    private UserInfo userInfo;
 
     public ProfileConfigurationFragmentView() {
     }
@@ -45,10 +52,21 @@ public class ProfileConfigurationFragmentView extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        View rootView =  inflater.inflate(R.layout.fragment_pager_profile_config, container, false);
-        AppState appState = AppState.getInstance();
-        User user = appState.getUser();
-        UserInfo userInfo = appState.getUserInfo();
+        rootView =  inflater.inflate(R.layout.fragment_pager_profile_config, container, false);
+
+        if (!AppState.getInstance().getUserInfo().isValidState()) {
+            Utils.popProgressDialog(getActivity(), "Loading...");
+            AREVIRepository.getInstance().getApiUserInfo(Utils.getUserId(), this);
+        }
+        else {
+            loadData();
+        }
+        return rootView;
+    }
+
+    private void loadData(){
+        user = AppState.getInstance().getUser() == null ? new User() : AppState.getInstance().getUser();
+        userInfo = AppState.getInstance().getUserInfo() == null ? new UserInfo() : AppState.getInstance().getUserInfo();
 
         EditText mEmailTxt = rootView.findViewById(R.id.text_input_email);
         mEmailTxt.setText(user.email);
@@ -75,7 +93,13 @@ public class ProfileConfigurationFragmentView extends Fragment {
         });
 
         EditText otherGenderNameTxt = rootView.findViewById(R.id.text_input_gender);
-        otherGenderNameTxt.setText(userInfo.genderOther);
+        TextInputLayout otherGenderLayout = rootView.findViewById(R.id.text_input_layout_gender);
+        if(!TextUtils.isEmpty(userInfo.genderOther)){
+            otherGenderNameTxt.setText(userInfo.genderOther);
+        }
+        else {
+            otherGenderLayout.setVisibility(View.GONE);
+        }
         otherGenderNameTxt.setOnFocusChangeListener((v, hasFocus) -> {
             if (!hasFocus) {
                 userInfo.genderOther = Utils.validateInput(otherGenderNameTxt);
@@ -99,12 +123,12 @@ public class ProfileConfigurationFragmentView extends Fragment {
         });
 
         Spinner genderSpinner = rootView.findViewById(R.id.input_spinner_gender);
-        TextInputLayout otherGenderLayout = rootView.findViewById(R.id.text_input_layout_gender);
+        genderSpinner.setSelection(getIndex(genderSpinner, userInfo.gender));
         genderSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 otherGenderLayout.setVisibility(position == 2 ? View.VISIBLE : View.GONE);
-                appState.getUserInfo().gender = parent.getItemAtPosition(position).toString();
+                userInfo.gender = parent.getItemAtPosition(position).toString();
             }
 
             @Override
@@ -113,10 +137,11 @@ public class ProfileConfigurationFragmentView extends Fragment {
         });
 
         Spinner ageSpinner = rootView.findViewById(R.id.input_spinner_age);
+        ageSpinner.setSelection(getIndex(ageSpinner, userInfo.age));
         ageSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                appState.getUserInfo().age = parent.getItemAtPosition(position).toString();
+                userInfo.age = parent.getItemAtPosition(position).toString();
             }
 
             @Override
@@ -125,10 +150,11 @@ public class ProfileConfigurationFragmentView extends Fragment {
         });
 
         Spinner educationSpinner = rootView.findViewById(R.id.input_spinner_education);
+        educationSpinner.setSelection(getIndex(educationSpinner, userInfo.education));
         educationSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                appState.getUserInfo().education = parent.getItemAtPosition(position).toString();
+                userInfo.education = parent.getItemAtPosition(position).toString();
             }
 
             @Override
@@ -139,7 +165,23 @@ public class ProfileConfigurationFragmentView extends Fragment {
                 R.array.input_spinner_education_list, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(R.layout.spinner_wrap_text_adapter);
         educationSpinner.setAdapter(adapter);
+    }
 
-        return rootView;
+    private int getIndex(Spinner spinner, String myString){
+        for (int i=0;i<spinner.getCount();i++){
+            if (spinner.getItemAtPosition(i).toString().equalsIgnoreCase(myString)){
+                return i;
+            }
+        }
+
+        return 0;
+    }
+
+
+    @Override
+    public <T> void onResponse(T response) {
+        if (response instanceof String && !(TextUtils.isEmpty((String) response))){
+            loadData();
+        }
     }
 }

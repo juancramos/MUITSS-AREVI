@@ -4,13 +4,13 @@ import okhttp3.OkHttpClient;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-class RetrofitClient {
+public class RetrofitClient {
 
     private static final String BASE_URL = "http://192.168.0.105:3030/";
     private static Retrofit retrofit = null;
     private static Retrofit.Builder builder = null;
 
-    static Retrofit getClient() {
+    public static Retrofit getClient() {
         if (retrofit==null) {
             builder = new Retrofit.Builder()
                     .baseUrl(BASE_URL)
@@ -21,7 +21,7 @@ class RetrofitClient {
         return retrofit;
     }
 
-    static Retrofit getClient(OkHttpClient client) {
+    public static Retrofit getClient(OkHttpClient client) {
         if (retrofit==null) {
             builder = new Retrofit.Builder()
                     .client(client)
