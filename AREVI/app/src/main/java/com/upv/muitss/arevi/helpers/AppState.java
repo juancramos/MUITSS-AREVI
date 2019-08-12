@@ -1,5 +1,6 @@
 package com.upv.muitss.arevi.helpers;
 
+import com.upv.muitss.arevi.entities.Profile;
 import com.upv.muitss.arevi.entities.User;
 import com.upv.muitss.arevi.entities.UserInfo;
 
@@ -37,6 +38,10 @@ public class AppState {
     public UserInfo getUserInfo() { return this.userInfo; }
     public void setUserInfo(UserInfo pUserInfo) { this.userInfo = pUserInfo; }
 
+    private Profile profile;
+    public Profile getProfile() { return this.profile; }
+    public void setProfile(Profile pProfile) { this.profile = pProfile; }
+
     private static AppState instance;
 
     public static AppState getInstance() {
@@ -56,6 +61,7 @@ public class AppState {
         nodeAge = 0;
         user = new User();
         userInfo = new UserInfo();
+        profile = new Profile();
     }
 }
 

@@ -166,6 +166,8 @@ public class PagerActivity extends AppCompatActivity implements ActivityMessage 
         finish();
     }
     public void onFinishButtonClick(View view) {
+        AREVIRepository.getInstance().updateProfile(AppState.getInstance().getProfile().id, AppState.getInstance().getProfile());
+
         Intent toMain = new Intent(PagerActivity.this, MainActivity.class);
         startActivity(toMain);
         finish();
@@ -182,9 +184,11 @@ public class PagerActivity extends AppCompatActivity implements ActivityMessage 
 
         boolean hasErrors = !appState.getUser().isValidState() || !appState.getUserInfo().isValidState();
 
-        if (!hasErrors) {
+        if (!hasErrors && !AppState.getInstance().getUser().fetchingData) {
             Utils.popProgressDialog(this, "Loading...");
-            if (!AppState.getInstance().getUser().fetchingData) {
+            if (Utils.getLogIn().isValidState() && !AppState.getInstance().getUser().isLocal()){
+                AREVIRepository.getInstance().updateUser(AppState.getInstance().getUser().id, AppState.getInstance().getUser(), this);
+            } else {
                 AREVIRepository.getInstance().registerUser(AppState.getInstance().getUser(), this);
             }
         }
@@ -302,17 +306,30 @@ public class PagerActivity extends AppCompatActivity implements ActivityMessage 
     @Override
     public <T> void onResponse(T response) {
         if (response instanceof String && !(TextUtils.isEmpty((String) response))){
-            AREVIRepository.getInstance().postUserInfo(AppState.getInstance().getUserInfo(), this);
+            if (AppState.getInstance().getUserInfo().isLocal()){
+                AREVIRepository.getInstance().postUserInfo(AppState.getInstance().getUserInfo(), this);
+            }
+            else {
+                AREVIRepository.getInstance().updateUserInfo(AppState.getInstance().getUserInfo().id, AppState.getInstance().getUserInfo(), this);
+            }
         }
         else if (response instanceof UserInfo && !(TextUtils.isEmpty(((UserInfo) response).id))){
             int theme =  Utils.getSavedThemeStyle();
-            Profile p = new Profile();
-            p.enabled = "false";
+            Profile p = AppState.getInstance().getProfile();
+            p.enabled = "true";
             Configuration c = new Configuration();
             c.selectedAppTheme = theme;
             p.configuration = c;
             p.profileName = Profile.class.getSimpleName() + "-" + theme;
-            AREVIRepository.getInstance().postProfile(p);
+
+            AppState.getInstance().setProfile(p);
+
+            if (AppState.getInstance().getProfile().isLocal()){
+                AREVIRepository.getInstance().postProfile(AppState.getInstance().getProfile());
+            }
+            else if (Utils.getLogIn().isValidState() && p.profileName.equals(AppState.getInstance().getProfile().profileName)) {
+                AREVIRepository.getInstance().updateProfile(AppState.getInstance().getProfile().id, AppState.getInstance().getProfile());
+            }
         }
     }
 }

@@ -38,6 +38,7 @@ public class MainActivity extends AppCompatActivity implements ActivityMessage {
                 AREVIRepository.getInstance().logIn(userLogIn,this);
             });
         }
+        else startProfileWizard();
     }
 
     public void onStartArButtonClick(View view) {

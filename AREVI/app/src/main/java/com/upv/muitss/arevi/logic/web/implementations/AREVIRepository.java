@@ -64,9 +64,74 @@ public class AREVIRepository {
         });
     }
 
+    public void updateUser(String id, User user, ActivityMessage caller) {
+        user.fetchingData = true;
+        apiService.patchApiUser(id, user).enqueue(new Callback<User>() {
+            @Override
+            public void onResponse(@NonNull Call<User> call, @NonNull Response<User> response) {
+
+                if(response.isSuccessful()) {
+                    User apiUser = response.body();
+
+                    assert apiUser != null;
+
+                    Log.i(TAG, "post submitted to API." + apiUser.toString());
+
+                    Utils.saveLogIn(apiUser.email, user.password);
+                    Utils.saveUserId(apiUser.id);
+                    logIn(caller);
+                }
+                else {
+                    Utils.popProgressDialog(null, null);
+                    Log.i(TAG, "post submitted to API." + response.body());
+                }
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<User> call, @NonNull Throwable t) {
+                Utils.popProgressDialog(null, null);
+                Log.e(TAG, "Unable to submit post to API.");
+            }
+        });
+    }
+
     public void postUserInfo(UserInfo userInfo, ActivityMessage caller) {
         userInfo.userId = Utils.getUserId();
         apiService.postApiUserInfo(userInfo).enqueue(new Callback<UserInfo>() {
+            @Override
+            public void onResponse(@NonNull Call<UserInfo> call, @NonNull Response<UserInfo> response) {
+
+                if(response.isSuccessful()) {
+                    UserInfo apiUserInfo = response.body();
+
+                    assert apiUserInfo != null;
+
+                    Log.i(TAG, "post submitted to API." + apiUserInfo.toString());
+
+                    AppState.getInstance().setUserInfo(apiUserInfo);
+
+                    Utils.popProgressDialog(null, null);
+                    if (caller != null) caller.onResponse(apiUserInfo);
+                }
+                else {
+                    Utils.popProgressDialog(null, null);
+                    Log.i(TAG, "post submitted to API." + response.body());
+                    if (caller != null) caller.onResponse(null);
+                }
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<UserInfo> call, @NonNull Throwable t) {
+                Utils.popProgressDialog(null, null);
+                Log.e(TAG, "Unable to submit post to API.");
+                if (caller != null) caller.onResponse(null);
+            }
+        });
+    }
+
+    public void updateUserInfo(String id, UserInfo userInfo, ActivityMessage caller) {
+        userInfo.userId = Utils.getUserId();
+        apiService.putApiUserInfo(id, userInfo).enqueue(new Callback<UserInfo>() {
             @Override
             public void onResponse(@NonNull Call<UserInfo> call, @NonNull Response<UserInfo> response) {
 
@@ -108,6 +173,37 @@ public class AREVIRepository {
                     Profile apiProfile = response.body();
 
                     assert apiProfile != null;
+                    AppState.getInstance().setProfile(apiProfile);
+
+                    Log.i(TAG, "post submitted to API." + apiProfile.toString());
+
+                    Utils.popProgressDialog(null, null);
+                }
+                else {
+                    Utils.popProgressDialog(null, null);
+                    Log.i(TAG, "post submitted to API." + response.body());
+                }
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<Profile> call, @NonNull Throwable t) {
+                Utils.popProgressDialog(null, null);
+                Log.e(TAG, "Unable to submit post to API.");
+            }
+        });
+    }
+
+    public void updateProfile(String id, Profile profile) {
+        profile.userId = Utils.getUserId();
+        apiService.putApiProfile(id, profile).enqueue(new Callback<Profile>() {
+            @Override
+            public void onResponse(@NonNull Call<Profile> call, @NonNull Response<Profile> response) {
+
+                if(response.isSuccessful()) {
+                    Profile apiProfile = response.body();
+
+                    assert apiProfile != null;
+                    AppState.getInstance().setProfile(apiProfile);
 
                     Log.i(TAG, "post submitted to API." + apiProfile.toString());
 
@@ -230,6 +326,39 @@ public class AREVIRepository {
 
             @Override
             public void onFailure(@NonNull Call<DataResponse<UserInfo>> call, @NonNull Throwable t) {
+                Utils.popProgressDialog(null, null);
+                Log.e(TAG, "Unable to submit post to API.");
+                if (caller != null) caller.onResponse(null);
+            }
+        });
+    }
+
+
+    public void getApiProfile(String userId, ActivityMessage caller) {
+        apiService.findApiProfile(userId, 1).enqueue(new Callback<DataResponse<Profile>>() {
+            @Override
+            public void onResponse(@NonNull Call<DataResponse<Profile>> call, @NonNull Response<DataResponse<Profile>> response) {
+
+                if(response.isSuccessful()) {
+                    DataResponse<Profile> apiProfile = response.body();
+                    assert apiProfile != null;
+                    Profile profile = apiProfile.data.get(0);
+
+                    AppState.getInstance().setProfile(profile);
+                    if (caller != null) caller.onResponse(profile);
+
+                    Utils.popProgressDialog(null, null);
+                    Log.i(TAG, "post submitted to API." + profile.toString());
+                }
+                else {
+                    Utils.popProgressDialog(null, null);
+                    Log.i(TAG, "post submitted to API." + response.body());
+                    if (caller != null) caller.onResponse(null);
+                }
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<DataResponse<Profile>> call, @NonNull Throwable t) {
                 Utils.popProgressDialog(null, null);
                 Log.e(TAG, "Unable to submit post to API.");
                 if (caller != null) caller.onResponse(null);

@@ -28,7 +28,7 @@ module.exports = function (app) {
         type: DataTypes.BOOLEAN,
         allowNull: false,
         // User has to accept license agreement 
-        defaultValue: false
+        defaultValue: true
       },
       role: {
         type: DataTypes.ENUM({
