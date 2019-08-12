@@ -5,31 +5,36 @@ import android.support.annotation.NonNull;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class User {
+public class Profile {
     @SerializedName("id")
     @Expose
     public String id;
-    @SerializedName("email")
+    @SerializedName("profileName")
     @Expose
-    public String email;
-    @SerializedName("password")
+    public String profileName;
+    @SerializedName("configuration")
     @Expose
-    public String password;
+    public Configuration configuration = new Configuration();
     @SerializedName("enabled")
     @Expose
-    private String enabled;
+    public String enabled;
+    @SerializedName("userId")
+    @Expose
+    public String userId;
+
+
     private boolean enabledBoolean;
-    public boolean fetchingData;
 
 
     @NonNull
     @Override
     public String toString() {
-        return "user = {" +
+        return "profile = {" +
                 "id = '" + id + '\'' +
-                ", email = '" + email + '\'' +
-                ", password = '" + password + '\'' +
+                ", profileName = '" + profileName + '\'' +
+                ", configuration = '" + configuration.toString() + '\'' +
                 ", enabled = '" + enabled + '\'' +
+                ", userId = '" + userId + '\'' +
                 '}';
     }
 
@@ -42,9 +47,10 @@ public class User {
         enabledBoolean = Boolean.valueOf(pEnabled);
     }
 
-    public boolean isValidState() {
-        return email != null && !email.isEmpty() && password != null && !password.isEmpty();
-    }
+    public Configuration getConfiguration() {
+        return configuration;    }
+
+    public void setfiguration(Configuration configuration) {
+        this.configuration = configuration;    }
+
 }
-
-

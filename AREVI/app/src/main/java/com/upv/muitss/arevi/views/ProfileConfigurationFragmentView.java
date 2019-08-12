@@ -54,7 +54,10 @@ public class ProfileConfigurationFragmentView extends Fragment implements Activi
 
         rootView =  inflater.inflate(R.layout.fragment_pager_profile_config, container, false);
 
-        if (!AppState.getInstance().getUserInfo().isValidState()) {
+        boolean userInfo = AppState.getInstance().getUserInfo().isValidState();
+        boolean userLogin = Utils.getLogIn().isValidState();
+
+        if (userLogin && !userInfo) {
             Utils.popProgressDialog(getActivity(), "Loading...");
             AREVIRepository.getInstance().getApiUserInfo(Utils.getUserId(), this);
         }
@@ -92,20 +95,6 @@ public class ProfileConfigurationFragmentView extends Fragment implements Activi
             }
         });
 
-        EditText otherGenderNameTxt = rootView.findViewById(R.id.text_input_gender);
-        TextInputLayout otherGenderLayout = rootView.findViewById(R.id.text_input_layout_gender);
-        if(!TextUtils.isEmpty(userInfo.genderOther)){
-            otherGenderNameTxt.setText(userInfo.genderOther);
-        }
-        else {
-            otherGenderLayout.setVisibility(View.GONE);
-        }
-        otherGenderNameTxt.setOnFocusChangeListener((v, hasFocus) -> {
-            if (!hasFocus) {
-                userInfo.genderOther = Utils.validateInput(otherGenderNameTxt);
-            }
-        });
-
         EditText occupationTxt = rootView.findViewById(R.id.text_input_occupation);
         occupationTxt.setText(userInfo.occupation);
         occupationTxt.setOnFocusChangeListener((v, hasFocus) -> {
@@ -122,6 +111,9 @@ public class ProfileConfigurationFragmentView extends Fragment implements Activi
             }
         });
 
+        EditText otherGenderNameTxt = rootView.findViewById(R.id.text_input_gender);
+        TextInputLayout otherGenderLayout = rootView.findViewById(R.id.text_input_layout_gender);
+
         Spinner genderSpinner = rootView.findViewById(R.id.input_spinner_gender);
         genderSpinner.setSelection(getIndex(genderSpinner, userInfo.gender));
         genderSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -133,6 +125,19 @@ public class ProfileConfigurationFragmentView extends Fragment implements Activi
 
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
+            }
+        });
+
+
+        if(!TextUtils.isEmpty(userInfo.genderOther)){
+            otherGenderNameTxt.setText(userInfo.genderOther);
+        }
+        else {
+            otherGenderLayout.setVisibility(View.GONE);
+        }
+        otherGenderNameTxt.setOnFocusChangeListener((v, hasFocus) -> {
+            if (!hasFocus) {
+                userInfo.genderOther = Utils.validateInput(otherGenderNameTxt);
             }
         });
 

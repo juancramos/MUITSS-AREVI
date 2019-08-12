@@ -2,6 +2,7 @@ package com.upv.muitss.arevi.logic.web.interfaces;
 
 import com.upv.muitss.arevi.entities.AccessToken;
 import com.upv.muitss.arevi.entities.DataResponse;
+import com.upv.muitss.arevi.entities.Profile;
 import com.upv.muitss.arevi.entities.User;
 import com.upv.muitss.arevi.entities.UserInfo;
 import com.upv.muitss.arevi.entities.UserLogIn;
@@ -18,6 +19,7 @@ public interface AREVIApiService {
     String USER_API_ROUTE = "/user";
     String AUTH_API_ROUTE = "/authentication";
     String USER_INFO_API_ROUTE = "/user-info";
+    String PROFILE_API_ROUTE = "/profile";
 
     @GET(USER_API_ROUTE)
     Call<DataResponse<User>> getApiUser(@Query("") String id);
@@ -39,5 +41,12 @@ public interface AREVIApiService {
     @POST(USER_INFO_API_ROUTE)
     @Headers({ "Content-Type: application/json;charset=UTF-8"})
     Call<UserInfo> postApiUserInfo(@Body UserInfo pUserInfo);
+
+    @GET(PROFILE_API_ROUTE)
+    Call<DataResponse<Profile>> findApiProfile(@Query("userId") String userId);
+
+    @POST(PROFILE_API_ROUTE)
+    @Headers({ "Content-Type: application/json;charset=UTF-8"})
+    Call<Profile> postApiProfile(@Body Profile pUserInfo);
 }
 
