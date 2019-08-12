@@ -1,6 +1,7 @@
 package com.upv.muitss.arevi.entities;
 
 import android.support.annotation.NonNull;
+import android.text.TextUtils;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
@@ -15,6 +16,9 @@ public class User {
     @SerializedName("password")
     @Expose
     public String password;
+    @SerializedName("role")
+    @Expose
+    public String role;
     @SerializedName("enabled")
     @Expose
     private String enabled;
@@ -29,8 +33,13 @@ public class User {
                 "id = '" + id + '\'' +
                 ", email = '" + email + '\'' +
                 ", password = '" + password + '\'' +
+                ", role = '" + role + '\'' +
                 ", enabled = '" + enabled + '\'' +
                 '}';
+    }
+
+    public boolean isLocal(){
+        return TextUtils.isEmpty(id);
     }
 
     public String getEnabled() {

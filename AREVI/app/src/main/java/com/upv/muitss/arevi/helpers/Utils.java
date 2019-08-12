@@ -142,9 +142,24 @@ public class Utils {
         userPreferences.saveUserPreferenceString(Constants.USER_ID, userId);
     }
 
+    public static void saveMode(boolean mode) {
+        UserPreferences userPreferences = UserPreferences.getInstance();
+        userPreferences.saveUserPreferenceBool(Constants.USER_SELECTED_MODE, mode);
+    }
+
     public static String getUserId(){
         UserPreferences userPreferences = UserPreferences.getInstance();
         return userPreferences.getUserPreferenceString(Constants.USER_ID);
+    }
+
+    private static String getSavedTheme(){
+        UserPreferences userPreferences = UserPreferences.getInstance();
+        return userPreferences.getUserPreferenceString(Constants.USER_SELECTED_THEME);
+    }
+
+    public static boolean getSavedMode(){
+        UserPreferences userPreferences = UserPreferences.getInstance();
+        return userPreferences.getUserPreferenceBool(Constants.USER_SELECTED_MODE);
     }
 
     public static <S> S createService(Class<S> serviceClass) {
@@ -173,10 +188,5 @@ public class Utils {
     private static boolean emailValidation(@NonNull String email){
         Pattern pattern = Patterns.EMAIL_ADDRESS;
         return !pattern.matcher(email.trim()).matches();
-    }
-
-    private static String getSavedTheme(){
-        UserPreferences userPreferences = UserPreferences.getInstance();
-        return userPreferences.getUserPreferenceString(Constants.USER_SELECTED_THEME);
     }
 }

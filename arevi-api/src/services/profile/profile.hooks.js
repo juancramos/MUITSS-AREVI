@@ -1,3 +1,5 @@
+const setEnabled = require('../../hooks/profile/setEnabled-hook');
+const jsonParse = require('../../hooks/profile/jsonParse-hook');
 const { authenticate } = require('@feathersjs/authentication').hooks;
 const checkPermissions = require('feathers-permissions');
 const { iff } = require('feathers-hooks-common');
@@ -20,15 +22,15 @@ module.exports = {
     find: [...restrict],
     get: [...restrict],
     create: [],
-    update: [...restrict],
-    patch: [...restrict],
+    update: [setEnabled(), ...restrict],
+    patch: [setEnabled(), ...restrict],
     remove: [...restrict]
   },
 
   after: {
     all: [],
-    find: [],
-    get: [],
+    find: [jsonParse()],
+    get: [jsonParse()],
     create: [],
     update: [],
     patch: [],

@@ -1,8 +1,9 @@
 package com.upv.muitss.arevi.helpers;
 
 public class Constants {
-    static final String USER_ID = "USER_ID";
     static final String USER_SELECTED_THEME = "USER_SELECTED_THEME";
+    static final String USER_SELECTED_MODE = "USER_SELECTED_MODE";
+    static final String USER_ID = "USER_ID";
     static final String USER_EMAIL = "USER_EMAIL";
     static final String USER_PASSWORD = "USER_PASSWORD";
 

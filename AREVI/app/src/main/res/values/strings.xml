@@ -55,4 +55,5 @@
         <item>Graduate degree</item>
     </string-array>
     <string name="frame_profile_config_privacy_compliance_text">By continuing you are accepting to share your information for investigation purposes</string>
+    <string name="use_cardboard_switch_text">Use Google Cardboard</string>
 </resources>
