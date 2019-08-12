@@ -32,4 +32,8 @@ public class UserLogIn {
                 ", password='" + password + '\'' +
                 '}';
     }
+
+    public boolean isValidState() {
+        return email != null && !email.isEmpty() && password != null && !password.isEmpty();
+    }
 }

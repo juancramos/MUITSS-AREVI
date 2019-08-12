@@ -6,6 +6,7 @@ import android.util.Log;
 
 import com.upv.muitss.arevi.entities.AccessToken;
 import com.upv.muitss.arevi.entities.DataResponse;
+import com.upv.muitss.arevi.entities.Profile;
 import com.upv.muitss.arevi.entities.User;
 import com.upv.muitss.arevi.entities.UserInfo;
 import com.upv.muitss.arevi.entities.UserLogIn;
@@ -63,7 +64,7 @@ public class AREVIRepository {
         });
     }
 
-    public void postUserInfo(UserInfo userInfo) {
+    public void postUserInfo(UserInfo userInfo, ActivityMessage caller) {
         userInfo.userId = Utils.getUserId();
         apiService.postApiUserInfo(userInfo).enqueue(new Callback<UserInfo>() {
             @Override
@@ -79,6 +80,38 @@ public class AREVIRepository {
                     AppState.getInstance().setUserInfo(apiUserInfo);
 
                     Utils.popProgressDialog(null, null);
+                    if (caller != null) caller.onResponse(apiUserInfo);
+                }
+                else {
+                    Utils.popProgressDialog(null, null);
+                    Log.i(TAG, "post submitted to API." + response.body());
+                    if (caller != null) caller.onResponse(null);
+                }
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<UserInfo> call, @NonNull Throwable t) {
+                Utils.popProgressDialog(null, null);
+                Log.e(TAG, "Unable to submit post to API.");
+                if (caller != null) caller.onResponse(null);
+            }
+        });
+    }
+
+    public void postProfile(Profile profile) {
+        profile.userId = Utils.getUserId();
+        apiService.postApiProfile(profile).enqueue(new Callback<Profile>() {
+            @Override
+            public void onResponse(@NonNull Call<Profile> call, @NonNull Response<Profile> response) {
+
+                if(response.isSuccessful()) {
+                    Profile apiProfile = response.body();
+
+                    assert apiProfile != null;
+
+                    Log.i(TAG, "post submitted to API." + apiProfile.toString());
+
+                    Utils.popProgressDialog(null, null);
                 }
                 else {
                     Utils.popProgressDialog(null, null);
@@ -87,15 +120,18 @@ public class AREVIRepository {
             }
 
             @Override
-            public void onFailure(@NonNull Call<UserInfo> call, @NonNull Throwable t) {
+            public void onFailure(@NonNull Call<Profile> call, @NonNull Throwable t) {
                 Utils.popProgressDialog(null, null);
                 Log.e(TAG, "Unable to submit post to API.");
             }
         });
     }
 
-    public void logIn(ActivityMessage caller){
-        UserLogIn userLogIn = Utils.getLogIn();
+    private void logIn(ActivityMessage caller){
+        logIn(Utils.getLogIn(), caller);
+    };
+
+    public void logIn(UserLogIn userLogIn, ActivityMessage caller){
         if (!TextUtils.isEmpty(userLogIn.email) && !TextUtils.isEmpty(userLogIn.password)){
 
             AppState.getInstance().getUser().fetchingData = true;

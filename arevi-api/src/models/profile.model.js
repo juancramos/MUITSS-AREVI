@@ -12,18 +12,12 @@ module.exports = function (app) {
         defaultValue: DataTypes.UUIDV4,
         primaryKey: true
       },
-      profileNmae: {
+      profileName: {
         type: DataTypes.STRING,
         allowNull: false
       },
       configuration: {
-        type: Sequelize.TEXT,
-        get: function () {
-          return JSON.parse(this.getDataValue('value'));
-        },
-        set: function (value) {
-          this.setDataValue('value', JSON.stringify(value));
-        },
+        type: DataTypes.JSON,
         allowNull: false
       },
       enabled: {

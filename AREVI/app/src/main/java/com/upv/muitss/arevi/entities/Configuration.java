@@ -5,19 +5,16 @@ import android.support.annotation.NonNull;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-import java.util.List;
-
-public class DataResponse<T> {
-
-    @SerializedName("data")
+public class Configuration {
+    @SerializedName("selectedAppTheme")
     @Expose
-    public List<T> data;
+    public int selectedAppTheme;
 
     @NonNull
     @Override
     public String toString() {
-        return '{' +
-                "data = '" + data.toString() + '\'' +
+        return "{" +
+                "selectedAppTheme = '" + selectedAppTheme + '\'' +
                 '}';
     }
 }

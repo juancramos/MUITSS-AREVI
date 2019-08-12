@@ -37,16 +37,16 @@ public class UserInfo {
     @NonNull
     @Override
     public String toString() {
-        return "user{" +
-                "id='" + id + '\'' +
-                ", fullName='" + fullName + '\'' +
-                ", gender='" + gender + '\'' +
-                ", genderOther='" + genderOther + '\'' +
-                ", age='" + age + '\'' +
-                ", visualIllness='" + visualIllness + '\'' +
-                ", occupation='" + occupation + '\'' +
-                ", education='" + education + '\'' +
-                ", userId='" + userId + '\'' +
+        return "user-info = {" +
+                "id = '" + id + '\'' +
+                ", fullName = '" + fullName + '\'' +
+                ", gender = '" + gender + '\'' +
+                ", genderOther = '" + genderOther + '\'' +
+                ", age = '" + age + '\'' +
+                ", visualIllness = '" + visualIllness + '\'' +
+                ", occupation = '" + occupation + '\'' +
+                ", education = '" + education + '\'' +
+                ", userId = '" + userId + '\'' +
                 '}';
     }
 

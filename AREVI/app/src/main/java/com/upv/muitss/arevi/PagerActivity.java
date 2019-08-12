@@ -19,7 +19,8 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.RadioGroup;
 
-import com.upv.muitss.arevi.entities.User;
+import com.upv.muitss.arevi.entities.Profile;
+import com.upv.muitss.arevi.entities.Configuration;
 import com.upv.muitss.arevi.entities.UserInfo;
 import com.upv.muitss.arevi.helpers.AppState;
 import com.upv.muitss.arevi.helpers.Constants;
@@ -301,7 +302,17 @@ public class PagerActivity extends AppCompatActivity implements ActivityMessage 
     @Override
     public <T> void onResponse(T response) {
         if (response instanceof String && !(TextUtils.isEmpty((String) response))){
-            AREVIRepository.getInstance().postUserInfo(AppState.getInstance().getUserInfo());
+            AREVIRepository.getInstance().postUserInfo(AppState.getInstance().getUserInfo(), this);
+        }
+        else if (response instanceof UserInfo && !(TextUtils.isEmpty(((UserInfo) response).id))){
+            int theme =  Utils.getSavedThemeStyle();
+            Profile p = new Profile();
+            p.enabled = "false";
+            Configuration c = new Configuration();
+            c.selectedAppTheme = theme;
+            p.configuration = c;
+            p.profileName = Profile.class.getSimpleName() + "-" + theme;
+            AREVIRepository.getInstance().postProfile(p);
         }
     }
 }

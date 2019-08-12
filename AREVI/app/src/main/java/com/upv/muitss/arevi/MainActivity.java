@@ -8,6 +8,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 
+import com.upv.muitss.arevi.entities.UserLogIn;
 import com.upv.muitss.arevi.helpers.AppState;
 import com.upv.muitss.arevi.helpers.UserPreferences;
 import com.upv.muitss.arevi.helpers.Utils;
@@ -29,10 +30,14 @@ public class MainActivity extends AppCompatActivity implements ActivityMessage {
         setTheme(Utils.getSavedThemeStyle());
         setContentView(R.layout.activity_main);
 
-        runOnUiThread(()->{
-            Utils.popProgressDialog(this, "Loading...");
-            AREVIRepository.getInstance().logIn(this);
-        });
+        UserLogIn userLogIn = Utils.getLogIn();
+
+        if (userLogIn.isValidState()){
+            runOnUiThread(()->{
+                Utils.popProgressDialog(this, "Loading...");
+                AREVIRepository.getInstance().logIn(userLogIn,this);
+            });
+        }
     }
 
     public void onStartArButtonClick(View view) {
