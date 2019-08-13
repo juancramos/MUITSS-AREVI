@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TextView android:id="@+id/nameTextView"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:ellipsize="marquee"
+    android:theme="@style/AppTheme.Spinner.DropDown"
+    android:hyphenationFrequency="normal"
+    android:breakStrategy="simple"
+    android:scrollHorizontally="false"
+    android:background="@drawable/spinner_list_border"
+    xmlns:android="http://schemas.android.com/apk/res/android" />

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center|top"
+    android:orientation="vertical"
+    tools:context=".ArActivity">
+
+    <include
+        android:id="@+id/ar_view"
+        layout="@layout/ar_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginBottom="@dimen/ar_activity_ar_scene_margin_bottom" />
+
+    <com.upv.muitss.arevi.views.MenuView
+        android:id="@+id/gallery_layout"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/ar_activity_menu_layout_height"
+        android:layout_marginTop="@dimen/ar_activity_menu_margin_top"
+        android:orientation="horizontal" />
+
+</LinearLayout>
