@@ -10,8 +10,6 @@ import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.FrameLayout;
 
 import com.upv.arbe.arcp.helpers.AppState;
 import com.upv.arbe.arcp.logic.webrtc.implementations.WebRTCModule;
