@@ -208,7 +208,7 @@ public class WebRTCModule implements SignalingInterface {
         owner.get().runOnUiThread(this::hangup);
     }
 
-    private void hangup() {
+    public void hangup() {
         try {
             localPeer.close();
             localPeer = null;
@@ -335,10 +335,9 @@ public class WebRTCModule implements SignalingInterface {
 
         videoView.setMirror(false);
         videoView.init(rootEglBase.getEglBaseContext(), null);
-        videoView.setZOrderMediaOverlay(true);
+        videoView.setZOrderMediaOverlay(false);
 
         remoteVideoView = videoView;
-        remoteVideoView.setMirror(true);
     }
 
     private void getIceServers() {

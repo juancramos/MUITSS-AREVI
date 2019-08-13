@@ -24,6 +24,7 @@ import com.google.ar.sceneform.rendering.ModelRenderable;
 import com.google.ar.sceneform.rendering.ShapeFactory;
 import com.google.ar.sceneform.rendering.ViewRenderable;
 import com.google.ar.sceneform.ux.ArFragment;
+import com.google.ar.sceneform.ux.TransformableNode;
 import com.upv.muitss.arevi.ArActivity;
 import com.upv.muitss.arevi.R;
 import com.upv.muitss.arevi.drawables.PointerDrawable;
@@ -41,7 +42,8 @@ public class ArView extends ArFragment {
     private PointerDrawable pointer;
     private View view;
     private Plane firstPlane;
-    private AnchorNode anchorNode;
+    private AnchorNode webRTCNode;
+    private AnchorNode randomNode;
     private static Random rand;
 
     private static WeakReference<ArActivity> owner;
@@ -61,7 +63,11 @@ public class ArView extends ArFragment {
         view = ownerView.findViewById(R.id.sceneform_pointer);
 
         getArSceneView().getScene().addOnUpdateListener(randomRenderListener);
-        getArSceneView().getScene().addOnUpdateListener(webRtcRenderListener);
+    }
+
+    public void attachWebRTCView(){
+        if (webRTCNode == null) getArSceneView().getScene().addOnUpdateListener(webRtcRenderListener);
+        else removeViewRenderable();
     }
 
     private Scene.OnUpdateListener randomRenderListener = frameTime -> {
@@ -143,16 +149,34 @@ public class ArView extends ArFragment {
         getArSceneView().getScene()
                 .removeOnUpdateListener(webRtcRenderListener);
 
-        Node node = new Node();
+
+        TransformableNode node = new TransformableNode(getTransformationSystem());
         node.setRenderable(render);
         // Create the Sceneform AnchorNode
         AnchorNode anchorNode = new AnchorNode(anchor);
         anchorNode.addChild(node);
         anchorNode.setParent(getArSceneView().getScene());
 
+        webRTCNode = anchorNode;
+
         owner.get().MountViewData((SurfaceViewRenderer) render.getView());
     }
 
+    private void removeViewRenderable(){
+        Log.d(TAG,"handleOnTouch hitTestResult.getNode() != null");
+
+        Toast.makeText(owner.get(), "Kill WebRTC view", Toast.LENGTH_SHORT).show();
+        getArSceneView().getScene().removeChild(webRTCNode);
+        Node parent = webRTCNode.getParent();
+        if (parent != null) {
+            Anchor anchorParent = ((AnchorNode) parent).getAnchor();
+            if (anchorParent != null){
+                anchorParent.detach();
+                webRTCNode.setParent(null);
+                webRTCNode = null;
+            }
+        }
+    }
 
     private void randomPlacedCube(Plane plane) {
         //find a random spot on the plane in the X
@@ -177,7 +201,7 @@ public class ArView extends ArFragment {
 
         Anchor anchor = session.createAnchor(pose);
 
-        if (anchorNode == null) {
+        if (randomNode == null) {
             MaterialFactory.makeOpaqueWithColor(owner.get(), new Color(android.graphics.Color.RED))
                     .thenAccept(
                             material -> {
@@ -186,9 +210,9 @@ public class ArView extends ArFragment {
                                         , material);
                                 Node node = new Node();
                                 node.setRenderable(render);
-                                anchorNode = new AnchorNode(anchor);
-                                anchorNode.addChild(node);
-                                anchorNode.setParent(getArSceneView().getScene());
+                                randomNode = new AnchorNode(anchor);
+                                randomNode.addChild(node);
+                                randomNode.setParent(getArSceneView().getScene());
 
                                 node.setOnTapListener((hitTestResult, motionEvent) -> {
                                     //We are only interested in the ACTION_UP events - anything else just return
@@ -212,10 +236,10 @@ public class ArView extends ArFragment {
                                 });
                             });
         } else {
-            Anchor a = anchorNode.getAnchor();
+            Anchor a = randomNode.getAnchor();
             assert a != null;
             a.detach();
-            anchorNode.setAnchor(anchor);
+            randomNode.setAnchor(anchor);
         }
     }
 
