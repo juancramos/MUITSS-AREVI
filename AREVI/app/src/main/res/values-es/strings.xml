@@ -24,7 +24,7 @@
     <string name="frame_app_font_large_size_text">Grande</string>
     <string name="frame_ar_config_title_text">Interfaz de usuario de realidad aumentada AREVI.</string>
     <string name="frame_profile_config_user_gender_text">Género:</string>
-    <string name="text_input_txt_email_text">EmailL:</string>
+    <string name="text_input_txt_email_text">Email:</string>
     <string name="text_input_txt_password_text">Contraseña:</string>
     <string name="text_input_txt_full_name_text">Nombre completo:</string>
     <string name="text_input_txt_age_text">Edad:</string>

@@ -26,6 +26,7 @@ import java.lang.ref.WeakReference;
 public class ArActivity extends AppCompatActivity {
 
     private AppState appState;
+    private ArView arView;
     private WeakReference<ArActivity> weakReference;
     private final String TAG = this.getClass().getCanonicalName();
     private static final int CAPTURE_PERMISSION_REQUEST_CODE = 1;
@@ -51,7 +52,7 @@ public class ArActivity extends AppCompatActivity {
         appState.setCenterX(metrics.widthPixels / 2);
         appState.setCenterY(metrics.heightPixels / 2);
 
-        ArView arView = (ArView) getSupportFragmentManager().findFragmentById(R.id.sceneform_fragment);
+        arView = (ArView) getSupportFragmentManager().findFragmentById(R.id.sceneform_fragment);
         MenuView gallery = findViewById(R.id.gallery_layout);
 
         assert arView != null && gallery != null;
@@ -61,6 +62,10 @@ public class ArActivity extends AppCompatActivity {
         gallery.init(weakReference);
 
         startScreenCapture();
+    }
+
+    public void arAttachWebRTCView(){
+        arView.attachWebRTCView();
     }
 
     private void startScreenCapture() {

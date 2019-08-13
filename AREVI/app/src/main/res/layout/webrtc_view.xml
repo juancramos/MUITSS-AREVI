@@ -1,6 +1,6 @@
 <org.webrtc.SurfaceViewRenderer
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/remote_gl_surface_view"
-    android:layout_width="100dp"
-    android:layout_height="100dp" />
+    android:layout_width="350dp"
+    android:layout_height="200dp" />
 

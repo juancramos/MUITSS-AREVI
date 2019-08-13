@@ -26,6 +26,10 @@ public class AppState {
     public boolean getIsFocusing() { return this.isFocusing; }
     public void setIsFocusing(boolean pIsFocusing) { this.isFocusing = pIsFocusing; }
 
+    private boolean isCasting;
+    public boolean getIsCasting() { return this.isCasting; }
+    public void setIsCasting(boolean pIsCasting) { this.isCasting = pIsCasting; }
+
     private float nodeAge;
     public float getNodeAge() { return this.nodeAge; }
     public void setNodeAge(float pNodeAge) { this.nodeAge = pNodeAge; }
