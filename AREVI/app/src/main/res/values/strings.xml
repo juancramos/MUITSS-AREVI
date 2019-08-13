@@ -1,10 +1,10 @@
 <resources>
     <string name="app_name">AREVI</string>
     <string name="app_preferences_name">AREVI_Preferences</string>
-    <string name="app_title">Hello World!</string>
+    <string name="app_title">AREVI app</string>
     <string name="start_ar_scene_button_text">Start ar scene</string>
-    <string name="wizard_activity_button_text">Wizard Activity</string>
-    <string name="frame_app_config_description_text">Set the way AREVI will show relevant information</string>
+    <string name="wizard_activity_button_text">Manage profile</string>
+    <string name="frame_app_config_description_text">Set the way AREVI will show relevant information.</string>
     <string name="frame_ar_config_description_text">AREVI is compatible with Google Cardboard, you are able to use it to explore the augmented reality experience.</string>
     <string name="frame_app_font_size_text">Set text size:</string>
     <string name="section_format">Page %1$d</string>
@@ -13,7 +13,7 @@
     <string name="ice_candidates_file_name">ice_servers.json</string>
     <string name="signaling_server_url">https://arbertc.azurewebsites.net/</string>
     <string name="indicator_of_context_action_image_text">Indicator of context action</string>
-    <string name="frame_profile_config_description_text">AREVI wants to know you in order to provide the study with demographic information</string>
+    <string name="frame_profile_config_description_text">AREVI wants to know you in order to provide the study with demographic information.</string>
     <string name="frame_app_config_title_text">AREVI configuration</string>
     <string name="frame_profile_config_title_text">Your AREVI profile</string>
     <string name="frame_app_config_theme_rbtn_text">Set color theme:</string>
@@ -22,16 +22,16 @@
     <string name="frame_app_font_default_size_text">Normal</string>
     <string name="frame_app_font_medium_size_text">Medium</string>
     <string name="frame_app_font_large_size_text">Large</string>
-    <string name="frame_ar_config_title_text">AREVI augmented reality user interface</string>
-    <string name="frame_profile_config_user_gender_text">Gender</string>
-    <string name="text_input_txt_email_text">Email</string>
-    <string name="text_input_txt_password_text">Password</string>
-    <string name="text_input_txt_full_name_text">Full name</string>
-    <string name="text_input_txt_age_text">Age</string>
-    <string name="text_input_txt_education_text">Education</string>
-    <string name="text_input_txt_occupation_text">Occupation</string>
-    <string name="text_input_txt_visual_illness_text">Describe your visual illness</string>
-    <string name="text_input_txt_gender_text">Specify gender</string>
+    <string name="frame_ar_config_title_text">AREVI augmented reality user interface.</string>
+    <string name="frame_profile_config_user_gender_text">Gender:</string>
+    <string name="text_input_txt_email_text">Email:</string>
+    <string name="text_input_txt_password_text">Password:</string>
+    <string name="text_input_txt_full_name_text">Full name:</string>
+    <string name="text_input_txt_age_text">Age:</string>
+    <string name="text_input_txt_education_text">Education:</string>
+    <string name="text_input_txt_occupation_text">Occupation:</string>
+    <string name="text_input_txt_visual_illness_text">Describe your visual illness:</string>
+    <string name="text_input_txt_gender_text">Specify gender:</string>
     <string-array name="input_spinner_gender_list">
         <item>Male</item>
         <item>Female</item>
@@ -54,6 +54,6 @@
         <item>Bachelor degree</item>
         <item>Graduate degree</item>
     </string-array>
-    <string name="frame_profile_config_privacy_compliance_text">By continuing you are accepting to share your information for investigation purposes</string>
-    <string name="use_cardboard_switch_text">Use Google Cardboard</string>
+    <string name="frame_profile_config_privacy_compliance_text">By continuing you are agreeing to share your information for research purposes.</string>
+    <string name="use_cardboard_switch_text">Use Google Cardboard?</string>
 </resources>

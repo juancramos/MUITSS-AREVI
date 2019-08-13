@@ -111,12 +111,15 @@ var remoteVideo = document.querySelector('#remoteVideo');
 
 navigator.mediaDevices.getUserMedia({
   audio: true,
-  video: true
-})
-  .then(gotStream)
-  .catch(function (e) {
-    console.log('getUserMedia() error: ' + e);
-  });
+  video: {
+    mediaSource: "screen", // whole screen sharing
+    width: { max: '1920' },
+    height: { max: '1080' },
+    frameRate: { max: '10' }
+  }
+}).then(gotStream).catch(function (e) {
+  console.log('getUserMedia() error: ' + e);
+});
 
 
 // try {
