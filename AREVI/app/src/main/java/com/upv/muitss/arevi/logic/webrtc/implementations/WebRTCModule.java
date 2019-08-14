@@ -307,7 +307,7 @@ public class WebRTCModule implements SignalingInterface {
                 .createPeerConnectionFactory();
 
         getIceServers();
-        SignallingClient.getInstance().init(this, owner.get().getString(R.string.signaling_server_url));
+        SignallingClient.getInstance().init(this, Utils.getInstance().getResourceString(R.string.signaling_server_url));
 
 
         //Create MediaConstraints - Will be useful for specifying video and audio constraints. More on this later!

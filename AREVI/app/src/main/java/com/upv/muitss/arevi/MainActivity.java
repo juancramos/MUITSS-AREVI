@@ -16,6 +16,9 @@ import com.upv.muitss.arevi.logic.web.implementations.AREVIRepository;
 import com.upv.muitss.arevi.logic.web.interfaces.ActivityMessage;
 
 public class MainActivity extends AppCompatActivity implements ActivityMessage {
+
+    public static Context appContext;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -29,6 +32,8 @@ public class MainActivity extends AppCompatActivity implements ActivityMessage {
 
         setTheme(Utils.getSavedThemeStyle());
         setContentView(R.layout.activity_main);
+
+        appContext = this.getBaseContext();
 
         UserLogIn userLogIn = Utils.getLogIn();
 
