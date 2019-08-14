@@ -24,6 +24,10 @@ public class Utils {
         return instance;
     }
 
+    public String getResourceString(int id){
+        return com.upv.muitss.arevi.helpers.Utils.getResourceString(id);
+    }
+
     public List<IceServer> getIceServerData(Context context) {
         String jsonString = getAssetsJSON(context);
         Gson gson = new Gson();
