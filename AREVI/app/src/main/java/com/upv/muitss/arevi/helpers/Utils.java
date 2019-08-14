@@ -13,6 +13,7 @@ import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 
+import com.upv.muitss.arevi.MainActivity;
 import com.upv.muitss.arevi.R;
 import com.upv.muitss.arevi.entities.UserLogIn;
 import com.upv.muitss.arevi.logic.web.implementations.AuthenticationInterceptor;
@@ -26,6 +27,10 @@ public class Utils {
     private static final String TAG = "Utils";
     private static ProgressDialog progressDialog = null;
     private static OkHttpClient.Builder httpClient = new OkHttpClient.Builder();
+
+    public static String getResourceString(int id){
+        return MainActivity.appContext.getString(id);
+    }
 
     public static void saveTheme(@NonNull Activity context, String value) {
         UserPreferences userPreferences = UserPreferences.getInstance();
