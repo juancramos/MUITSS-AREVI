@@ -1,12 +1,15 @@
 package com.upv.muitss.arevi.logic.web.implementations;
 
+import com.upv.muitss.arevi.R;
+import com.upv.muitss.arevi.helpers.Utils;
+
 import okhttp3.OkHttpClient;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 public class RetrofitClient {
 
-    private static final String BASE_URL = "http://192.168.0.105:3030/";
+    private static final String BASE_URL = Utils.getResourceString(R.string.signaling_server_url);
     private static Retrofit retrofit = null;
     private static Retrofit.Builder builder = null;
 
