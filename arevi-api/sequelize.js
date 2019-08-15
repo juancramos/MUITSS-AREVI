@@ -1,7 +1,7 @@
 const Sequelize = require('sequelize');
 
 module.exports = function (app) {
-  const connectionString = app.get('mysql');
+  const connectionString = process.env.MYSQLCONNSTR_localdb || app.get('mysql');
   const sequelize = new Sequelize(connectionString, {
     dialect: 'mysql',
     logging: false,
