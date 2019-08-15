@@ -11,7 +11,7 @@
     <string name="pager_skip_button_text">Omitir</string>
     <string name="pager_finish_button_text">Terminar</string>
     <string name="ice_candidates_file_name">ice_servers.json</string>
-    <string name="signaling_server_url">https://arbertc.azurewebsites.net/</string>
+    <string name="signaling_server_url">https://arevi-api.azurewebsites.net/</string>
     <string name="indicator_of_context_action_image_text">Indicador de acción contextual.</string>
     <string name="frame_profile_config_description_text">AREVI quiere conocerte con el fin de proporcionar al estudio información demográfica para analizar.</string>
     <string name="frame_app_config_title_text">Configuración de AREVI</string>
