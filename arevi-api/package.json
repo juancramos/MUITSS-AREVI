@@ -1,9 +1,9 @@
 {
-  "name": "featers-server",
+  "name": "arevi-api",
   "description": "",
   "version": "0.0.0",
   "homepage": "",
-  "main": "./index.js",
+  "main": "./",
   "keywords": [
     "feathers"
   ],
@@ -14,7 +14,7 @@
   "contributors": [],
   "bugs": {},
   "directories": {
-    "lib": "src",
+    "lib": "./",
     "test": "test/",
     "config": "config/"
   },
@@ -24,9 +24,9 @@
   },
   "scripts": {
     "test": "npm run eslint && NODE_ENV= npm run mocha",
-    "eslint": "eslint ./index.js test/. --config .eslintrc.json",
-    "dev": "nodemon ./index.js",
-    "start": "node ./index.js",
+    "eslint": "eslint .//. test/. --config .eslintrc.json",
+    "dev": "nodemon .//",
+    "start": "node .//",
     "mocha": "mocha test/ --recursive --exit"
   },
   "dependencies": {
@@ -44,10 +44,10 @@
     "feathers-hooks-common": "^4.20.7",
     "feathers-permissions": "^0.2.1",
     "feathers-sequelize": "^4.1.1",
-    "helmet": "^3.16.0",
-    "sequelize": "^4.43.2",
+    "helmet": "^3.20.0",
+    "mysql2": "^1.6.5",
+    "sequelize": "^4.44.2",
     "serve-favicon": "^2.5.0",
-    "sqlite3": "^4.0.9",
     "winston": "^3.2.1"
   },
   "devDependencies": {

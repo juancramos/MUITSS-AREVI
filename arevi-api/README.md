@@ -1,4 +1,4 @@
-# featers-server
+# arevi-api
 
 > 
 
@@ -14,7 +14,7 @@ Getting up and running is as easy as 1, 2, 3.
 2. Install your dependencies
 
     ```
-    cd path/to/featers-server; npm install
+    cd path/to/arevi-api; npm install
     ```
 
 3. Start your app
