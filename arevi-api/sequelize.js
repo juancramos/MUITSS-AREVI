@@ -1,9 +1,9 @@
 const Sequelize = require('sequelize');
 
 module.exports = function (app) {
-  const connectionString = app.get('sqlite');
+  const connectionString = app.get('mysql');
   const sequelize = new Sequelize(connectionString, {
-    dialect: 'sqlite',
+    dialect: 'mysql',
     logging: false,
     operatorsAliases: false,
     define: {
@@ -25,7 +25,7 @@ module.exports = function (app) {
       }
     });
 
-    // Sync to the database
+    // Sync to the database    
     sequelize.sync({
       force: true
     });
