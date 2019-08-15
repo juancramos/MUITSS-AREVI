@@ -11,14 +11,14 @@ const express = require('@feathersjs/express');
 const socketio = require('@feathersjs/socketio');
 
 
-const middleware = require('./middleware');
-const services = require('./services');
-const appHooks = require('./app.hooks');
-const channels = require('./channels');
+const middleware = require('./src/middleware');
+const services = require('./src/services');
+const appHooks = require('./src/app.hooks');
+const channels = require('./src/channels');
 
-const sequelize = require('./sequelize');
+const sequelize = require('./src/sequelize');
 
-const authentication = require('./authentication');
+const authentication = require('./src/authentication');
 
 const app = express(feathers());
 
