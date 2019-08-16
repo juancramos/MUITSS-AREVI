@@ -17,6 +17,7 @@
         android:usesCleartextTraffic="true">
         <activity android:name=".PagerActivity"></activity>
         <activity android:name=".ArActivity"></activity>
+        <activity android:name=".LogInActivity"></activity>
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

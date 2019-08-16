@@ -80,7 +80,7 @@ public class ProfileConfigurationFragmentView extends Fragment implements Activi
         });
 
         EditText passwordTxt = rootView.findViewById(R.id.text_input_password);
-        passwordTxt.setText(user.email);
+        passwordTxt.setText(user.password);
         passwordTxt.setOnFocusChangeListener((v, hasFocus) -> {
             if (!hasFocus) {
                 user.password = Utils.validateInput(passwordTxt);

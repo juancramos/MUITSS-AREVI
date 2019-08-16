@@ -32,6 +32,10 @@
     <string name="text_input_txt_occupation_text">Ocupación:</string>
     <string name="text_input_txt_visual_illness_text">Describe tu enfermedad visual:</string>
     <string name="text_input_txt_gender_text">Especificar género:</string>
+    <string name="activity_log_in_title_text">AREVI Iniciar sesión</string>
+    <string name="activity_log_in_description_text">Por favor inicie sesión para configurar AREVI.</string>
+    <string name="log_in_button_text">Iniciar sesión</string>
+    <string name="register_button_text">Registrarse</string>
     <string-array name="input_spinner_gender_list">
         <item>Masculino</item>
         <item>femenino</item>
