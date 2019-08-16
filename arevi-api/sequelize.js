@@ -3,36 +3,31 @@ const Sequelize = require('sequelize');
 module.exports = function (app) {
   const connectionString = app.get('mysql');
   let sequelize = null
-  if (process.env.PORT) {    
-    console.log("pro env");
+  let sequelizeParams = {
+    dialect: 'mysql',
+    logging: false,
+    operatorsAliases: false,
+    define: {
+      freezeTableName: true
+    }
+  };
+  if (process.env.PORT) {
     const vars = connectionString.split(';');
     const database = vars[0].split('=')[1];
     const source = vars[1].split('=')[1];
-    const hst = source.split(':')[0];
-    const prt = source.split(':')[1];
+    const hostName = source.split(':');
     const usr = vars[2].split('=')[1];
     const psw = vars[3].split('=')[1];
 
-    sequelize = new Sequelize(database, usr, psw, {
-      host: hst,
-      port: prt,
-      dialect: 'mysql',
-      logging: false,
-      operatorsAliases: false,
-      define: {
-        freezeTableName: true
-      }
-    })
+    Object.assign(sequelizeParams, {
+      host: hostName[0],
+      port: hostName[1]
+    });
+
+    sequelize = new Sequelize(database, usr, psw, sequelizeParams);
   }
   else {
-    sequelize = new Sequelize(connectionString, {
-      dialect: 'mysql',
-      logging: false,
-      operatorsAliases: false,
-      define: {
-        freezeTableName: true
-      }
-    });
+    sequelize = new Sequelize(connectionString, sequelizeParams);
   }
 
   const oldSetup = app.setup;
