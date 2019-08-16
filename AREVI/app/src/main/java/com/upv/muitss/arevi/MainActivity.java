@@ -43,7 +43,7 @@ public class MainActivity extends AppCompatActivity implements ActivityMessage {
                 AREVIRepository.getInstance().logIn(userLogIn,this);
             });
         }
-        else startProfileWizard();
+        else startLogIn();
     }
 
     public void onStartArButtonClick(View view) {
@@ -56,8 +56,8 @@ public class MainActivity extends AppCompatActivity implements ActivityMessage {
 //         startActivityForResult(getNameScreenIntent, result);
     }
 
-    public void onStartWizardButtonClick(View view) {
-        startProfileWizard();
+    public void onLogInButtonClick(View view) {
+        startLogIn();
     }
 
     @Override
@@ -80,15 +80,15 @@ public class MainActivity extends AppCompatActivity implements ActivityMessage {
     @Override
     public <T> void onResponse(T response) {
         if (response == null){
-            startProfileWizard();
+            startLogIn();
         }
         else if(response instanceof String && ((String)response).isEmpty()){
-            startProfileWizard();
+            startLogIn();
         }
     }
 
-    private void startProfileWizard(){
-        Intent toAct = new Intent(this, PagerActivity.class);
+    private void startLogIn(){
+        Intent toAct = new Intent(this, LogInActivity.class);
         startActivity(toAct);
     }
 
