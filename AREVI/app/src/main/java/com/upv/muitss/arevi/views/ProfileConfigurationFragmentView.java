@@ -12,6 +12,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.TextView;
 
 import com.upv.muitss.arevi.R;
 import com.upv.muitss.arevi.entities.User;
@@ -21,12 +22,18 @@ import com.upv.muitss.arevi.helpers.Utils;
 import com.upv.muitss.arevi.logic.web.implementations.AREVIRepository;
 import com.upv.muitss.arevi.logic.web.interfaces.ActivityMessage;
 
+import java.util.Arrays;
+import java.util.List;
+
 public class ProfileConfigurationFragmentView extends Fragment implements ActivityMessage {
     /**
      * The fragment argument representing the section number for this
      * fragment.
      */
     private static final String ARG_SECTION_NUMBER = "section_number";
+    private static final List<String> genders = Arrays.asList("Male", "Female","Other (specify)");
+    private static final List<String> ages = Arrays.asList("17 or younger", "18–20", "21–29", "30–39", "40–49", "50–59", "60 or older");
+    private static final List<String> educations = Arrays.asList("Less than high school degree", "High school degree or equivalent", "Some college but no degree", "Associate degree", "Bachelor degree", "Graduate degree");
 
     private View rootView;
     private User user;
@@ -113,14 +120,17 @@ public class ProfileConfigurationFragmentView extends Fragment implements Activi
 
         EditText otherGenderNameTxt = rootView.findViewById(R.id.text_input_gender);
         TextInputLayout otherGenderLayout = rootView.findViewById(R.id.text_input_layout_gender);
+        TextView otherGenderText = rootView.findViewById(R.id.text_view_layout_gender);
 
         Spinner genderSpinner = rootView.findViewById(R.id.input_spinner_gender);
         genderSpinner.setSelection(getIndex(genderSpinner, userInfo.gender));
+        userInfo.gender = genders.get(genderSpinner.getFirstVisiblePosition());
         genderSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 otherGenderLayout.setVisibility(position == 2 ? View.VISIBLE : View.GONE);
-                userInfo.gender = parent.getItemAtPosition(position).toString();
+                otherGenderText.setVisibility(position == 2 ? View.VISIBLE : View.GONE);
+                userInfo.gender = genders.get(position);
             }
 
             @Override
@@ -134,6 +144,7 @@ public class ProfileConfigurationFragmentView extends Fragment implements Activi
         }
         else {
             otherGenderLayout.setVisibility(View.GONE);
+            otherGenderText.setVisibility(View.GONE);
         }
         otherGenderNameTxt.setOnFocusChangeListener((v, hasFocus) -> {
             if (!hasFocus) {
@@ -143,10 +154,11 @@ public class ProfileConfigurationFragmentView extends Fragment implements Activi
 
         Spinner ageSpinner = rootView.findViewById(R.id.input_spinner_age);
         ageSpinner.setSelection(getIndex(ageSpinner, userInfo.age));
+        userInfo.age = ages.get(ageSpinner.getFirstVisiblePosition());
         ageSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                userInfo.age = parent.getItemAtPosition(position).toString();
+                userInfo.age = ages.get(position);
             }
 
             @Override
@@ -156,10 +168,11 @@ public class ProfileConfigurationFragmentView extends Fragment implements Activi
 
         Spinner educationSpinner = rootView.findViewById(R.id.input_spinner_education);
         educationSpinner.setSelection(getIndex(educationSpinner, userInfo.education));
+        userInfo.education = educations.get(educationSpinner.getFirstVisiblePosition());
         educationSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                userInfo.education = parent.getItemAtPosition(position).toString();
+                userInfo.education = educations.get(position);
             }
 
             @Override
@@ -186,6 +199,9 @@ public class ProfileConfigurationFragmentView extends Fragment implements Activi
     @Override
     public <T> void onResponse(T response) {
         if (response instanceof String && !(TextUtils.isEmpty((String) response))){
+            loadData();
+        }
+        else{
             loadData();
         }
     }

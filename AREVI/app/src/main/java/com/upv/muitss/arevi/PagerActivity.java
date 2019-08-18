@@ -162,16 +162,14 @@ public class PagerActivity extends AppCompatActivity implements ActivityMessage 
         page += 1;
         mViewPager.setCurrentItem(page, true);
     }
-    public void onSkipButtonClick(View view) {
-        finish();
-    }
+    public void onSkipButtonClick(View view) { startMainActivity(); }
+
     public void onFinishButtonClick(View view) {
         AREVIRepository.getInstance().updateProfile(AppState.getInstance().getProfile().id, AppState.getInstance().getProfile());
 
-        Intent toMain = new Intent(PagerActivity.this, MainActivity.class);
-        startActivity(toMain);
-        finish();
+        startMainActivity();
     }
+
     public void onBackButtonClick(View view) {
         page -= 1;
         mViewPager.setCurrentItem(page, true);
@@ -229,6 +227,12 @@ public class PagerActivity extends AppCompatActivity implements ActivityMessage 
                     break;
             }
         }
+    }
+
+    private void startMainActivity(){
+        Intent toMain = new Intent(PagerActivity.this, MainActivity.class);
+        startActivity(toMain);
+        finish();
     }
 
     void updateIndicators(int position) {

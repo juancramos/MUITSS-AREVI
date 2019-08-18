@@ -22,9 +22,9 @@ public class User {
     @SerializedName("enabled")
     @Expose
     private String enabled;
-    private boolean enabledBoolean;
-    public boolean fetchingData;
 
+
+    public boolean fetchingData;
 
     @NonNull
     @Override
@@ -48,7 +48,6 @@ public class User {
 
     public void setEnabled(String pEnabled) {
         enabled = pEnabled;
-        enabledBoolean = Boolean.valueOf(pEnabled);
     }
 
     public boolean isValidState() {

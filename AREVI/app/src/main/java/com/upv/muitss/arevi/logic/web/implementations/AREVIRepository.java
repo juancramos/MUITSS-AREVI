@@ -225,7 +225,7 @@ public class AREVIRepository {
 
     private void logIn(ActivityMessage caller){
         logIn(Utils.getLogIn(), caller);
-    };
+    }
 
     public void logIn(UserLogIn userLogIn, ActivityMessage caller){
         if (!TextUtils.isEmpty(userLogIn.email) && !TextUtils.isEmpty(userLogIn.password)){
@@ -235,8 +235,8 @@ public class AREVIRepository {
                 @Override
                 public void onResponse(@NonNull Call<AccessToken> call, @NonNull Response<AccessToken> response) {
 
+                    AppState.getInstance().getUser().fetchingData = false;
                     if(response.isSuccessful()) {
-                        AppState.getInstance().getUser().fetchingData = false;
                         AccessToken token = response.body();
                         Log.i(TAG, "post submitted to API." + response.body());
 
@@ -259,6 +259,7 @@ public class AREVIRepository {
 
                 @Override
                 public void onFailure(@NonNull Call<AccessToken> call, @NonNull Throwable t) {
+                    AppState.getInstance().getUser().fetchingData = false;
                     Utils.popProgressDialog(null, null);
                     Log.e(TAG, "Unable to submit post to API.");
                     if (caller != null) caller.onResponse(null);
@@ -276,8 +277,8 @@ public class AREVIRepository {
             @Override
             public void onResponse(@NonNull Call<DataResponse<User>> call, @NonNull Response<DataResponse<User>> response) {
 
+                AppState.getInstance().getUser().fetchingData = false;
                 if(response.isSuccessful()) {
-                    AppState.getInstance().getUser().fetchingData = false;
                     DataResponse<User> apiUser = response.body();
                     assert apiUser != null;
                     User user = apiUser.data.get(0);
@@ -295,6 +296,7 @@ public class AREVIRepository {
 
             @Override
             public void onFailure(@NonNull Call<DataResponse<User>> call, @NonNull Throwable t) {
+                AppState.getInstance().getUser().fetchingData = false;
                 Utils.popProgressDialog(null, null);
                 Log.e(TAG, "Unable to submit post to API.");
             }

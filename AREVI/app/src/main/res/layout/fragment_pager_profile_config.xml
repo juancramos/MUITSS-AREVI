@@ -172,6 +172,7 @@
                 android:entries="@array/input_spinner_gender_list"/>
 
             <TextView
+                android:id="@+id/text_view_layout_gender"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/text_input_txt_gender_text"

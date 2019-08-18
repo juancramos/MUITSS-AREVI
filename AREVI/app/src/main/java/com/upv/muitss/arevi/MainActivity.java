@@ -36,12 +36,16 @@ public class MainActivity extends AppCompatActivity implements ActivityMessage {
         appContext = this.getBaseContext();
 
         UserLogIn userLogIn = Utils.getLogIn();
+        String savedTheme = Utils.getSavedTheme();
 
         if (userLogIn.isValidState()){
             runOnUiThread(()->{
                 Utils.popProgressDialog(this, "Loading...");
                 AREVIRepository.getInstance().logIn(userLogIn,this);
             });
+        }
+        else if (savedTheme == null){
+            startProfileWizard();
         }
         else startLogIn();
     }
@@ -57,7 +61,27 @@ public class MainActivity extends AppCompatActivity implements ActivityMessage {
     }
 
     public void onLogInButtonClick(View view) {
-        startLogIn();
+        startProfileWizard();
+    }
+
+    private void startProfileWizard(){
+        Intent toAct = new Intent(MainActivity.this, PagerActivity.class);
+        startActivity(toAct);
+    }
+
+    private void startLogIn(){
+        Intent toAct = new Intent(MainActivity.this, LogInActivity.class);
+        startActivity(toAct);
+    }
+
+    protected boolean isOnline() {
+
+        ConnectivityManager cm = (ConnectivityManager)getSystemService(Context.CONNECTIVITY_SERVICE);
+
+        NetworkInfo netInfo = cm.getActiveNetworkInfo();
+
+        return netInfo != null && netInfo.isConnectedOrConnecting();
+
     }
 
     @Override
@@ -85,20 +109,5 @@ public class MainActivity extends AppCompatActivity implements ActivityMessage {
         else if(response instanceof String && ((String)response).isEmpty()){
             startLogIn();
         }
-    }
-
-    private void startLogIn(){
-        Intent toAct = new Intent(this, LogInActivity.class);
-        startActivity(toAct);
-    }
-
-    protected boolean isOnline() {
-
-        ConnectivityManager cm = (ConnectivityManager)getSystemService(Context.CONNECTIVITY_SERVICE);
-
-        NetworkInfo netInfo = cm.getActiveNetworkInfo();
-
-        return netInfo != null && netInfo.isConnectedOrConnecting();
-
     }
 }
