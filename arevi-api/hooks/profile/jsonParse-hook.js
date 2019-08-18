@@ -10,7 +10,7 @@ module.exports = function () { // eslint-disable-line no-unused-vars
         try {
           x.configuration = JSON.parse(x.configuration);
         }
-        catch {
+        catch (err) {
           return;
         }
       });
