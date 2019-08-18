@@ -5,10 +5,14 @@ module.exports = function () { // eslint-disable-line no-unused-vars
     if (!hook.params.provider) {
       return hook;
     }
-
     if (hook.result && hook.result.data) {
       hook.result.data.map(x => {
-        x.configuration = JSON.parse(x.configuration);
+        try {
+          x.configuration = JSON.parse(x.configuration);
+        }
+        catch {
+          return;
+        }
       });
     }
 

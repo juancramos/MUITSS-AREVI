@@ -8,10 +8,10 @@ import com.google.gson.annotations.SerializedName;
 public class Configuration {
     @SerializedName("selectedAppTheme")
     @Expose
-    public int selectedAppTheme;
+    private int selectedAppTheme;
     @SerializedName("useGoogleCardboard")
     @Expose
-    public String useGoogleCardboard;
+    private String useGoogleCardboard;
 
     @NonNull
     @Override
@@ -23,7 +23,15 @@ public class Configuration {
     }
 
     public boolean getUseGoogleCardboardBoolean(){
-        return Boolean.getBoolean(useGoogleCardboard);
+        return Boolean.parseBoolean(getUseGoogleCardboard());
+    }
+
+    public int getSelectedAppTheme(){
+        return selectedAppTheme;
+    }
+
+    public void setSelectedAppTheme(int value){
+        selectedAppTheme = value;
     }
 
     public String getUseGoogleCardboard(){

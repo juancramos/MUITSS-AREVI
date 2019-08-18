@@ -15,8 +15,6 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.upv.muitss.arevi.R;
-import com.upv.muitss.arevi.entities.User;
-import com.upv.muitss.arevi.entities.UserInfo;
 import com.upv.muitss.arevi.helpers.AppState;
 import com.upv.muitss.arevi.helpers.Utils;
 import com.upv.muitss.arevi.logic.web.implementations.AREVIRepository;
@@ -32,12 +30,10 @@ public class ProfileConfigurationFragmentView extends Fragment implements Activi
      */
     private static final String ARG_SECTION_NUMBER = "section_number";
     private static final List<String> genders = Arrays.asList("Male", "Female","Other (specify)");
-    private static final List<String> ages = Arrays.asList("17 or younger", "18–20", "21–29", "30–39", "40–49", "50–59", "60 or older");
+    private static final List<String> ages = Arrays.asList("17 or younger", "18-20", "21-29", "30-39", "40-49", "50-59", "60 or older");
     private static final List<String> educations = Arrays.asList("Less than high school degree", "High school degree or equivalent", "Some college but no degree", "Associate degree", "Bachelor degree", "Graduate degree");
 
     private View rootView;
-    private User user;
-    private UserInfo userInfo;
 
     public ProfileConfigurationFragmentView() {
     }
@@ -75,46 +71,43 @@ public class ProfileConfigurationFragmentView extends Fragment implements Activi
     }
 
     private void loadData(){
-        user = AppState.getInstance().getUser() == null ? new User() : AppState.getInstance().getUser();
-        userInfo = AppState.getInstance().getUserInfo() == null ? new UserInfo() : AppState.getInstance().getUserInfo();
-
         EditText mEmailTxt = rootView.findViewById(R.id.text_input_email);
-        mEmailTxt.setText(user.email);
+        mEmailTxt.setText(AppState.getInstance().getUser().email);
         mEmailTxt.setOnFocusChangeListener((v, hasFocus) -> {
             if (!hasFocus) {
-                user.email = Utils.validateInput(mEmailTxt);
+                AppState.getInstance().getUser().email = Utils.validateInput(mEmailTxt);
             }
         });
 
         EditText passwordTxt = rootView.findViewById(R.id.text_input_password);
-        passwordTxt.setText(user.password);
+        passwordTxt.setText(AppState.getInstance().getUser().password);
         passwordTxt.setOnFocusChangeListener((v, hasFocus) -> {
             if (!hasFocus) {
-                user.password = Utils.validateInput(passwordTxt);
+                AppState.getInstance().getUser().password = Utils.validateInput(passwordTxt);
             }
         });
 
         EditText fullNameTxt = rootView.findViewById(R.id.text_input_full_name);
-        fullNameTxt.setText(userInfo.fullName);
+        fullNameTxt.setText(AppState.getInstance().getUserInfo().fullName);
         fullNameTxt.setOnFocusChangeListener((v, hasFocus) -> {
             if (!hasFocus) {
-                userInfo.fullName = Utils.validateInput(fullNameTxt);
+                AppState.getInstance().getUserInfo().fullName = Utils.validateInput(fullNameTxt);
             }
         });
 
         EditText occupationTxt = rootView.findViewById(R.id.text_input_occupation);
-        occupationTxt.setText(userInfo.occupation);
+        occupationTxt.setText(AppState.getInstance().getUserInfo().occupation);
         occupationTxt.setOnFocusChangeListener((v, hasFocus) -> {
             if (!hasFocus) {
-                userInfo.occupation = Utils.validateInput(occupationTxt);
+                AppState.getInstance().getUserInfo().occupation = Utils.validateInput(occupationTxt);
             }
         });
 
         EditText visualIllnessTxt = rootView.findViewById(R.id.text_input_visual_illness);
-        visualIllnessTxt.setText(userInfo.visualIllness);
+        visualIllnessTxt.setText(AppState.getInstance().getUserInfo().visualIllness);
         visualIllnessTxt.setOnFocusChangeListener((v, hasFocus) -> {
             if (!hasFocus) {
-                userInfo.visualIllness =  Utils.validateInput(visualIllnessTxt);
+                AppState.getInstance().getUserInfo().visualIllness =  Utils.validateInput(visualIllnessTxt);
             }
         });
 
@@ -123,14 +116,14 @@ public class ProfileConfigurationFragmentView extends Fragment implements Activi
         TextView otherGenderText = rootView.findViewById(R.id.text_view_layout_gender);
 
         Spinner genderSpinner = rootView.findViewById(R.id.input_spinner_gender);
-        genderSpinner.setSelection(getIndex(genderSpinner, userInfo.gender));
-        userInfo.gender = genders.get(genderSpinner.getFirstVisiblePosition());
+        genderSpinner.setSelection(getIndex(genderSpinner, AppState.getInstance().getUserInfo().gender));
+        AppState.getInstance().getUserInfo().gender = genders.get(genderSpinner.getFirstVisiblePosition());
         genderSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 otherGenderLayout.setVisibility(position == 2 ? View.VISIBLE : View.GONE);
                 otherGenderText.setVisibility(position == 2 ? View.VISIBLE : View.GONE);
-                userInfo.gender = genders.get(position);
+                AppState.getInstance().getUserInfo().gender = genders.get(position);
             }
 
             @Override
@@ -139,8 +132,8 @@ public class ProfileConfigurationFragmentView extends Fragment implements Activi
         });
 
 
-        if(!TextUtils.isEmpty(userInfo.genderOther)){
-            otherGenderNameTxt.setText(userInfo.genderOther);
+        if(!TextUtils.isEmpty(AppState.getInstance().getUserInfo().genderOther)){
+            otherGenderNameTxt.setText(AppState.getInstance().getUserInfo().genderOther);
         }
         else {
             otherGenderLayout.setVisibility(View.GONE);
@@ -148,17 +141,17 @@ public class ProfileConfigurationFragmentView extends Fragment implements Activi
         }
         otherGenderNameTxt.setOnFocusChangeListener((v, hasFocus) -> {
             if (!hasFocus) {
-                userInfo.genderOther = Utils.validateInput(otherGenderNameTxt);
+                AppState.getInstance().getUserInfo().genderOther = Utils.validateInput(otherGenderNameTxt);
             }
         });
 
         Spinner ageSpinner = rootView.findViewById(R.id.input_spinner_age);
-        ageSpinner.setSelection(getIndex(ageSpinner, userInfo.age));
-        userInfo.age = ages.get(ageSpinner.getFirstVisiblePosition());
+        ageSpinner.setSelection(getIndex(ageSpinner, AppState.getInstance().getUserInfo().age));
+        AppState.getInstance().getUserInfo().age = ages.get(ageSpinner.getFirstVisiblePosition());
         ageSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                userInfo.age = ages.get(position);
+                AppState.getInstance().getUserInfo().age = ages.get(position);
             }
 
             @Override
@@ -167,12 +160,12 @@ public class ProfileConfigurationFragmentView extends Fragment implements Activi
         });
 
         Spinner educationSpinner = rootView.findViewById(R.id.input_spinner_education);
-        educationSpinner.setSelection(getIndex(educationSpinner, userInfo.education));
-        userInfo.education = educations.get(educationSpinner.getFirstVisiblePosition());
+        educationSpinner.setSelection(getIndex(educationSpinner, AppState.getInstance().getUserInfo().education));
+        AppState.getInstance().getUserInfo().education = educations.get(educationSpinner.getFirstVisiblePosition());
         educationSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                userInfo.education = educations.get(position);
+                AppState.getInstance().getUserInfo().education = educations.get(position);
             }
 
             @Override
