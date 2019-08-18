@@ -13,13 +13,7 @@ module.exports = function (app) {
         primaryKey: true
       },
       score: {
-        type: Sequelize.TEXT,
-        get: function () {
-          return JSON.parse(this.getDataValue('value'));
-        },
-        set: function (value) {
-          this.setDataValue('value', JSON.stringify(value));
-        },
+        type: DataTypes.JSON,
         allowNull: false
       },
       completed: {
