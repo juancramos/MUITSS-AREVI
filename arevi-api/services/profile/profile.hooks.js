@@ -21,9 +21,9 @@ module.exports = {
     all: [],
     find: [...restrict],
     get: [...restrict],
-    create: [],
-    update: [setEnabled(), ...restrict],
-    patch: [setEnabled(), ...restrict],
+    create: [setEnabled()],
+    update: [...restrict],
+    patch: [...restrict],
     remove: [...restrict]
   },
 

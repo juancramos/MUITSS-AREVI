@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.Switch;
 
 import com.upv.muitss.arevi.R;
+import com.upv.muitss.arevi.entities.Configuration;
 import com.upv.muitss.arevi.entities.Profile;
 import com.upv.muitss.arevi.helpers.AppState;
 import com.upv.muitss.arevi.helpers.Utils;
@@ -45,10 +46,9 @@ public class ARConfigurationFragmentView extends Fragment implements ActivityMes
 
         rootView = inflater.inflate(R.layout.fragment_pager_ar_config, container, false);
 
-        boolean mode = Utils.getSavedMode();
         boolean userLogin = Utils.getLogIn().isValidState();
 
-        if (userLogin && !mode) {
+        if (userLogin) {
             Utils.popProgressDialog(getActivity(), "Loading...");
             AREVIRepository.getInstance().getApiProfile(Utils.getUserId(), this);
         }
@@ -63,11 +63,15 @@ public class ARConfigurationFragmentView extends Fragment implements ActivityMes
         Switch toggle = rootView.findViewById(R.id.use_cardboard_switch);
         toggle.setChecked(Utils.getSavedMode());
         toggle.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            Profile p = AppState.getInstance().getProfile();
+            Configuration c = p.getConfiguration();
             if (isChecked) {
-                AppState.getInstance().getProfile().configuration.setUseGoogleCardboard(true);
+                c.setUseGoogleCardboard(true);
+                p.setConfiguration(c);
                 Utils.saveMode(true);
             } else {
-                AppState.getInstance().getProfile().configuration.setUseGoogleCardboard(false);
+                c.setUseGoogleCardboard(false);
+                p.setConfiguration(c);
                 Utils.saveMode(false);
             }
         });
@@ -75,8 +79,8 @@ public class ARConfigurationFragmentView extends Fragment implements ActivityMes
 
     @Override
     public <T> void onResponse(T response) {
-        if (response instanceof Profile && ((Profile) response).configuration != null){
-            Utils.saveMode(((Profile) response).configuration.getUseGoogleCardboardBoolean());
+        if (response instanceof Profile && ((Profile) response).getConfiguration() != null){
+            Utils.saveMode(((Profile) response).getConfiguration().getUseGoogleCardboardBoolean());
             loadData();
         }
     }

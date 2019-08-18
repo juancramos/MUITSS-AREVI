@@ -9,14 +9,18 @@ import android.view.ViewGroup;
 import android.widget.RadioButton;
 
 import com.upv.muitss.arevi.R;
+import com.upv.muitss.arevi.entities.Profile;
 import com.upv.muitss.arevi.helpers.Utils;
+import com.upv.muitss.arevi.logic.web.implementations.AREVIRepository;
+import com.upv.muitss.arevi.logic.web.interfaces.ActivityMessage;
 
-public class AppConfigurationFragmentView extends Fragment {
+public class AppConfigurationFragmentView extends Fragment implements ActivityMessage {
     /**
      * The fragment argument representing the section number for this
      * fragment.
      */
     private static final String ARG_SECTION_NUMBER = "section_number";
+    private View rootView;
 
     public AppConfigurationFragmentView() {
     }
@@ -37,7 +41,22 @@ public class AppConfigurationFragmentView extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_pager_app_config, container, false);
+        rootView = inflater.inflate(R.layout.fragment_pager_app_config, container, false);
+
+        boolean userLogin = Utils.getLogIn().isValidState();
+
+        if (userLogin) {
+            Utils.popProgressDialog(getActivity(), "Loading...");
+            AREVIRepository.getInstance().getApiProfile(Utils.getUserId(), this);
+        }
+        else {
+            loadData();
+        }
+
+        return rootView;
+    }
+
+    private void loadData() {
 
         boolean isDark = Utils.isDarkTheme();
         int sizeTheme = Utils.getSavedThemeStyle();
@@ -62,6 +81,14 @@ public class AppConfigurationFragmentView extends Fragment {
                 ((RadioButton)rootView.findViewById(R.id.APP_THEME_LARGE_FONT_SIZE)).setChecked(true);
                 break;
         }
-        return rootView;
+    }
+
+
+    @Override
+    public <T> void onResponse(T response) {
+        if (response instanceof Profile && ((Profile) response).getConfiguration() != null){
+            Utils.saveMode(((Profile) response).getConfiguration().getUseGoogleCardboardBoolean());
+            loadData();
+        }
     }
 }

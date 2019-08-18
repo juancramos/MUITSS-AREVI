@@ -13,15 +13,15 @@ public class Profile {
     @SerializedName("profileName")
     @Expose
     public String profileName;
-    @SerializedName("configuration")
-    @Expose
-    public Configuration configuration = new Configuration();
     @SerializedName("enabled")
     @Expose
     public String enabled;
     @SerializedName("userId")
     @Expose
     public String userId;
+    @SerializedName("configuration")
+    @Expose
+    private Configuration configuration = new Configuration();
 
     @NonNull
     @Override
@@ -50,7 +50,7 @@ public class Profile {
     public Configuration getConfiguration() {
         return configuration;    }
 
-    public void setfiguration(Configuration configuration) {
+    public void setConfiguration(Configuration configuration) {
         this.configuration = configuration;    }
 
 }

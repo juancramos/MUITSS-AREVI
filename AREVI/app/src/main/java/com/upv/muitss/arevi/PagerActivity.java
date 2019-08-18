@@ -320,10 +320,10 @@ public class PagerActivity extends AppCompatActivity implements ActivityMessage 
         else if (response instanceof UserInfo && !(TextUtils.isEmpty(((UserInfo) response).id))){
             int theme =  Utils.getSavedThemeStyle();
             Profile p = AppState.getInstance().getProfile();
-            p.enabled = "true";
-            Configuration c = new Configuration();
-            c.selectedAppTheme = theme;
-            p.configuration = c;
+            p.enabled = String.valueOf(true);
+            Configuration c = p.getConfiguration();
+            c.setSelectedAppTheme(theme);
+            p.setConfiguration(c);
             p.profileName = Profile.class.getSimpleName() + "-" + theme;
 
             AppState.getInstance().setProfile(p);
