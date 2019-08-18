@@ -9,7 +9,7 @@ import android.widget.Toast;
 import com.upv.muitss.arevi.ArActivity;
 import com.upv.muitss.arevi.R;
 import com.upv.muitss.arevi.logic.webrtc.models.IceServer;
-import com.upv.muitss.arevi.logic.webrtc.helpers.Utils;
+import com.upv.muitss.arevi.helpers.Utils;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -208,7 +208,7 @@ public class WebRTCModule implements SignalingInterface {
         owner.get().runOnUiThread(this::hangup);
     }
 
-    public void hangup() {
+    private void hangup() {
         try {
             localPeer.close();
             localPeer = null;
@@ -307,7 +307,7 @@ public class WebRTCModule implements SignalingInterface {
                 .createPeerConnectionFactory();
 
         getIceServers();
-        SignallingClient.getInstance().init(this, Utils.getInstance().getResourceString(R.string.signaling_server_url));
+        SignallingClient.getInstance().init(this, Utils.getResourceString(R.string.signaling_server_url));
 
 
         //Create MediaConstraints - Will be useful for specifying video and audio constraints. More on this later!
@@ -341,7 +341,7 @@ public class WebRTCModule implements SignalingInterface {
     }
 
     private void getIceServers() {
-        List<IceServer> iceServers = Utils.getInstance().getIceServerData(owner.get());
+        List<IceServer> iceServers = Utils.getIceServerData(owner.get());
         for (IceServer iceServer : iceServers) {
             if (iceServer.credential == null) {
                 PeerConnection.IceServer peerIceServer = PeerConnection.IceServer.builder(iceServer.url).createIceServer();

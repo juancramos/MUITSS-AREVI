@@ -47,7 +47,7 @@ module.exports = function (app) {
 
     // Sync to the database    
     sequelize.sync({
-      force: true
+      force: false
     });
 
     return result;

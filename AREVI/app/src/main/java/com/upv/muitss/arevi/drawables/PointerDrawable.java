@@ -1,6 +1,5 @@
 package com.upv.muitss.arevi.drawables;
 
-
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.ColorFilter;

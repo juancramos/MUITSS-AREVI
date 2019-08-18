@@ -23,10 +23,6 @@ public class Profile {
     @Expose
     public String userId;
 
-
-    private boolean enabledBoolean;
-
-
     @NonNull
     @Override
     public String toString() {
@@ -49,7 +45,6 @@ public class Profile {
 
     public void setEnabled(String pEnabled) {
         enabled = pEnabled;
-        enabledBoolean = Boolean.valueOf(pEnabled);
     }
 
     public Configuration getConfiguration() {

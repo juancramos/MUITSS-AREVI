@@ -36,6 +36,7 @@
     <string name="activity_log_in_description_text">Please start session to configure AREVI.</string>
     <string name="log_in_button_text">Log in</string>
     <string name="register_button_text">Register</string>
+    <string name="far_activity_log_in_description_text">Start session to configure AREVI with your profile</string>
     <string-array name="input_spinner_gender_list">
         <item>Male</item>
         <item>Female</item>
