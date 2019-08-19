@@ -6,7 +6,6 @@ import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.design.widget.TextInputLayout;
 import android.text.InputType;
-import android.text.TextUtils;
 import android.util.Patterns;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,8 +17,6 @@ import com.google.gson.reflect.TypeToken;
 import com.upv.muitss.arevi.MainActivity;
 import com.upv.muitss.arevi.R;
 import com.upv.muitss.arevi.entities.UserLogIn;
-import com.upv.muitss.arevi.logic.web.implementations.AuthenticationInterceptor;
-import com.upv.muitss.arevi.logic.web.implementations.RetrofitClient;
 import com.upv.muitss.arevi.logic.webrtc.models.IceServer;
 
 import java.io.IOException;
@@ -29,12 +26,8 @@ import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.regex.Pattern;
 
-import okhttp3.OkHttpClient;
-
 public class Utils {
-    private static final String TAG = "Utils";
     private static ProgressDialog progressDialog = null;
-    private static OkHttpClient.Builder httpClient = new OkHttpClient.Builder();
 
     public static String getResourceString(int id){
         return MainActivity.appContext.getString(id);
@@ -173,25 +166,6 @@ public class Utils {
     public static boolean getSavedMode(){
         UserPreferences userPreferences = UserPreferences.getInstance();
         return userPreferences.getUserPreferenceBool(Constants.USER_SELECTED_MODE);
-    }
-
-    public static <S> S createService(Class<S> serviceClass) {
-        return createService(serviceClass, null);
-    }
-
-    public static <S> S createService(Class<S> serviceClass, final String authToken) {
-        if (!TextUtils.isEmpty(authToken)) {
-            AuthenticationInterceptor interceptor =
-                    new AuthenticationInterceptor(authToken);
-
-            if (!httpClient.interceptors().contains(interceptor)) {
-                httpClient.addInterceptor(interceptor);
-
-                return RetrofitClient.getClient(httpClient.build()).create(serviceClass);
-            }
-        }
-
-        return RetrofitClient.getClient().create(serviceClass);
     }
 
     public static List<IceServer> getIceServerData(Context context) {

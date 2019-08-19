@@ -12,6 +12,7 @@ import com.upv.muitss.arevi.entities.UserInfo;
 import com.upv.muitss.arevi.entities.UserLogIn;
 import com.upv.muitss.arevi.helpers.AppState;
 import com.upv.muitss.arevi.helpers.Utils;
+import com.upv.muitss.arevi.logic.web.interceptors.Instance;
 import com.upv.muitss.arevi.logic.web.interfaces.AREVIApiService;
 import com.upv.muitss.arevi.logic.web.interfaces.ActivityMessage;
 
@@ -23,12 +24,12 @@ public class AREVIRepository {
 
     private final String TAG = this.getClass().getCanonicalName();
     private static AREVIRepository AREVIRepository = null;
-    private static AREVIApiService apiService;
+    private static AREVIApiService apiService = null;
 
     public static AREVIRepository getInstance(){
         if (AREVIRepository == null){
             AREVIRepository = new AREVIRepository();
-            apiService = Utils.createService(AREVIApiService.class);
+            apiService = Instance.createService(AREVIApiService.class);
         }
         return AREVIRepository;
     }
@@ -242,7 +243,7 @@ public class AREVIRepository {
 
                         assert token != null;
 
-                        apiService = Utils.createService(AREVIApiService.class, token.accessToken);
+                        apiService = Instance.createService(AREVIApiService.class, token.accessToken);
 
                         getApiUser(null);
 

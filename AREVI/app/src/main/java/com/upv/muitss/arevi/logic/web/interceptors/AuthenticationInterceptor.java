@@ -1,4 +1,4 @@
-package com.upv.muitss.arevi.logic.web.implementations;
+package com.upv.muitss.arevi.logic.web.interceptors;
 
 import android.support.annotation.NonNull;
 
@@ -12,7 +12,7 @@ public class AuthenticationInterceptor implements Interceptor {
 
     private String authToken;
 
-    public AuthenticationInterceptor(String token) {
+    AuthenticationInterceptor(String token) {
         this.authToken = token;
     }
 
