@@ -5,7 +5,6 @@ const checkPermissions = require('feathers-permissions');
 const { iff } = require('feathers-hooks-common');
 const { restrictToOwner } = require('feathers-authentication-hooks');
 const restrict = [
-  authenticate('jwt'),
   checkPermissions({
     roles: ['admin'],
     field: 'role',
@@ -18,7 +17,7 @@ const restrict = [
 
 module.exports = {
   before: {
-    all: [],
+    all: [authenticate('jwt')],
     find: [...restrict],
     get: [...restrict],
     create: [setEnabled()],
