@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.graphics.Point;
 import android.net.Uri;
+import android.text.TextUtils;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Toast;
@@ -20,6 +21,8 @@ import com.google.ar.sceneform.AnchorNode;
 import com.google.ar.sceneform.Node;
 import com.google.ar.sceneform.Scene;
 import com.google.ar.sceneform.assets.RenderableSource;
+import com.google.ar.sceneform.math.Quaternion;
+import com.google.ar.sceneform.math.Vector3;
 import com.google.ar.sceneform.rendering.ModelRenderable;
 import com.google.ar.sceneform.rendering.ViewRenderable;
 import com.google.ar.sceneform.ux.ArFragment;
@@ -42,7 +45,7 @@ import java.util.Random;
 public class ArView extends ArFragment {
 
     private PointerDrawable pointer;
-    private View view;
+    private View pointerView;
     private Plane firstPlane;
     private AnchorNode webRTCNode;
     private AnchorNode randomNode;
@@ -61,7 +64,12 @@ public class ArView extends ArFragment {
 
         View ownerView = getView();
         assert ownerView != null;
-        view = ownerView.findViewById(R.id.sceneform_pointer);
+        pointerView = ownerView.findViewById(R.id.sceneform_pointer);
+
+        getArSceneView().getScene().addOnUpdateListener(frameTime -> {
+            onUpdate(frameTime);
+            onUpdate();
+        });
 
         getArSceneView().getScene().addOnUpdateListener(randomRenderListener);
     }
@@ -88,11 +96,17 @@ public class ArView extends ArFragment {
             firstPlane = firstPlane.getSubsumedBy();
         }
 
+        if (appState.getIsTracking()) {
+            randomPlacedCube(firstPlane);
+        }
+    };
+
+    private void onUpdate() {
         boolean trackingChanged = updateTracking();
         if (trackingChanged) {
             if (appState.getIsTracking()) {
-                view.getOverlay().add(pointer);
-                view.invalidate();
+                pointerView.getOverlay().add(pointer);
+                pointerView.invalidate();
             }
         }
 
@@ -100,25 +114,17 @@ public class ArView extends ArFragment {
             boolean hitTestChanged = updateHitTest();
             if (hitTestChanged) {
                 pointer.setEnabled(appState.getIsHitting());
-                view.invalidate();
+                pointerView.invalidate();
             }
-
-            randomPlacedCube(firstPlane);
         }
-    };
+    }
 
     private Scene.OnUpdateListener webRtcRenderListener = frameTime -> {
 
         if (!appState.getIsTracking()) return;
 
-        Session session = getArSceneView().getSession();
-
-        assert session != null;
-
         Frame frame = getArSceneView().getArFrame();
-        if(frame == null) {
-            return;
-        }
+        if(frame == null) { return; }
 
         Collection<Plane> planes = frame.getUpdatedTrackables(Plane.class);
         if (planes.isEmpty()) return;
@@ -129,8 +135,7 @@ public class ArView extends ArFragment {
         }
 
         Pose pose = anchorPlane.getCenterPose();
-        Anchor anchor = session.createAnchor(pose);
-
+        Anchor anchor = anchorPlane.createAnchor(pose);
 
         ViewRenderable.builder()
                 .setView(owner.get(), R.layout.webrtc_view)
@@ -160,7 +165,7 @@ public class ArView extends ArFragment {
     }
 
     private void removeViewRenderable(){
-        Toast.makeText(owner.get(), "Remove view", Toast.LENGTH_SHORT).show();
+        Toast.makeText(owner.get(), "Remove pointerView", Toast.LENGTH_SHORT).show();
         getArSceneView().getScene().removeChild(webRTCNode);
         Node parent = webRTCNode.getParent();
         if (parent != null) {
@@ -182,22 +187,13 @@ public class ArView extends ArFragment {
         float maxX = plane.getExtentX() * 2;
         float randomX = (maxX * rand.nextFloat()) - plane.getExtentX();
 
-        float maxZ = plane.getExtentZ() * 2;
-        float randomZ = (maxZ * rand.nextFloat()) - plane.getExtentZ();
-
         Pose pose = plane.getCenterPose();
         float[] translation = pose.getTranslation();
         float[] rotation = pose.getRotationQuaternion();
 
         translation[0] += randomX;
-        translation[2] += randomZ;
         pose = new Pose(translation, rotation);
-
-        Session session = getArSceneView().getSession();
-
-        assert session != null;
-
-        Anchor anchor = session.createAnchor(pose);
+        Anchor anchor = plane.createAnchor(pose);
 
         if (randomNode == null) {
             getCurrentRenderable(anchor);
@@ -215,26 +211,42 @@ public class ArView extends ArFragment {
 
         if (activity == null || context == null) return;
 
-        activity.runOnUiThread(() -> PolyRepository.getInstance().getApiAsset("5vbJ5vildOq", new ActivityMessage() {
+        activity.runOnUiThread(() -> PolyRepository.getInstance().getApiAsset("c-tEGK9e49p", new ActivityMessage() {
             @Override
             public <T> void onResponse(T response) {
                 if (response instanceof PolyAsset){
+                    PolyAsset pa = (PolyAsset) response;
+
+                    if (TextUtils.isEmpty(pa.modelUrl)) return;
 
                     RenderableSource source = RenderableSource.builder().setSource(context,
-                            Uri.parse(((PolyAsset) response).modelUrl), RenderableSource.SourceType.GLTF2)
+                            Uri.parse(pa.modelUrl), RenderableSource.SourceType.GLTF2)
                             .setRecenterMode(RenderableSource.RecenterMode.ROOT)
                             .build();
 
 
-                    ModelRenderable.builder().setRegistryId(((PolyAsset) response).key)
+                    ModelRenderable.builder().setRegistryId(pa.key)
                             .setSource(context, source)
                             .build()
                             .thenAccept(renderable -> {
-                                Node node = new Node();
-                                node.setRenderable(renderable);
                                 randomNode = new AnchorNode(anchor);
-                                randomNode.addChild(node);
                                 randomNode.setParent(getArSceneView().getScene());
+
+                                // Create the transformable andy and add it to the anchor.
+                                TransformableNode node = new TransformableNode(getTransformationSystem());
+                                node.setRenderable(renderable);
+                                //set rotation in direction (x,y,z) in degrees 0
+                                node.setLocalRotation(Quaternion.axisAngle(new Vector3(0f, 0, 0), 0f));
+                                // Set the min and max scales of the ScaleController.
+                                // Default min is 0.75, default max is 1.75.
+                                node.getScaleController().setMinScale(0.4f);
+                                node.getScaleController().setMaxScale(1.0f);
+
+                                // Set the local scale of the node BEFORE setting its parent
+                                node.setLocalScale(new Vector3(0.05f, 0.05f, 0.05f));
+
+                                node.setParent(randomNode);
+                                node.select();
 
                                 node.setOnTapListener((hitTestResult, motionEvent) -> {
                                     //We are only interested in the ACTION_UP events - anything else just return

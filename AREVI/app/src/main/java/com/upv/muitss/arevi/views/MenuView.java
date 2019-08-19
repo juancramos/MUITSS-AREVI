@@ -1,6 +1,7 @@
 package com.upv.muitss.arevi.views;
 
 import android.content.Context;
+import android.content.res.TypedArray;
 import android.graphics.Color;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
@@ -20,6 +21,10 @@ public class MenuView extends LinearLayout {
     private final String TAG = this.getClass().getCanonicalName();
     private AppState appState;
 
+    private int tintColor;
+    private int tintColorDisabled;
+    private ImageView cast;
+
     public MenuView(Context context) {
         this(context, null);
     }
@@ -31,6 +36,10 @@ public class MenuView extends LinearLayout {
     public void init(WeakReference<ArActivity> pOwner) {
         owner = pOwner;
         assert owner.get() != null;
+
+        TypedArray ta = getContext().getTheme().obtainStyledAttributes(R.styleable.ViewStyle);
+        tintColor = ta.getColor(R.styleable.ViewStyle_fillPrimaryColor, -1);
+        tintColorDisabled = ta.getColor(R.styleable.ViewStyle_fillSecondaryColor, -1);
 
         appState = AppState.getInstance();
 
@@ -46,10 +55,10 @@ public class MenuView extends LinearLayout {
         focus.setOnClickListener(view -> {
             appState.setIsFocusing(!appState.getIsFocusing());
             if (appState.getIsFocusing()) focus.setColorFilter(Color.RED);
-            else focus.setColorFilter(R.attr.colorPrimary);
+            else focus.setColorFilter(tintColor);
         });
         this.addView(focus);
-        ImageView cast = new ImageView(getContext());
+        cast = new ImageView(getContext());
         cast.setImageResource(R.drawable.ic_cast_black_24dp);
         cast.setScaleType(ImageView.ScaleType.FIT_CENTER);
         cast.setAdjustViewBounds(true);
@@ -60,8 +69,13 @@ public class MenuView extends LinearLayout {
             owner.get().arAttachWebRTCView();
 
             if (appState.getIsCasting()) cast.setColorFilter(Color.RED);
-            else cast.setColorFilter(R.attr.colorPrimary);
+            else cast.setColorFilter(tintColor);
         });
         this.addView(cast);
+    }
+
+    public void setCastButtonEnabled(boolean enabled){
+        cast.setEnabled(enabled);
+        cast.setColorFilter(tintColorDisabled);
     }
 }

@@ -27,6 +27,7 @@ public class ArActivity extends AppCompatActivity {
 
     private AppState appState;
     private ArView arView;
+    private MenuView gallery;
     private WeakReference<ArActivity> weakReference;
     private final String TAG = this.getClass().getCanonicalName();
     private static final int CAPTURE_PERMISSION_REQUEST_CODE = 1;
@@ -53,7 +54,7 @@ public class ArActivity extends AppCompatActivity {
         appState.setCenterY(metrics.heightPixels / 2);
 
         arView = (ArView) getSupportFragmentManager().findFragmentById(R.id.sceneform_fragment);
-        MenuView gallery = findViewById(R.id.gallery_layout);
+        gallery = findViewById(R.id.gallery_layout);
 
         assert arView != null && gallery != null;
 
@@ -82,10 +83,7 @@ public class ArActivity extends AppCompatActivity {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == CAPTURE_PERMISSION_REQUEST_CODE) {
             if (resultCode != Activity.RESULT_OK) {
-                Log.i(TAG, "User cancelled");
-                Toast.makeText(this, "User cancelled", Toast.LENGTH_SHORT).show();
-                Intent navigateIntent = new Intent(this, MainActivity.class);
-                startActivity(navigateIntent);
+                gallery.setCastButtonEnabled(false);
                 return;
             }
 

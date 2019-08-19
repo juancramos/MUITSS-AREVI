@@ -1,9 +1,14 @@
 <resources>
 
-    <attr name="fillPrimaryColor" format="color" />
-    <attr name="fillSecondaryColor" format="color" />
-    <attr name="titleTextSize" format="dimension" />
-    <attr name="editTextSize" format="dimension" />
+    <declare-styleable name="ViewStyle">
+
+        <attr name="fillPrimaryColor" format="color" />
+        <attr name="fillSecondaryColor" format="color" />
+        <attr name="titleTextSize" format="dimension" />
+        <attr name="editTextSize" format="dimension" />
+
+    </declare-styleable>
+
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <!-- Customize your theme here. -->
