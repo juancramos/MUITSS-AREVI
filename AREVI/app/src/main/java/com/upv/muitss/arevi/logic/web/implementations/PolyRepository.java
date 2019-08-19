@@ -3,10 +3,13 @@ package com.upv.muitss.arevi.logic.web.implementations;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
+import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.upv.muitss.arevi.R;
+import com.upv.muitss.arevi.entities.PolyAsset;
 import com.upv.muitss.arevi.helpers.Utils;
 import com.upv.muitss.arevi.logic.web.interceptors.Instance;
+import com.upv.muitss.arevi.logic.web.interfaces.ActivityMessage;
 import com.upv.muitss.arevi.logic.web.interfaces.PolyApiService;
 
 import retrofit2.Call;
@@ -28,23 +31,47 @@ public class PolyRepository {
         return polyRepository;
     }
 
-    public void getApiAsset(String assetId) {
+    public void getApiAsset(String assetId, ActivityMessage caller) {
         apiService.getApiAsset(assetId, API_KEY).enqueue(new Callback<JsonObject>() {
             @Override
             public void onResponse(@NonNull Call<JsonObject> call, @NonNull Response<JsonObject> response) {
 
                 if(response.isSuccessful()) {
-                    String asset = response.body().toString();
+                    JsonObject obj = response.body();
 
-                    Log.i(TAG, "post submitted to API." + asset);
+                    if (obj == null) return;
+
+                    PolyAsset item = new PolyAsset(obj.get("name").getAsString());
+                    item.displayName = obj.get("displayName").getAsString();
+                    item.authorName = obj.get("authorName").getAsString();
+                    item.license = obj.get("license").getAsString();
+
+                    if (obj.has("description")) {
+                        item.description = obj.get("description").getAsString();
+                    }
+
+                    // Find the glTF URL.
+                    JsonArray formats = obj.getAsJsonArray("formats");
+                    for (int j = 0; j < formats.size(); j++) {
+                        JsonObject format = formats.get(j).getAsJsonObject();
+                        if (format.get("formatType").getAsString().equals("GLTF2")) {
+                            item.modelUrl = format.get("root").getAsJsonObject().get("url").getAsString();
+                            break;
+                        }
+                    }
+
+                    if (caller != null) caller.onResponse(item);
+                    Log.i(TAG, "post submitted to API." + obj.toString());
                 }
                 else {
+                    if (caller != null) caller.onResponse(null);
                     Log.i(TAG, "post submitted to API." + response.body());
                 }
             }
 
             @Override
             public void onFailure(@NonNull Call<JsonObject> call, @NonNull Throwable t) {
+                if (caller != null) caller.onResponse(null);
                 Log.e(TAG, "Unable to submit post to API.");
             }
         });

@@ -30,9 +30,9 @@ public class AppState {
     public boolean getIsCasting() { return this.isCasting; }
     public void setIsCasting(boolean pIsCasting) { this.isCasting = pIsCasting; }
 
-    private float nodeAge;
-    public float getNodeAge() { return this.nodeAge; }
-    public void setNodeAge(float pNodeAge) { this.nodeAge = pNodeAge; }
+//    private float nodeAge;
+//    public float getNodeAge() { return this.nodeAge; }
+//    public void setNodeAge(float pNodeAge) { this.nodeAge = pNodeAge; }
 
     private User user;
     public User getUser() { return this.user; }
@@ -62,7 +62,7 @@ public class AppState {
         isTracking = false;
         isHitting = false;
         isFocusing = false;
-        nodeAge = 0;
+//        nodeAge = 0;
         user = new User();
         userInfo = new UserInfo();
         profile = new Profile();

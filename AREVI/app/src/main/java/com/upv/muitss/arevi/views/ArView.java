@@ -1,7 +1,9 @@
 package com.upv.muitss.arevi.views;
 
+import android.app.Activity;
+import android.content.Context;
 import android.graphics.Point;
-import android.util.Log;
+import android.net.Uri;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Toast;
@@ -17,18 +19,18 @@ import com.google.ar.core.TrackingState;
 import com.google.ar.sceneform.AnchorNode;
 import com.google.ar.sceneform.Node;
 import com.google.ar.sceneform.Scene;
-import com.google.ar.sceneform.math.Vector3;
-import com.google.ar.sceneform.rendering.Color;
-import com.google.ar.sceneform.rendering.MaterialFactory;
+import com.google.ar.sceneform.assets.RenderableSource;
 import com.google.ar.sceneform.rendering.ModelRenderable;
-import com.google.ar.sceneform.rendering.ShapeFactory;
 import com.google.ar.sceneform.rendering.ViewRenderable;
 import com.google.ar.sceneform.ux.ArFragment;
 import com.google.ar.sceneform.ux.TransformableNode;
 import com.upv.muitss.arevi.ArActivity;
 import com.upv.muitss.arevi.R;
 import com.upv.muitss.arevi.drawables.PointerDrawable;
+import com.upv.muitss.arevi.entities.PolyAsset;
 import com.upv.muitss.arevi.helpers.AppState;
+import com.upv.muitss.arevi.logic.web.implementations.PolyRepository;
+import com.upv.muitss.arevi.logic.web.interfaces.ActivityMessage;
 
 import org.webrtc.SurfaceViewRenderer;
 
@@ -47,7 +49,6 @@ public class ArView extends ArFragment {
     private static Random rand;
 
     private static WeakReference<ArActivity> owner;
-    private final String TAG = this.getClass().getCanonicalName();
     private AppState appState;
 
     public void init(WeakReference<ArActivity> pOwner) {
@@ -102,11 +103,7 @@ public class ArView extends ArFragment {
                 view.invalidate();
             }
 
-            if (appState.getNodeAge() > 2000000) {
-                appState.setNodeAge(frameTime.getStartSeconds() - appState.getNodeAge());
-                randomPlacedCube(firstPlane);
-            }
-            appState.setNodeAge(appState.getNodeAge() + frameTime.getStartSeconds());
+            randomPlacedCube(firstPlane);
         }
     };
 
@@ -155,17 +152,15 @@ public class ArView extends ArFragment {
         // Create the Sceneform AnchorNode
         AnchorNode anchorNode = new AnchorNode(anchor);
         anchorNode.addChild(node);
-        anchorNode.setParent(getArSceneView().getScene());
 
+        anchorNode.setParent(getArSceneView().getScene());
         webRTCNode = anchorNode;
 
         owner.get().MountViewData((SurfaceViewRenderer) render.getView());
     }
 
     private void removeViewRenderable(){
-        Log.d(TAG,"handleOnTouch hitTestResult.getNode() != null");
-
-        Toast.makeText(owner.get(), "Kill WebRTC view", Toast.LENGTH_SHORT).show();
+        Toast.makeText(owner.get(), "Remove view", Toast.LENGTH_SHORT).show();
         getArSceneView().getScene().removeChild(webRTCNode);
         Node parent = webRTCNode.getParent();
         if (parent != null) {
@@ -179,6 +174,9 @@ public class ArView extends ArFragment {
     }
 
     private void randomPlacedCube(Plane plane) {
+        getArSceneView().getScene()
+                .removeOnUpdateListener(randomRenderListener);
+
         //find a random spot on the plane in the X
         // The width of the plan is 2*extentX in the range center.x +/- extentX
         float maxX = plane.getExtentX() * 2;
@@ -202,14 +200,38 @@ public class ArView extends ArFragment {
         Anchor anchor = session.createAnchor(pose);
 
         if (randomNode == null) {
-            MaterialFactory.makeOpaqueWithColor(owner.get(), new Color(android.graphics.Color.RED))
-                    .thenAccept(
-                            material -> {
-                                ModelRenderable render = ShapeFactory.makeSphere(0.1f,
-                                        new Vector3(0.0f, 0.15f, 0.0f)
-                                        , material);
+            getCurrentRenderable(anchor);
+        } else {
+            Anchor a = randomNode.getAnchor();
+            assert a != null;
+            a.detach();
+            randomNode.setAnchor(anchor);
+        }
+    }
+
+    private void getCurrentRenderable(Anchor anchor){
+        Context context = this.getContext();
+        Activity activity = this.getActivity();
+
+        if (activity == null || context == null) return;
+
+        activity.runOnUiThread(() -> PolyRepository.getInstance().getApiAsset("5vbJ5vildOq", new ActivityMessage() {
+            @Override
+            public <T> void onResponse(T response) {
+                if (response instanceof PolyAsset){
+
+                    RenderableSource source = RenderableSource.builder().setSource(context,
+                            Uri.parse(((PolyAsset) response).modelUrl), RenderableSource.SourceType.GLTF2)
+                            .setRecenterMode(RenderableSource.RecenterMode.ROOT)
+                            .build();
+
+
+                    ModelRenderable.builder().setRegistryId(((PolyAsset) response).key)
+                            .setSource(context, source)
+                            .build()
+                            .thenAccept(renderable -> {
                                 Node node = new Node();
-                                node.setRenderable(render);
+                                node.setRenderable(renderable);
                                 randomNode = new AnchorNode(anchor);
                                 randomNode.addChild(node);
                                 randomNode.setParent(getArSceneView().getScene());
@@ -223,8 +245,6 @@ public class ArView extends ArFragment {
                                     Node hitNode = hitTestResult.getNode();
                                     // Check for touching a Sceneform node
                                     if (hitNode != null) {
-                                        Log.d(TAG,"handleOnTouch hitTestResult.getNode() != null");
-
                                         Toast.makeText(owner.get(), "We've hit Andy!!", Toast.LENGTH_SHORT).show();
                                         AnchorNode aNode = ((AnchorNode) hitNode.getParent());
                                         assert aNode != null;
@@ -234,13 +254,11 @@ public class ArView extends ArFragment {
                                         aNode.setAnchor(anchor);
                                     }
                                 });
-                            });
-        } else {
-            Anchor a = randomNode.getAnchor();
-            assert a != null;
-            a.detach();
-            randomNode.setAnchor(anchor);
-        }
+                            })
+                            .exceptionally(throwable -> null);
+                }
+            }
+        }));
     }
 
     private boolean updateTracking() {

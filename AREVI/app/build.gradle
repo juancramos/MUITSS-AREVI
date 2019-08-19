@@ -41,6 +41,7 @@ dependencies {
 
     // Alternatively, use ArSceneView without the UX dependency.
     implementation 'com.google.ar.sceneform:core:1.11.0'
+    implementation 'com.google.ar.sceneform:assets:1.11.0'
 
     // WEBRTC
     implementation 'org.webrtc:google-webrtc:1.0.28513'
