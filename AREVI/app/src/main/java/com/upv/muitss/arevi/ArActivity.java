@@ -3,6 +3,7 @@ package com.upv.muitss.arevi;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Point;
 import android.media.projection.MediaProjectionManager;
 import android.os.SystemClock;
 import android.support.v7.app.AppCompatActivity;
@@ -11,10 +12,10 @@ import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
-import android.widget.Toast;
 
 import com.upv.muitss.arevi.helpers.AppState;
 import com.upv.muitss.arevi.helpers.Utils;
+import com.upv.muitss.arevi.logic.web.implementations.PolyRepository;
 import com.upv.muitss.arevi.logic.webrtc.implementations.WebRTCModule;
 import com.upv.muitss.arevi.views.ArView;
 import com.upv.muitss.arevi.views.MenuView;
@@ -25,7 +26,6 @@ import java.lang.ref.WeakReference;
 
 public class ArActivity extends AppCompatActivity {
 
-    private AppState appState;
     private ArView arView;
     private MenuView gallery;
     private WeakReference<ArActivity> weakReference;
@@ -45,13 +45,8 @@ public class ArActivity extends AppCompatActivity {
         // Get the data that was sent
         // String previousActivity = activityThatCalled.getExtras().getString("callingActivity");
 
-        appState = AppState.getInstance();
-
         DisplayMetrics metrics = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(metrics);
-
-        appState.setCenterX(metrics.widthPixels / 2);
-        appState.setCenterY(metrics.heightPixels / 2);
 
         arView = (ArView) getSupportFragmentManager().findFragmentById(R.id.sceneform_fragment);
         gallery = findViewById(R.id.gallery_layout);
@@ -63,6 +58,18 @@ public class ArActivity extends AppCompatActivity {
         gallery.init(weakReference);
 
         startScreenCapture();
+        loadTask();
+    }
+
+    public boolean loadTask() {
+        if(AppState.getInstance().ids.isEmpty() && AppState.getInstance().polyQueueIsEmpty()) return false;
+        runOnUiThread(() -> {
+            while (!AppState.getInstance().ids.isEmpty() && AppState.getInstance().polyQueueHasToLoad()) {
+                String nextId = AppState.getInstance().ids.poll();
+                PolyRepository.getInstance().getApiAsset(nextId);
+            }
+        });
+        return true;
     }
 
     public void arAttachWebRTCView(){
@@ -99,12 +106,12 @@ public class ArActivity extends AppCompatActivity {
         webRTCModule.MountRemoteView(remoteVideoView);
     }
 
-    public void TouchView(View view)
+    public void TouchView(View view, Point point)
     {
-        if (!appState.getIsFocusing()) return;
+        if (!AppState.getInstance().getIsFocusing()) return;
 
-        int centerX = appState.getCenterX();
-        int centerY = appState.getCenterY();
+        int centerX = point.x;
+        int centerY = point.y;
         view.dispatchTouchEvent(MotionEvent.obtain(SystemClock.uptimeMillis(),
                 SystemClock.uptimeMillis() + 100, MotionEvent.ACTION_DOWN, centerX, centerY, 0));
         view.dispatchTouchEvent(MotionEvent.obtain(SystemClock.uptimeMillis(),

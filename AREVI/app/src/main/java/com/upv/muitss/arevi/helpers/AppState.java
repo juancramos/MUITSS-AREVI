@@ -1,18 +1,14 @@
 package com.upv.muitss.arevi.helpers;
 
+import com.upv.muitss.arevi.entities.PolyAsset;
 import com.upv.muitss.arevi.entities.Profile;
 import com.upv.muitss.arevi.entities.User;
 import com.upv.muitss.arevi.entities.UserInfo;
 
+import java.util.LinkedList;
+import java.util.Queue;
+
 public class AppState {
-
-    private int centerX;
-    public int getCenterX() { return this.centerX; }
-    public void setCenterX(int pCenterX) { this.centerX = pCenterX; }
-
-    private int centerY;
-    public int getCenterY() { return this.centerY; }
-    public void setCenterY(int pCenterY) { this.centerY = pCenterY; }
 
     private boolean isTracking;
     public boolean getIsTracking() { return this.isTracking; }
@@ -46,6 +42,14 @@ public class AppState {
     public Profile getProfile() { return this.profile; }
     public void setProfile(Profile pProfile) { this.profile = pProfile; }
 
+    private Queue<PolyAsset> polyQueue;
+    public boolean polyQueueHasToLoad() { return this.polyQueue.size() < 2; }
+    public boolean polyQueueIsEmpty() { return this.polyQueue.isEmpty(); }
+    public PolyAsset pollPolyAsset() { return this.polyQueue.poll(); }
+    public void queuePolyAsset(PolyAsset polyAsset) { this.polyQueue.add(polyAsset); }
+
+    public Queue<String> ids;
+
     private static AppState instance;
 
     public static AppState getInstance() {
@@ -57,8 +61,6 @@ public class AppState {
     }
 
     private void initState(){
-        centerX = 0;
-        centerY = 0;
         isTracking = false;
         isHitting = false;
         isFocusing = false;
@@ -66,6 +68,11 @@ public class AppState {
         user = new User();
         userInfo = new UserInfo();
         profile = new Profile();
+        polyQueue = new LinkedList<>();
+        ids = new LinkedList<>();
+        ids.add("c-tEGK9e49p");
+        ids.add("dIsZyy2FUY-");
+        ids.add("d1M5ncMBUDi");
     }
 }
 

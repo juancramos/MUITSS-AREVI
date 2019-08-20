@@ -7,9 +7,9 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.upv.muitss.arevi.R;
 import com.upv.muitss.arevi.entities.PolyAsset;
+import com.upv.muitss.arevi.helpers.AppState;
 import com.upv.muitss.arevi.helpers.Utils;
 import com.upv.muitss.arevi.logic.web.interceptors.Instance;
-import com.upv.muitss.arevi.logic.web.interfaces.ActivityMessage;
 import com.upv.muitss.arevi.logic.web.interfaces.PolyApiService;
 
 import retrofit2.Call;
@@ -31,7 +31,7 @@ public class PolyRepository {
         return polyRepository;
     }
 
-    public void getApiAsset(String assetId, ActivityMessage caller) {
+    public void getApiAsset(String assetId) {
         apiService.getApiAsset(assetId, API_KEY).enqueue(new Callback<JsonObject>() {
             @Override
             public void onResponse(@NonNull Call<JsonObject> call, @NonNull Response<JsonObject> response) {
@@ -60,18 +60,16 @@ public class PolyRepository {
                         }
                     }
 
-                    if (caller != null) caller.onResponse(item);
+                    AppState.getInstance().queuePolyAsset(item);
                     Log.i(TAG, "post submitted to API." + obj.toString());
                 }
                 else {
-                    if (caller != null) caller.onResponse(null);
                     Log.i(TAG, "post submitted to API." + response.body());
                 }
             }
 
             @Override
             public void onFailure(@NonNull Call<JsonObject> call, @NonNull Throwable t) {
-                if (caller != null) caller.onResponse(null);
                 Log.e(TAG, "Unable to submit post to API.");
             }
         });

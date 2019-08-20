@@ -1,6 +1,5 @@
 package com.upv.muitss.arevi.views;
 
-import android.app.Activity;
 import android.content.Context;
 import android.graphics.Point;
 import android.net.Uri;
@@ -18,10 +17,10 @@ import com.google.ar.core.Session;
 import com.google.ar.core.Trackable;
 import com.google.ar.core.TrackingState;
 import com.google.ar.sceneform.AnchorNode;
+import com.google.ar.sceneform.HitTestResult;
 import com.google.ar.sceneform.Node;
 import com.google.ar.sceneform.Scene;
 import com.google.ar.sceneform.assets.RenderableSource;
-import com.google.ar.sceneform.math.Quaternion;
 import com.google.ar.sceneform.math.Vector3;
 import com.google.ar.sceneform.rendering.ModelRenderable;
 import com.google.ar.sceneform.rendering.ViewRenderable;
@@ -32,8 +31,6 @@ import com.upv.muitss.arevi.R;
 import com.upv.muitss.arevi.drawables.PointerDrawable;
 import com.upv.muitss.arevi.entities.PolyAsset;
 import com.upv.muitss.arevi.helpers.AppState;
-import com.upv.muitss.arevi.logic.web.implementations.PolyRepository;
-import com.upv.muitss.arevi.logic.web.interfaces.ActivityMessage;
 
 import org.webrtc.SurfaceViewRenderer;
 
@@ -48,29 +45,29 @@ public class ArView extends ArFragment {
     private View pointerView;
     private Plane firstPlane;
     private AnchorNode webRTCNode;
-    private AnchorNode randomNode;
+
+    private Anchor currentRandomAanchor;
+    private AnchorNode currentRandomAnchorNode;
     private static Random rand;
 
     private static WeakReference<ArActivity> owner;
-    private AppState appState;
 
     public void init(WeakReference<ArActivity> pOwner) {
         owner = pOwner;
         assert owner.get() != null;
 
         rand = new Random();
-        appState = AppState.getInstance();
-        pointer = new PointerDrawable(appState.getCenterX(), appState.getCenterY());
+        Point pt = getScreenCenter();
+        pointer = new PointerDrawable(pt.x, pt.y);
 
         View ownerView = getView();
-        assert ownerView != null;
+        if (ownerView == null) return;
         pointerView = ownerView.findViewById(R.id.sceneform_pointer);
 
         getArSceneView().getScene().addOnUpdateListener(frameTime -> {
             onUpdate(frameTime);
             onUpdate();
         });
-
         getArSceneView().getScene().addOnUpdateListener(randomRenderListener);
     }
 
@@ -96,7 +93,7 @@ public class ArView extends ArFragment {
             firstPlane = firstPlane.getSubsumedBy();
         }
 
-        if (appState.getIsTracking()) {
+        if (AppState.getInstance().getIsTracking()) {
             randomPlacedCube(firstPlane);
         }
     };
@@ -104,16 +101,16 @@ public class ArView extends ArFragment {
     private void onUpdate() {
         boolean trackingChanged = updateTracking();
         if (trackingChanged) {
-            if (appState.getIsTracking()) {
+            if (AppState.getInstance().getIsTracking()) {
                 pointerView.getOverlay().add(pointer);
                 pointerView.invalidate();
             }
         }
 
-        if (appState.getIsTracking()) {
+        if (AppState.getInstance().getIsTracking()) {
             boolean hitTestChanged = updateHitTest();
             if (hitTestChanged) {
-                pointer.setEnabled(appState.getIsHitting());
+                pointer.setEnabled(AppState.getInstance().getIsHitting());
                 pointerView.invalidate();
             }
         }
@@ -121,7 +118,7 @@ public class ArView extends ArFragment {
 
     private Scene.OnUpdateListener webRtcRenderListener = frameTime -> {
 
-        if (!appState.getIsTracking()) return;
+        if (!AppState.getInstance().getIsTracking()) return;
 
         Frame frame = getArSceneView().getArFrame();
         if(frame == null) { return; }
@@ -189,117 +186,113 @@ public class ArView extends ArFragment {
 
         Pose pose = plane.getCenterPose();
         float[] translation = pose.getTranslation();
-        float[] rotation = pose.getRotationQuaternion();
+        float[] rotation = new float[]{0,0,0,0};
 
         translation[0] += randomX;
         pose = new Pose(translation, rotation);
-        Anchor anchor = plane.createAnchor(pose);
+        currentRandomAanchor = plane.createAnchor(pose);
 
-        if (randomNode == null) {
-            getCurrentRenderable(anchor);
+        if (currentRandomAnchorNode == null) {
+            getCurrentRenderable();
         } else {
-            Anchor a = randomNode.getAnchor();
-            assert a != null;
+            Anchor a = currentRandomAnchorNode.getAnchor();
+            if (a == null) return;
             a.detach();
-            randomNode.setAnchor(anchor);
+            currentRandomAnchorNode.setAnchor(currentRandomAanchor);
         }
     }
 
-    private void getCurrentRenderable(Anchor anchor){
+    private void getCurrentRenderable(){
         Context context = this.getContext();
-        Activity activity = this.getActivity();
 
-        if (activity == null || context == null) return;
+        if (context == null) return;
 
-        activity.runOnUiThread(() -> PolyRepository.getInstance().getApiAsset("c-tEGK9e49p", new ActivityMessage() {
-            @Override
-            public <T> void onResponse(T response) {
-                if (response instanceof PolyAsset){
-                    PolyAsset pa = (PolyAsset) response;
+        PolyAsset pa = AppState.getInstance().pollPolyAsset();
 
-                    if (TextUtils.isEmpty(pa.modelUrl)) return;
+        if (pa == null || TextUtils.isEmpty(pa.modelUrl)) return;
 
-                    RenderableSource source = RenderableSource.builder().setSource(context,
-                            Uri.parse(pa.modelUrl), RenderableSource.SourceType.GLTF2)
-                            .setRecenterMode(RenderableSource.RecenterMode.ROOT)
-                            .build();
+        RenderableSource source = RenderableSource.builder().setSource(context,
+                Uri.parse(pa.modelUrl), RenderableSource.SourceType.GLTF2)
+                .setRecenterMode(RenderableSource.RecenterMode.ROOT)
+                .build();
 
 
-                    ModelRenderable.builder().setRegistryId(pa.key)
-                            .setSource(context, source)
-                            .build()
-                            .thenAccept(renderable -> {
-                                randomNode = new AnchorNode(anchor);
-                                randomNode.setParent(getArSceneView().getScene());
+        ModelRenderable.builder().setRegistryId(pa.key)
+                .setSource(context, source)
+                .build()
+                .thenAccept(renderable -> {
+                    currentRandomAnchorNode = new AnchorNode(currentRandomAanchor);
+                    currentRandomAnchorNode.setParent(getArSceneView().getScene());
 
-                                // Create the transformable andy and add it to the anchor.
-                                TransformableNode node = new TransformableNode(getTransformationSystem());
-                                node.setRenderable(renderable);
-                                //set rotation in direction (x,y,z) in degrees 0
-                                node.setLocalRotation(Quaternion.axisAngle(new Vector3(0f, 0, 0), 0f));
-                                // Set the min and max scales of the ScaleController.
-                                // Default min is 0.75, default max is 1.75.
-                                node.getScaleController().setMinScale(0.4f);
-                                node.getScaleController().setMaxScale(1.0f);
+                    // Create the transformable andy and add it to the anchor.
+                    TransformableNode node = new TransformableNode(getTransformationSystem());
+                    node.setRenderable(renderable);
 
-                                // Set the local scale of the node BEFORE setting its parent
-                                node.setLocalScale(new Vector3(0.05f, 0.05f, 0.05f));
+                    // Set the min and max scales of the ScaleController.
+                    // Default min is 0.75, default max is 1.75.
+                    node.getScaleController().setMinScale(0.2f);
+                    node.getScaleController().setMaxScale(1.0f);
 
-                                node.setParent(randomNode);
-                                node.select();
+                    // Set the local scale of the node BEFORE setting its parent
+                    node.setLocalScale(new Vector3(0.02f, 0.02f, 0.02f));
 
-                                node.setOnTapListener((hitTestResult, motionEvent) -> {
-                                    //We are only interested in the ACTION_UP events - anything else just return
-                                    if (motionEvent.getAction() != MotionEvent.ACTION_UP) {
-                                        return;
-                                    }
+                    node.setParent(currentRandomAnchorNode);
+                    node.select();
 
-                                    Node hitNode = hitTestResult.getNode();
-                                    // Check for touching a Sceneform node
-                                    if (hitNode != null) {
-                                        Toast.makeText(owner.get(), "We've hit Andy!!", Toast.LENGTH_SHORT).show();
-                                        AnchorNode aNode = ((AnchorNode) hitNode.getParent());
-                                        assert aNode != null;
-                                        Anchor a = aNode.getAnchor();
-                                        assert a != null;
-                                        a.detach();
-                                        aNode.setAnchor(anchor);
-                                    }
-                                });
-                            })
-                            .exceptionally(throwable -> null);
-                }
-            }
-        }));
+                    node.setOnTapListener(this::onTapListener);
+                }).exceptionally(throwable -> null);
+    }
+
+    private void onTapListener(HitTestResult hitTestResult, MotionEvent motionEvent){
+
+        //We are only interested in the ACTION_UP events - anything else just return
+        if (motionEvent.getAction() != MotionEvent.ACTION_UP) {
+            return;
+        }
+
+        Node hitNode = hitTestResult.getNode();
+        // Check for touching a Sceneform node
+        if (hitNode != null) {
+            Toast.makeText(owner.get(), "We've hit Andy!!", Toast.LENGTH_SHORT).show();
+            AnchorNode aNode = ((AnchorNode) hitNode.getParent());
+            assert aNode != null;
+            Anchor a = aNode.getAnchor();
+            assert a != null;
+            a.detach();
+            aNode.setAnchor(currentRandomAanchor);
+
+            currentRandomAnchorNode = null;
+            if (owner.get().loadTask()) getArSceneView().getScene().addOnUpdateListener(randomRenderListener);
+        }
     }
 
     private boolean updateTracking() {
         Frame frame = getArSceneView().getArFrame();
-        boolean wasTracking = appState.getIsTracking();
-        appState.setIsTracking(frame != null &&
+        boolean wasTracking = AppState.getInstance().getIsTracking();
+        AppState.getInstance().setIsTracking(frame != null &&
                 frame.getCamera().getTrackingState() == TrackingState.TRACKING);
-        return appState.getIsTracking() != wasTracking;
+        return AppState.getInstance().getIsTracking() != wasTracking;
     }
 
     private boolean updateHitTest() {
         Frame frame = getArSceneView().getArFrame();
         Point pt = getScreenCenter();
         List<HitResult> hits;
-        boolean wasHitting = appState.getIsHitting();
-        appState.setIsHitting(false);
+        boolean wasHitting = AppState.getInstance().getIsHitting();
+        AppState.getInstance().setIsHitting(false);
         if (frame != null) {
             hits = frame.hitTest(pt.x, pt.y);
             for (HitResult hit : hits) {
                 Trackable trackable = hit.getTrackable();
                 if (trackable instanceof Plane &&
                         ((Plane) trackable).isPoseInPolygon(hit.getHitPose())) {
-                    appState.setIsHitting(true);
+                    AppState.getInstance().setIsHitting(true);
                     break;
                 }
             }
         }
-        owner.get().TouchView(getView());
-        return wasHitting != appState.getIsHitting();
+        owner.get().TouchView(getView(), pt);
+        return wasHitting != AppState.getInstance().getIsHitting();
     }
 
     private Point getScreenCenter() {
@@ -310,8 +303,6 @@ public class ArView extends ArFragment {
         int w = getView().getWidth()/2;
         int h = getView().getHeight()/2;
         return new Point(w, h);
-
-        //return new Point(appState.getCenterX(), appState.getCenterY());
     }
 }
 
