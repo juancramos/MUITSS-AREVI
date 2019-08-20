@@ -12,7 +12,7 @@ public class Task {
     public String id;
     @SerializedName("work")
     @Expose
-    public Work work;
+    public Work work = new Work();
     @SerializedName("enabled")
     @Expose
     public String enabled;
@@ -20,7 +20,7 @@ public class Task {
     @NonNull
     @Override
     public String toString() {
-        return "profile = {" +
+        return "task = {" +
                 "id = '" + id + '\'' +
                 ", work = '" + work.toString() + '\'' +
                 ", enabled = '" + enabled + '\'' +

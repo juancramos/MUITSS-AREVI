@@ -20,7 +20,7 @@ public class Round {
     @NonNull
     @Override
     public String toString() {
-        return "profile = {" +
+        return "round = {" +
                 "id = '" + id + '\'' +
                 ", score = '" + score.toString() + '\'' +
                 ", completed = '" + completed + '\'' +

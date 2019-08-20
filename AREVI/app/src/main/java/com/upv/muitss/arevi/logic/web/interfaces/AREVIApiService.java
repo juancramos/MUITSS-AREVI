@@ -3,6 +3,7 @@ package com.upv.muitss.arevi.logic.web.interfaces;
 import com.upv.muitss.arevi.entities.AccessToken;
 import com.upv.muitss.arevi.entities.DataResponse;
 import com.upv.muitss.arevi.entities.Profile;
+import com.upv.muitss.arevi.entities.Task;
 import com.upv.muitss.arevi.entities.User;
 import com.upv.muitss.arevi.entities.UserInfo;
 import com.upv.muitss.arevi.entities.UserLogIn;
@@ -23,6 +24,7 @@ public interface AREVIApiService {
     String AUTH_API_ROUTE = "/authentication";
     String USER_INFO_API_ROUTE = "/user-info";
     String PROFILE_API_ROUTE = "/profile";
+    String TASK_API_ROUTE = "/task";
 
     @GET(USER_API_ROUTE)
     Call<DataResponse<User>> getApiUser(@Query("") String id);
@@ -35,9 +37,11 @@ public interface AREVIApiService {
     @Headers({ "Content-Type: application/json;charset=UTF-8"})
     Call<User> patchApiUser(@Path("id") String id, @Body User pUser);
 
+
     @POST(AUTH_API_ROUTE)
     @Headers({ "Content-Type: application/json;charset=UTF-8"})
     Call<AccessToken> authApi(@Body UserLogIn logIn);
+
 
     @GET(USER_INFO_API_ROUTE)
     Call<DataResponse<UserInfo>> getApiUserInfo(@Query("") String id);
@@ -53,6 +57,7 @@ public interface AREVIApiService {
     @Headers({ "Content-Type: application/json;charset=UTF-8"})
     Call<UserInfo> putApiUserInfo(@Path("id") String id, @Body UserInfo pUserInfo);
 
+
     @GET(PROFILE_API_ROUTE)
     Call<DataResponse<Profile>> findApiProfile(@Query("userId") String userId, @Query("enabled") int enabled);
 
@@ -63,5 +68,9 @@ public interface AREVIApiService {
     @PUT(PROFILE_API_ROUTE + "/{id}")
     @Headers({ "Content-Type: application/json;charset=UTF-8"})
     Call<Profile> putApiProfile(@Path("id") String id, @Body Profile pUserInfo);
+
+
+    @GET(TASK_API_ROUTE)
+    Call<DataResponse<Task>> findApiTask(@Query("enabled") int enabled);
 }
 

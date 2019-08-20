@@ -13,9 +13,13 @@ import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 
+import com.upv.muitss.arevi.entities.Task;
+import com.upv.muitss.arevi.entities.Work;
 import com.upv.muitss.arevi.helpers.AppState;
 import com.upv.muitss.arevi.helpers.Utils;
+import com.upv.muitss.arevi.logic.web.implementations.AREVIRepository;
 import com.upv.muitss.arevi.logic.web.implementations.PolyRepository;
+import com.upv.muitss.arevi.logic.web.interfaces.ActivityMessage;
 import com.upv.muitss.arevi.logic.webrtc.implementations.WebRTCModule;
 import com.upv.muitss.arevi.views.ArView;
 import com.upv.muitss.arevi.views.MenuView;
@@ -23,8 +27,9 @@ import com.upv.muitss.arevi.views.MenuView;
 import org.webrtc.SurfaceViewRenderer;
 
 import java.lang.ref.WeakReference;
+import java.util.Arrays;
 
-public class ArActivity extends AppCompatActivity {
+public class ArActivity extends AppCompatActivity implements ActivityMessage {
 
     private ArView arView;
     private MenuView gallery;
@@ -58,14 +63,17 @@ public class ArActivity extends AppCompatActivity {
         gallery.init(weakReference);
 
         startScreenCapture();
-        loadTask();
+
+        runOnUiThread(() -> {
+            AREVIRepository.getInstance().getApiTask(this);
+        });
     }
 
     public boolean loadTask() {
-        if(AppState.getInstance().ids.isEmpty() && AppState.getInstance().polyQueueIsEmpty()) return false;
+        if(AppState.getInstance().workIsEmpty() && AppState.getInstance().polyQueueIsEmpty()) return false;
         runOnUiThread(() -> {
-            while (!AppState.getInstance().ids.isEmpty() && AppState.getInstance().polyQueueHasToLoad()) {
-                String nextId = AppState.getInstance().ids.poll();
+            while (!AppState.getInstance().workIsEmpty() && AppState.getInstance().polyQueueHasToLoad()) {
+                String nextId = AppState.getInstance().pollWork();
                 PolyRepository.getInstance().getApiAsset(nextId);
             }
         });
@@ -121,5 +129,15 @@ public class ArActivity extends AppCompatActivity {
     @Override
     public void onDestroy() {
         super.onDestroy();
+    }
+
+    @Override
+    public <T> void onResponse(T response) {
+        if (response instanceof Task){
+            Work w = ((Task) response).work;
+            AppState.getInstance().queueWork(Arrays.asList(w.ids));
+
+            loadTask();
+        }
     }
 }

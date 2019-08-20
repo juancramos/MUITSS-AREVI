@@ -2,10 +2,13 @@ package com.upv.muitss.arevi.helpers;
 
 import com.upv.muitss.arevi.entities.PolyAsset;
 import com.upv.muitss.arevi.entities.Profile;
+import com.upv.muitss.arevi.entities.Task;
 import com.upv.muitss.arevi.entities.User;
 import com.upv.muitss.arevi.entities.UserInfo;
 
+import java.util.Arrays;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Queue;
 
 public class AppState {
@@ -42,13 +45,19 @@ public class AppState {
     public Profile getProfile() { return this.profile; }
     public void setProfile(Profile pProfile) { this.profile = pProfile; }
 
+    private Task task;
+    public Task getTask() { return this.task; }
+    public void setTask(Task pTask) { this.task = pTask; }
+    private Queue<String> work;
+    public boolean workIsEmpty() { return this.work.isEmpty(); }
+    public String pollWork() { return this.work.poll(); }
+    public void queueWork(List<String> pWork) { this.work.addAll(pWork); }
+
     private Queue<PolyAsset> polyQueue;
     public boolean polyQueueHasToLoad() { return this.polyQueue.size() < 2; }
     public boolean polyQueueIsEmpty() { return this.polyQueue.isEmpty(); }
     public PolyAsset pollPolyAsset() { return this.polyQueue.poll(); }
     public void queuePolyAsset(PolyAsset polyAsset) { this.polyQueue.add(polyAsset); }
-
-    public Queue<String> ids;
 
     private static AppState instance;
 
@@ -69,10 +78,8 @@ public class AppState {
         userInfo = new UserInfo();
         profile = new Profile();
         polyQueue = new LinkedList<>();
-        ids = new LinkedList<>();
-        ids.add("c-tEGK9e49p");
-        ids.add("dIsZyy2FUY-");
-        ids.add("d1M5ncMBUDi");
+        task = new Task();
+        work = new LinkedList<>(Arrays.asList(task.work.ids));
     }
 }
 

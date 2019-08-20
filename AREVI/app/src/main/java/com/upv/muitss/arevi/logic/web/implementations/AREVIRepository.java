@@ -7,6 +7,7 @@ import android.util.Log;
 import com.upv.muitss.arevi.entities.AccessToken;
 import com.upv.muitss.arevi.entities.DataResponse;
 import com.upv.muitss.arevi.entities.Profile;
+import com.upv.muitss.arevi.entities.Task;
 import com.upv.muitss.arevi.entities.User;
 import com.upv.muitss.arevi.entities.UserInfo;
 import com.upv.muitss.arevi.entities.UserLogIn;
@@ -336,7 +337,6 @@ public class AREVIRepository {
         });
     }
 
-
     public void getApiProfile(String userId, ActivityMessage caller) {
         apiService.findApiProfile(userId, 1).enqueue(new Callback<DataResponse<Profile>>() {
             @Override
@@ -363,6 +363,35 @@ public class AREVIRepository {
             @Override
             public void onFailure(@NonNull Call<DataResponse<Profile>> call, @NonNull Throwable t) {
                 Utils.popProgressDialog(null, null);
+                Log.e(TAG, "Unable to submit post to API.");
+                if (caller != null) caller.onResponse(null);
+            }
+        });
+    }
+
+    public void getApiTask(ActivityMessage caller) {
+        apiService.findApiTask(1).enqueue(new Callback<DataResponse<Task>>() {
+            @Override
+            public void onResponse(@NonNull Call<DataResponse<Task>> call, @NonNull Response<DataResponse<Task>> response) {
+
+                if(response.isSuccessful()) {
+                    DataResponse<Task> apiTask = response.body();
+                    assert apiTask != null;
+                    Task task = apiTask.data.get(0);
+
+                    AppState.getInstance().setTask(task);
+                    if (caller != null) caller.onResponse(task);
+
+                    Log.i(TAG, "post submitted to API." + task.toString());
+                }
+                else {
+                    Log.i(TAG, "post submitted to API." + response.body());
+                    if (caller != null) caller.onResponse(null);
+                }
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<DataResponse<Task>> call, @NonNull Throwable t) {
                 Log.e(TAG, "Unable to submit post to API.");
                 if (caller != null) caller.onResponse(null);
             }

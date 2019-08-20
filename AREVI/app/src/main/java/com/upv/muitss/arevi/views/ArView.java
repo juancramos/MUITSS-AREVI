@@ -6,6 +6,7 @@ import android.net.Uri;
 import android.text.TextUtils;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewTreeObserver;
 import android.widget.Toast;
 
 import com.google.ar.core.Anchor;
@@ -57,11 +58,13 @@ public class ArView extends ArFragment {
         assert owner.get() != null;
 
         rand = new Random();
-        Point pt = getScreenCenter();
-        pointer = new PointerDrawable(pt.x, pt.y);
 
         View ownerView = getView();
         if (ownerView == null) return;
+        ownerView.getViewTreeObserver().addOnGlobalLayoutListener(() -> {
+            Point pt = getScreenCenter();
+            pointer = new PointerDrawable(pt.x, pt.y);
+        });
         pointerView = ownerView.findViewById(R.id.sceneform_pointer);
 
         getArSceneView().getScene().addOnUpdateListener(frameTime -> {
