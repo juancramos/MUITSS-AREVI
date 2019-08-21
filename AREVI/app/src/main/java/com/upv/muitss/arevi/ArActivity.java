@@ -8,7 +8,6 @@ import android.media.projection.MediaProjectionManager;
 import android.os.SystemClock;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
@@ -27,7 +26,6 @@ import com.upv.muitss.arevi.views.MenuView;
 import org.webrtc.SurfaceViewRenderer;
 
 import java.lang.ref.WeakReference;
-import java.util.Arrays;
 
 public class ArActivity extends AppCompatActivity implements ActivityMessage {
 
@@ -50,9 +48,6 @@ public class ArActivity extends AppCompatActivity implements ActivityMessage {
         // Get the data that was sent
         // String previousActivity = activityThatCalled.getExtras().getString("callingActivity");
 
-        DisplayMetrics metrics = new DisplayMetrics();
-        getWindowManager().getDefaultDisplay().getMetrics(metrics);
-
         arView = (ArView) getSupportFragmentManager().findFragmentById(R.id.sceneform_fragment);
         gallery = findViewById(R.id.gallery_layout);
 
@@ -64,17 +59,16 @@ public class ArActivity extends AppCompatActivity implements ActivityMessage {
 
         startScreenCapture();
 
-        runOnUiThread(() -> {
-            AREVIRepository.getInstance().getApiTask(this);
-        });
+        runOnUiThread(() -> AREVIRepository.getInstance().getApiTask(this));
     }
 
     public boolean loadTask() {
         if(AppState.getInstance().workIsEmpty() && AppState.getInstance().polyQueueIsEmpty()) return false;
         runOnUiThread(() -> {
             while (!AppState.getInstance().workIsEmpty() && AppState.getInstance().polyQueueHasToLoad()) {
-                String nextId = AppState.getInstance().pollWork();
-                PolyRepository.getInstance().getApiAsset(nextId);
+                Work next = AppState.getInstance().pollWork();
+
+                PolyRepository.getInstance().getApiAsset(next);
             }
         });
         return true;
@@ -134,8 +128,7 @@ public class ArActivity extends AppCompatActivity implements ActivityMessage {
     @Override
     public <T> void onResponse(T response) {
         if (response instanceof Task){
-            Work w = ((Task) response).work;
-            AppState.getInstance().queueWork(Arrays.asList(w.ids));
+            AppState.getInstance().queueWork(((Task) response).work);
 
             loadTask();
         }

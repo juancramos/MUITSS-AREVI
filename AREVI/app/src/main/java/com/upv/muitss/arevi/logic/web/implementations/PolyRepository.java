@@ -7,6 +7,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.upv.muitss.arevi.R;
 import com.upv.muitss.arevi.entities.PolyAsset;
+import com.upv.muitss.arevi.entities.Work;
 import com.upv.muitss.arevi.helpers.AppState;
 import com.upv.muitss.arevi.helpers.Utils;
 import com.upv.muitss.arevi.logic.web.interceptors.Instance;
@@ -31,8 +32,8 @@ public class PolyRepository {
         return polyRepository;
     }
 
-    public void getApiAsset(String assetId) {
-        apiService.getApiAsset(assetId, API_KEY).enqueue(new Callback<JsonObject>() {
+    public void getApiAsset(Work work) {
+        apiService.getApiAsset(work.id, API_KEY).enqueue(new Callback<JsonObject>() {
             @Override
             public void onResponse(@NonNull Call<JsonObject> call, @NonNull Response<JsonObject> response) {
 
@@ -59,6 +60,10 @@ public class PolyRepository {
                             break;
                         }
                     }
+
+                    item.scaleV = work.scaleV;
+                    item.scaleV1 = work.scaleV1;
+                    item.scaleV2 = work.scaleV2;
 
                     AppState.getInstance().queuePolyAsset(item);
                     Log.i(TAG, "post submitted to API." + obj.toString());

@@ -5,6 +5,7 @@ import com.upv.muitss.arevi.entities.Profile;
 import com.upv.muitss.arevi.entities.Task;
 import com.upv.muitss.arevi.entities.User;
 import com.upv.muitss.arevi.entities.UserInfo;
+import com.upv.muitss.arevi.entities.Work;
 
 import java.util.Arrays;
 import java.util.LinkedList;
@@ -48,10 +49,10 @@ public class AppState {
     private Task task;
     public Task getTask() { return this.task; }
     public void setTask(Task pTask) { this.task = pTask; }
-    private Queue<String> work;
+    private Queue<Work> work;
     public boolean workIsEmpty() { return this.work.isEmpty(); }
-    public String pollWork() { return this.work.poll(); }
-    public void queueWork(List<String> pWork) { this.work.addAll(pWork); }
+    public Work pollWork() { return this.work.poll(); }
+    public void queueWork(List<Work> pWork) { this.work.addAll(pWork); }
 
     private Queue<PolyAsset> polyQueue;
     public boolean polyQueueHasToLoad() { return this.polyQueue.size() < 2; }
@@ -79,7 +80,7 @@ public class AppState {
         profile = new Profile();
         polyQueue = new LinkedList<>();
         task = new Task();
-        work = new LinkedList<>(Arrays.asList(task.work.ids));
+        work = new LinkedList<>(task.work);
     }
 }
 

@@ -6,7 +6,6 @@ import android.net.Uri;
 import android.text.TextUtils;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.ViewTreeObserver;
 import android.widget.Toast;
 
 import com.google.ar.core.Anchor;
@@ -43,7 +42,6 @@ import java.util.Random;
 public class ArView extends ArFragment {
 
     private PointerDrawable pointer;
-    private View pointerView;
     private Plane firstPlane;
     private AnchorNode webRTCNode;
 
@@ -55,17 +53,21 @@ public class ArView extends ArFragment {
 
     public void init(WeakReference<ArActivity> pOwner) {
         owner = pOwner;
-        assert owner.get() != null;
+        if (owner.get() == null) return;
 
         rand = new Random();
 
-        View ownerView = getView();
-        if (ownerView == null) return;
-        ownerView.getViewTreeObserver().addOnGlobalLayoutListener(() -> {
+        if (getView() == null) return;
+
+        getView().getViewTreeObserver().addOnGlobalLayoutListener(() -> {
             Point pt = getScreenCenter();
-            pointer = new PointerDrawable(pt.x, pt.y);
+            if (pointer == null){
+                pointer = new PointerDrawable(pt.x, pt.y);
+            }
+            else {
+                pointer.setPoint(pt);
+            }
         });
-        pointerView = ownerView.findViewById(R.id.sceneform_pointer);
 
         getArSceneView().getScene().addOnUpdateListener(frameTime -> {
             onUpdate(frameTime);
@@ -102,12 +104,16 @@ public class ArView extends ArFragment {
     };
 
     private void onUpdate() {
+        if (getView() == null) return;
         boolean trackingChanged = updateTracking();
+        View pointerView = getView().findViewById(R.id.sceneform_pointer);
         if (trackingChanged) {
             if (AppState.getInstance().getIsTracking()) {
                 pointerView.getOverlay().add(pointer);
-                pointerView.invalidate();
+            } else {
+                pointerView.getOverlay().remove(pointer);
             }
+            pointerView.invalidate();
         }
 
         if (AppState.getInstance().getIsTracking()) {
@@ -150,7 +156,6 @@ public class ArView extends ArFragment {
     private void addViewRenderable(Anchor anchor, ViewRenderable render) {
         getArSceneView().getScene()
                 .removeOnUpdateListener(webRtcRenderListener);
-
 
         TransformableNode node = new TransformableNode(getTransformationSystem());
         node.setRenderable(render);
@@ -233,11 +238,11 @@ public class ArView extends ArFragment {
 
                     // Set the min and max scales of the ScaleController.
                     // Default min is 0.75, default max is 1.75.
-                    node.getScaleController().setMinScale(0.2f);
+                    node.getScaleController().setMinScale(0.1f);
                     node.getScaleController().setMaxScale(1.0f);
 
                     // Set the local scale of the node BEFORE setting its parent
-                    node.setLocalScale(new Vector3(0.02f, 0.02f, 0.02f));
+                    node.setLocalScale(new Vector3(pa.scaleV, pa.scaleV1, pa.scaleV2));
 
                     node.setParent(currentRandomAnchorNode);
                     node.select();
@@ -271,10 +276,11 @@ public class ArView extends ArFragment {
 
     private boolean updateTracking() {
         Frame frame = getArSceneView().getArFrame();
+        boolean isTracking = frame != null &&
+                frame.getCamera().getTrackingState() == TrackingState.TRACKING;
         boolean wasTracking = AppState.getInstance().getIsTracking();
-        AppState.getInstance().setIsTracking(frame != null &&
-                frame.getCamera().getTrackingState() == TrackingState.TRACKING);
-        return AppState.getInstance().getIsTracking() != wasTracking;
+        AppState.getInstance().setIsTracking(isTracking);
+        return isTracking != wasTracking;
     }
 
     private boolean updateHitTest() {
@@ -300,7 +306,7 @@ public class ArView extends ArFragment {
 
     private Point getScreenCenter() {
         if(getView() == null) {
-            return new android.graphics.Point(0,0);
+            return new Point(0,0);
         }
 
         int w = getView().getWidth()/2;

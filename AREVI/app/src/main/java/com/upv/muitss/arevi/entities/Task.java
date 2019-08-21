@@ -6,13 +6,16 @@ import android.text.TextUtils;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Task {
     @SerializedName("id")
     @Expose
     public String id;
     @SerializedName("work")
     @Expose
-    public Work work = new Work();
+    public List<Work> work = new ArrayList<>();
     @SerializedName("enabled")
     @Expose
     public String enabled;
@@ -33,14 +36,6 @@ public class Task {
 
     public void setEnabled(String pEnabled) {
         enabled = pEnabled;
-    }
-
-    public Work getWork() {
-        return work;
-    }
-
-    public void setWork(Work work) {
-        this.work = work;
     }
 
 }

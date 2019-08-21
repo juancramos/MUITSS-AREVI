@@ -24,6 +24,10 @@ public class PolyAsset {
     @Expose
     public String modelUrl;
 
+    public float scaleV = 0.01f;
+    public float scaleV1 = 0.01f;
+    public float scaleV2 = 0.01f;
+
     public PolyAsset(String key) {
         this.key = key;
     }
