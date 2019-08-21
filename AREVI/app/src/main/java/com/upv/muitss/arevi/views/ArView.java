@@ -6,6 +6,7 @@ import android.net.Uri;
 import android.text.TextUtils;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.google.ar.core.Anchor;
@@ -42,9 +43,11 @@ import java.util.Random;
 public class ArView extends ArFragment {
 
     private PointerDrawable pointer;
+    private View pointerView;
+    private ProgressBar spinner;
+
     private Plane firstPlane;
     private AnchorNode webRTCNode;
-
     private Anchor currentRandomAanchor;
     private AnchorNode currentRandomAnchorNode;
     private static Random rand;
@@ -58,6 +61,10 @@ public class ArView extends ArFragment {
         rand = new Random();
 
         if (getView() == null) return;
+
+        pointerView = getView().findViewById(R.id.sceneform_pointer);
+        spinner= getView().findViewById(R.id.sceneform_progress_bar);
+        spinner.setVisibility(View.GONE);
 
         getView().getViewTreeObserver().addOnGlobalLayoutListener(() -> {
             Point pt = getScreenCenter();
@@ -82,9 +89,9 @@ public class ArView extends ArFragment {
     }
 
     private Scene.OnUpdateListener randomRenderListener = frameTime -> {
+
         // Keep track of the first valid plane detected, update it
         // if the plane is lost or subsumed.
-
         Session session = getArSceneView().getSession();
 
         assert session != null;
@@ -99,14 +106,13 @@ public class ArView extends ArFragment {
         }
 
         if (AppState.getInstance().getIsTracking()) {
-            randomPlacedCube(firstPlane);
+            randomPlacedPoly(firstPlane);
         }
     };
 
     private void onUpdate() {
         if (getView() == null) return;
         boolean trackingChanged = updateTracking();
-        View pointerView = getView().findViewById(R.id.sceneform_pointer);
         if (trackingChanged) {
             if (AppState.getInstance().getIsTracking()) {
                 pointerView.getOverlay().add(pointer);
@@ -183,9 +189,11 @@ public class ArView extends ArFragment {
         }
     }
 
-    private void randomPlacedCube(Plane plane) {
+    private void randomPlacedPoly(Plane plane) {
         getArSceneView().getScene()
                 .removeOnUpdateListener(randomRenderListener);
+
+        spinner.setVisibility(View.VISIBLE);
 
         //find a random spot on the plane in the X
         // The width of the plan is 2*extentX in the range center.x +/- extentX
@@ -237,9 +245,7 @@ public class ArView extends ArFragment {
                     node.setRenderable(renderable);
 
                     // Set the min and max scales of the ScaleController.
-                    // Default min is 0.75, default max is 1.75.
                     node.getScaleController().setMinScale(0.1f);
-                    node.getScaleController().setMaxScale(1.0f);
 
                     // Set the local scale of the node BEFORE setting its parent
                     node.setLocalScale(new Vector3(pa.scaleV, pa.scaleV1, pa.scaleV2));
@@ -247,6 +253,7 @@ public class ArView extends ArFragment {
                     node.setParent(currentRandomAnchorNode);
                     node.select();
 
+                    spinner.setVisibility(View.GONE);
                     node.setOnTapListener(this::onTapListener);
                 }).exceptionally(throwable -> null);
     }

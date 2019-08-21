@@ -19,6 +19,14 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
 
+        <ProgressBar
+            style="@android:style/Widget.DeviceDefault.ProgressBar.Large"
+            android:id="@+id/sceneform_progress_bar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:progressDrawable="@drawable/ic_progress_bar_black_24dp" />
+
     </fragment>
 
 </LinearLayout>
