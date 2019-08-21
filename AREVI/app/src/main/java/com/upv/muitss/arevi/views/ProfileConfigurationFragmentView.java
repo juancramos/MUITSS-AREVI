@@ -1,5 +1,6 @@
 package com.upv.muitss.arevi.views;
 
+import android.opengl.Visibility;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.TextInputLayout;
@@ -60,6 +61,11 @@ public class ProfileConfigurationFragmentView extends Fragment implements Activi
         boolean userInfo = AppState.getInstance().getUserInfo().isValidState();
         boolean userLogin = Utils.getLogIn().isValidState();
 
+        if (userLogin) {
+            View loginView = rootView.findViewById(R.id.fragment_pager_profile_log_in);
+            loginView.setVisibility(View.GONE);
+        }
+
         if (userLogin && !userInfo) {
             Utils.popProgressDialog(getActivity(), "Loading...");
             AREVIRepository.getInstance().getApiUserInfo(Utils.getUserId(), this);
@@ -72,7 +78,7 @@ public class ProfileConfigurationFragmentView extends Fragment implements Activi
 
     private void loadData(){
         EditText mEmailTxt = rootView.findViewById(R.id.text_input_email);
-        mEmailTxt.setText(AppState.getInstance().getUser().email);
+        mEmailTxt.setText(Utils.getLogIn().email);
         mEmailTxt.setOnFocusChangeListener((v, hasFocus) -> {
             if (!hasFocus) {
                 AppState.getInstance().getUser().email = Utils.validateInput(mEmailTxt);
@@ -80,7 +86,7 @@ public class ProfileConfigurationFragmentView extends Fragment implements Activi
         });
 
         EditText passwordTxt = rootView.findViewById(R.id.text_input_password);
-        passwordTxt.setText(AppState.getInstance().getUser().password);
+        passwordTxt.setText(Utils.getLogIn().password);
         passwordTxt.setOnFocusChangeListener((v, hasFocus) -> {
             if (!hasFocus) {
                 AppState.getInstance().getUser().password = Utils.validateInput(passwordTxt);

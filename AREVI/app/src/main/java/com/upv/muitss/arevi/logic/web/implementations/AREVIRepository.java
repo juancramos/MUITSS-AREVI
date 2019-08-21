@@ -316,12 +316,12 @@ public class AREVIRepository {
 
                         assert token != null;
 
+                        Utils.saveLogIn(userLogIn.email, userLogIn.password);
                         apiService = Instance.createService(AREVIApiService.class, token.accessToken);
 
                         getApiUser(null);
 
                         Utils.popProgressDialog(null, null);
-
                         if (caller != null) caller.onResponse(token.accessToken);
                     }
                     else {
@@ -357,8 +357,10 @@ public class AREVIRepository {
                     assert apiUser != null;
                     User user = apiUser.data.get(0);
 
-                    AppState.getInstance().setUser(user);
                     Utils.saveUserId(user.id);
+                    user.password = Utils.getLogIn().password;
+                    AppState.getInstance().setUser(user);
+
                     Utils.popProgressDialog(null, null);
                     Log.i(TAG, "post submitted to API." + apiUser.toString());
                 }
@@ -449,6 +451,11 @@ public class AREVIRepository {
                 if(response.isSuccessful()) {
                     DataResponse<Task> apiTask = response.body();
                     assert apiTask != null;
+                    if(apiTask.data.isEmpty()) {
+                        if (caller != null) caller.onResponse(null);
+                        return;
+                    }
+
                     Task task = apiTask.data.get(0);
 
                     AppState.getInstance().setTask(task);

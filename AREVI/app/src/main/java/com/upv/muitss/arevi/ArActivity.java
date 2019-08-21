@@ -95,6 +95,12 @@ public class ArActivity extends AppCompatActivity implements ActivityMessage {
                 CAPTURE_PERMISSION_REQUEST_CODE);
     }
 
+    public void startMainActivity(){
+        Intent toMain = new Intent(ArActivity.this, MainActivity.class);
+        startActivity(toMain);
+        finish();
+    }
+
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == CAPTURE_PERMISSION_REQUEST_CODE) {
@@ -130,6 +136,11 @@ public class ArActivity extends AppCompatActivity implements ActivityMessage {
     @Override
     public void onDestroy() {
         super.onDestroy();
+
+        arView = null;
+        gallery = null;
+        weakReference=  null;
+        webRTCModule= null;
     }
 
     @Override
@@ -138,6 +149,10 @@ public class ArActivity extends AppCompatActivity implements ActivityMessage {
             AppState.getInstance().queueWork(((Task) response).work);
 
             loadTask();
+        }
+        else if (response == null) {
+            Utils.showToast(this, "No tasks available in AREVI");
+            startMainActivity();
         }
     }
 }

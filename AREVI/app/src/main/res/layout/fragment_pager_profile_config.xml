@@ -63,6 +63,33 @@
                 android:hyphenationFrequency="normal"
                 android:breakStrategy="simple"
                 android:scrollHorizontally="false"/>
+
+            <LinearLayout
+                android:id="@+id/fragment_pager_profile_log_in"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:gravity="center">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/activity_horizontal_margin"
+                    android:gravity="center"
+                    android:text="@string/frame_profile_config_login_text"
+                    android:ellipsize="end"
+                    android:hyphenationFrequency="normal"
+                    android:breakStrategy="simple"
+                    android:scrollHorizontally="false"/>
+                <Button
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/log_in_button_text"
+                    android:onClick="onLogInProfileButtonClick"
+                    android:ellipsize="end"
+                    android:hyphenationFrequency="normal"
+                    android:breakStrategy="simple"
+                    android:scrollHorizontally="false" />
+            </LinearLayout>
         </LinearLayout>
 
         <LinearLayout

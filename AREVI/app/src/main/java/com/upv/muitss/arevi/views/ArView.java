@@ -1,14 +1,12 @@
 package com.upv.muitss.arevi.views;
 
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.Point;
 import android.net.Uri;
 import android.text.TextUtils;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ProgressBar;
-import android.widget.Toast;
 
 import com.google.ar.core.Anchor;
 import com.google.ar.core.Frame;
@@ -29,13 +27,12 @@ import com.google.ar.sceneform.rendering.ViewRenderable;
 import com.google.ar.sceneform.ux.ArFragment;
 import com.google.ar.sceneform.ux.TransformableNode;
 import com.upv.muitss.arevi.ArActivity;
-import com.upv.muitss.arevi.MainActivity;
-import com.upv.muitss.arevi.PagerActivity;
 import com.upv.muitss.arevi.R;
 import com.upv.muitss.arevi.drawables.PointerDrawable;
 import com.upv.muitss.arevi.entities.PolyAsset;
 import com.upv.muitss.arevi.entities.Work;
 import com.upv.muitss.arevi.helpers.AppState;
+import com.upv.muitss.arevi.helpers.Utils;
 import com.upv.muitss.arevi.logic.web.implementations.AREVIRepository;
 
 import org.webrtc.SurfaceViewRenderer;
@@ -116,7 +113,7 @@ public class ArView extends ArFragment {
     };
 
     private void onUpdate() {
-        if (getView() == null) return;
+        if (getView() == null || pointer == null || pointerView == null) return;
         boolean trackingChanged = updateTracking();
         if (trackingChanged) {
             if (AppState.getInstance().getIsTracking()) {
@@ -221,7 +218,7 @@ public class ArView extends ArFragment {
         Node hitNode = hitTestResult.getNode();
         // Check for touching a Sceneform node
         if (hitNode != null) {
-            Toast.makeText(owner.get(), "We've hit Andy!!", Toast.LENGTH_SHORT).show();
+            Utils.showToast(owner.get() , "We've hit Andy!!");
             AnchorNode aNode = ((AnchorNode) hitNode.getParent());
             assert aNode != null;
             Anchor a = aNode.getAnchor();
@@ -241,7 +238,7 @@ public class ArView extends ArFragment {
             currentRandomAnchorNode = null;
             if (continueTask) getArSceneView().getScene().addOnUpdateListener(randomRenderListener);
             else {
-                startMainActivity();
+                owner.get().startMainActivity();
             }
         }
     }
@@ -327,7 +324,7 @@ public class ArView extends ArFragment {
     }
 
     private void removeViewRenderable(){
-        Toast.makeText(owner.get(), "Remove pointerView", Toast.LENGTH_SHORT).show();
+        Utils.showToast(owner.get(), "Remove pointerView");
         getArSceneView().getScene().removeChild(webRTCNode);
         Node parent = webRTCNode.getParent();
         if (parent != null) {
@@ -340,12 +337,6 @@ public class ArView extends ArFragment {
         }
     }
 
-    private void startMainActivity(){
-        Intent toMain = new Intent(owner.get(), MainActivity.class);
-        startActivity(toMain);
-        owner.get().finish();
-    }
-
     private Point getScreenCenter() {
         if(getView() == null) {
             return new Point(0,0);
@@ -354,6 +345,25 @@ public class ArView extends ArFragment {
         int w = getView().getWidth()/2;
         int h = getView().getHeight()/2;
         return new Point(w, h);
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        pointer = null;
+        pointerView = null;
+        spinner = null;
+
+        firstPlane = null;
+        webRTCNode = null;
+        currentRandomAanchor = null;
+        currentRandomAnchorNode = null;
+        rand = null;
+
+        currentScore = null;
+
+        owner = null;
+        AppState.getInstance().resetAr();
     }
 }
 

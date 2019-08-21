@@ -19,6 +19,7 @@
         android:scrollHorizontally="false" />
 
     <Button
+        android:id="@+id/activity_main_manage_profile.btn"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/wizard_activity_button_text"
@@ -29,6 +30,7 @@
         android:scrollHorizontally="false" />
 
     <Button
+        android:id="@+id/activity_main_ar_scene.btn"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/start_ar_scene_button_text"

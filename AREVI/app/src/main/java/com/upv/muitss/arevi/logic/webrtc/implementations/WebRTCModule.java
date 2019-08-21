@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.media.projection.MediaProjection;
 import android.util.Log;
 import android.view.View;
-import android.widget.Toast;
 
 import com.upv.muitss.arevi.ArActivity;
 import com.upv.muitss.arevi.R;
@@ -110,7 +109,7 @@ public class WebRTCModule implements SignalingInterface {
 
             @Override
             public void onAddStream(MediaStream mediaStream) {
-                showToast("Received Remote stream");
+                Utils.showToast(owner.get() ,"Received Remote stream");
                 super.onAddStream(mediaStream);
                 gotRemoteStream(mediaStream);
             }
@@ -180,7 +179,7 @@ public class WebRTCModule implements SignalingInterface {
      */
     @Override
     public void onCreatedRoom() {
-        showToast("You created the room " + gotUserMedia);
+        Utils.showToast(owner.get() ,"You created the room " + gotUserMedia);
         if (gotUserMedia) {
             SignallingClient.getInstance().emitMessage("got user media");
         }
@@ -191,7 +190,7 @@ public class WebRTCModule implements SignalingInterface {
      */
     @Override
     public void onJoinedRoom() {
-        showToast("You joined the room " + gotUserMedia);
+        Utils.showToast(owner.get() ,"You joined the room " + gotUserMedia);
         if (gotUserMedia) {
             SignallingClient.getInstance().emitMessage("got user media");
         }
@@ -199,12 +198,12 @@ public class WebRTCModule implements SignalingInterface {
 
     @Override
     public void onNewPeerJoined() {
-        showToast("Remote Peer Joined");
+        Utils.showToast(owner.get() ,"Remote Peer Joined");
     }
 
     @Override
     public void onRemoteHangUp(String msg) {
-        showToast("Remote Peer hungup");
+        Utils.showToast(owner.get() ,"Remote Peer hungup");
         owner.get().runOnUiThread(this::hangup);
     }
 
@@ -224,7 +223,7 @@ public class WebRTCModule implements SignalingInterface {
      */
     @Override
     public void onOfferReceived(final JSONObject data) {
-        showToast("Received Offer");
+        Utils.showToast(owner.get() ,"Received Offer");
         owner.get().runOnUiThread(() -> {
             if (!SignallingClient.getInstance().isInitiator && !SignallingClient.getInstance().isStarted) {
                 onTryToStart();
@@ -256,7 +255,7 @@ public class WebRTCModule implements SignalingInterface {
 
     @Override
     public void onAnswerReceived(JSONObject data) {
-        showToast("Received Answer");
+        Utils.showToast(owner.get() ,"Received Answer");
         try {
             localPeer.setRemoteDescription(new CustomSdpObserver("localSetRemote"), new SessionDescription(SessionDescription.Type.fromCanonicalForm(data.getString("type").toLowerCase()), data.getString("sdp")));
             //updateVideoViews(true);
@@ -355,13 +354,5 @@ public class WebRTCModule implements SignalingInterface {
             }
         }
     }
-
-    /**
-     * Util Methods
-     */
-    private void showToast(final String msg) {
-        owner.get().runOnUiThread(() -> Toast.makeText(owner.get(), msg, Toast.LENGTH_SHORT).show());
-    }
-
 }
 

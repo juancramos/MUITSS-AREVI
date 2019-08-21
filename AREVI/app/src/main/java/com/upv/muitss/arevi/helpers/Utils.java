@@ -11,12 +11,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.upv.muitss.arevi.MainActivity;
 import com.upv.muitss.arevi.R;
 import com.upv.muitss.arevi.entities.UserLogIn;
+import com.upv.muitss.arevi.logic.web.interfaces.ActivityMessage;
 import com.upv.muitss.arevi.logic.webrtc.models.IceServer;
 
 import java.io.IOException;
@@ -173,6 +175,13 @@ public class Utils {
         Gson gson = new Gson();
         Type listType = new TypeToken<List<IceServer>>(){}.getType();
         return gson.fromJson(jsonString, listType);
+    }
+
+    /**
+     * Util Methods
+     */
+    public static void showToast(Activity ac, final String msg) {
+        ac.runOnUiThread(() -> Toast.makeText(ac, msg, Toast.LENGTH_SHORT).show());
     }
 
     private static String getAssetsJSON(Context context) {

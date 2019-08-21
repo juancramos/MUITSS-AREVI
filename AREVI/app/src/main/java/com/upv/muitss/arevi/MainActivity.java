@@ -6,7 +6,9 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.View;
+import android.widget.Button;
 
 import com.upv.muitss.arevi.entities.UserLogIn;
 import com.upv.muitss.arevi.helpers.AppState;
@@ -18,6 +20,7 @@ import com.upv.muitss.arevi.logic.web.interfaces.ActivityMessage;
 public class MainActivity extends AppCompatActivity implements ActivityMessage {
 
     public static Context appContext;
+    private Button startArBtn, manageProfileBtn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,6 +35,11 @@ public class MainActivity extends AppCompatActivity implements ActivityMessage {
 
         setTheme(Utils.getSavedThemeStyle());
         setContentView(R.layout.activity_main);
+
+        startArBtn = findViewById(R.id.activity_main_ar_scene_btn);
+        startArBtn.setEnabled(false);
+        manageProfileBtn = findViewById(R.id.activity_main_manage_profile_btn);
+        manageProfileBtn.setEnabled(false);
 
         appContext = this.getBaseContext();
 
@@ -51,6 +59,11 @@ public class MainActivity extends AppCompatActivity implements ActivityMessage {
     }
 
     public void onStartArButtonClick(View view) {
+        if (AppState.getInstance().getUser().isLocal()) {
+            Utils.showToast(this, "Please register in AREVI");
+            startProfileWizard();
+            return;
+        }
 
         Intent navigateIntent = new Intent(this, ArActivity.class);
         startActivity(navigateIntent);
@@ -109,5 +122,13 @@ public class MainActivity extends AppCompatActivity implements ActivityMessage {
         else if(response instanceof String && ((String)response).isEmpty()){
             startLogIn();
         }
+        else {
+            enableButtons();
+        }
+    }
+
+    private void enableButtons() {
+        startArBtn.setEnabled(true);
+        manageProfileBtn.setEnabled(true);
     }
 }

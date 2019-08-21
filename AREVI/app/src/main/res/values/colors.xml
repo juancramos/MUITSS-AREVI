@@ -4,10 +4,10 @@
     <color name="colorSecondary">#000000</color>
     <color name="colorPrimaryDark">#344955</color>
     <color name="colorSecondaryDark">#F9AA33</color>
-    <color name="colorOnPrimary">#F9AA33</color>
-    <color name="colorOnPrimaryDark">#915904</color>
-    <color name="colorOnSecondary">#3382f8</color>
-    <color name="colorOnSecondaryDark">#043c90</color>
+    <color name="colorOnPrimary">#bfbfbf</color>
+    <!--<color name="colorOnPrimaryDark">#915904</color>-->
+    <!--<color name="colorOnSecondary">#3382f8</color>-->
+    <!--<color name="colorOnSecondaryDark">#043c90</color>-->
     <color name="colorBackground">#FFFFFF</color>
     <color name="colorBackgroundDark">#000000</color>
     <color name="colorError">#B00020</color>

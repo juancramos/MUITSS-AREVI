@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.animation.ArgbEvaluator;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
@@ -73,12 +72,6 @@ public class PagerActivity extends AppCompatActivity implements ActivityMessage 
         boolean isDark = Utils.isDarkTheme();
 
         final int color1 = isDark ? ContextCompat.getColor(this, R.color.colorPrimaryDark) : ContextCompat.getColor(this, R.color.colorPrimary);
-        final int color2 = isDark ? ContextCompat.getColor(this, R.color.colorOnPrimaryDark) : ContextCompat.getColor(this, R.color.colorOnPrimary);
-        final int color3 = isDark ? ContextCompat.getColor(this, R.color.colorOnSecondaryDark) : ContextCompat.getColor(this, R.color.colorOnSecondary);
-
-        final int[] colorList = new int[]{color1, color2, color3};
-
-        final ArgbEvaluator evaluator = new ArgbEvaluator();
 
         mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
@@ -93,8 +86,7 @@ public class PagerActivity extends AppCompatActivity implements ActivityMessage 
                 /*
                 color update
                  */
-                int colorUpdate = (Integer) evaluator.evaluate(positionOffset, colorList[position], colorList[position == 2 ? position : position + 1]);
-                mViewPager.setBackgroundColor(colorUpdate);
+                mViewPager.setBackgroundColor(color1);
 
             }
 
@@ -112,7 +104,7 @@ public class PagerActivity extends AppCompatActivity implements ActivityMessage 
                         mViewPager.setBackgroundColor(color1);
                         break;
                     case 1:
-                        mViewPager.setBackgroundColor(color2);
+                        mViewPager.setBackgroundColor(color1);
                         break;
                     case 2:
                         if (validateProfileFormError()){
@@ -122,7 +114,7 @@ public class PagerActivity extends AppCompatActivity implements ActivityMessage 
                             break;
                         }
                         Utils.hideKeyboardFrom(getBaseContext(), mViewPager);
-                        mViewPager.setBackgroundColor(color3);
+                        mViewPager.setBackgroundColor(color1);
                         break;
                 }
                 page = position;
@@ -241,6 +233,11 @@ public class PagerActivity extends AppCompatActivity implements ActivityMessage 
                     i == position ? R.drawable.indicator_selected : R.drawable.indicator_unselected
             );
         }
+    }
+
+    public void onLogInProfileButtonClick(View view) {
+        Intent toAct = new Intent(PagerActivity.this, LogInActivity.class);
+        startActivity(toAct);
     }
 
     /**

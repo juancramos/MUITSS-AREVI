@@ -40,6 +40,7 @@
     <string name="log_in_button_text">Log in</string>
     <string name="register_button_text">Register</string>
     <string name="far_activity_log_in_description_text">Start session to configure AREVI with your profile</string>
+    <string name="frame_profile_config_login_text">Already registered?</string>
     <string-array name="input_spinner_gender_list">
         <item>Male</item>
         <item>Female</item>

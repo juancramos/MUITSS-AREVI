@@ -35,6 +35,7 @@
     <string name="log_in_button_text">Iniciar sesión</string>
     <string name="register_button_text">Registrarse</string>
     <string name="far_activity_log_in_description_text">Inicia sesión para configurar tu perfil en AREVI.</string>
+    <string name="frame_profile_config_login_text">¿Ya estás registrado?</string>
     <string-array name="input_spinner_gender_list">
         <item>Masculino</item>
         <item>femenino</item>

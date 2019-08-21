@@ -78,10 +78,19 @@ public class AppState {
         isTracking = false;
         isHitting = false;
         isFocusing = false;
-//        nodeAge = 0;
         user = new User();
         userInfo = new UserInfo();
         profile = new Profile();
+        polyQueue = new LinkedList<>();
+        task = new Task();
+        work = new LinkedList<>(task.work);
+        round = new Round();
+    }
+
+    public void resetAr(){
+        isTracking = false;
+        isHitting = false;
+        isFocusing = false;
         polyQueue = new LinkedList<>();
         task = new Task();
         work = new LinkedList<>(task.work);
