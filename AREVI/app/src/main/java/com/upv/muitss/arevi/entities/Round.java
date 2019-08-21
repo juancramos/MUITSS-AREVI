@@ -1,9 +1,13 @@
 package com.upv.muitss.arevi.entities;
 
 import android.support.annotation.NonNull;
+import android.text.TextUtils;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class Round {
     @SerializedName("id")
@@ -11,10 +15,19 @@ public class Round {
     public String id;
     @SerializedName("score")
     @Expose
-    public Work score;
+    public List<Work> score = new ArrayList<>();
     @SerializedName("completed")
     @Expose
     public String completed;
+    @SerializedName("userId")
+    @Expose
+    public String userId;
+    @SerializedName("taskId")
+    @Expose
+    public String taskId;
+    @SerializedName("profileId")
+    @Expose
+    public String profileId;
 
 
     @NonNull
@@ -24,7 +37,14 @@ public class Round {
                 "id = '" + id + '\'' +
                 ", score = '" + score.toString() + '\'' +
                 ", completed = '" + completed + '\'' +
+                ", userId = '" + userId + '\'' +
+                ", taskId = '" + taskId + '\'' +
+                ", profileId = '" + profileId + '\'' +
                 '}';
+    }
+
+    public boolean isLocal(){
+        return TextUtils.isEmpty(id);
     }
 
     public String getCompleted() {
@@ -33,13 +53,5 @@ public class Round {
 
     public void setCompleted(String pEnabled) {
         completed = pEnabled;
-    }
-
-    public Work getScore() {
-        return score;
-    }
-
-    public void setScore(Work score) {
-        this.score = score;
     }
 }

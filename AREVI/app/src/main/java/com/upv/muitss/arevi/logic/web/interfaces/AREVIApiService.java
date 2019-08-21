@@ -1,8 +1,10 @@
 package com.upv.muitss.arevi.logic.web.interfaces;
 
+import com.google.gson.JsonObject;
 import com.upv.muitss.arevi.entities.AccessToken;
 import com.upv.muitss.arevi.entities.DataResponse;
 import com.upv.muitss.arevi.entities.Profile;
+import com.upv.muitss.arevi.entities.Round;
 import com.upv.muitss.arevi.entities.Task;
 import com.upv.muitss.arevi.entities.User;
 import com.upv.muitss.arevi.entities.UserInfo;
@@ -25,6 +27,7 @@ public interface AREVIApiService {
     String USER_INFO_API_ROUTE = "/user-info";
     String PROFILE_API_ROUTE = "/profile";
     String TASK_API_ROUTE = "/task";
+    String ROUND_API_ROUTE = "/round";
 
     @GET(USER_API_ROUTE)
     Call<DataResponse<User>> getApiUser(@Query("") String id);
@@ -72,5 +75,14 @@ public interface AREVIApiService {
 
     @GET(TASK_API_ROUTE)
     Call<DataResponse<Task>> findApiTask(@Query("enabled") int enabled);
+
+
+    @POST(ROUND_API_ROUTE)
+    @Headers({ "Content-Type: application/json;charset=UTF-8"})
+    Call<Round> postApiRound(@Body Round pRound);
+
+    @PATCH(ROUND_API_ROUTE + "/{id}")
+    @Headers({ "Content-Type: application/json;charset=UTF-8"})
+    Call<Round> patchApiRound(@Path("id") String id, @Body JsonObject object);
 }
 

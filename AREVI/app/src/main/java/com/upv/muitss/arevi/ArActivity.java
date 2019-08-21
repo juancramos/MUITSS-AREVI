@@ -59,7 +59,14 @@ public class ArActivity extends AppCompatActivity implements ActivityMessage {
 
         startScreenCapture();
 
-        runOnUiThread(() -> AREVIRepository.getInstance().getApiTask(this));
+        boolean userLogin = Utils.getLogIn().isValidState();
+
+        if (userLogin) {
+            runOnUiThread(() -> {
+                AREVIRepository.getInstance().getApiTask(this);
+                AREVIRepository.getInstance().getApiProfile(Utils.getUserId(), this);
+            });
+        }
     }
 
     public boolean loadTask() {

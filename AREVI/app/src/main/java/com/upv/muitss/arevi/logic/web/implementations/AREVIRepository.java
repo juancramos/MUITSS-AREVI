@@ -4,18 +4,28 @@ import android.support.annotation.NonNull;
 import android.text.TextUtils;
 import android.util.Log;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
 import com.upv.muitss.arevi.entities.AccessToken;
 import com.upv.muitss.arevi.entities.DataResponse;
 import com.upv.muitss.arevi.entities.Profile;
+import com.upv.muitss.arevi.entities.Round;
 import com.upv.muitss.arevi.entities.Task;
 import com.upv.muitss.arevi.entities.User;
 import com.upv.muitss.arevi.entities.UserInfo;
 import com.upv.muitss.arevi.entities.UserLogIn;
+import com.upv.muitss.arevi.entities.Work;
 import com.upv.muitss.arevi.helpers.AppState;
 import com.upv.muitss.arevi.helpers.Utils;
 import com.upv.muitss.arevi.logic.web.interceptors.Instance;
 import com.upv.muitss.arevi.logic.web.interfaces.AREVIApiService;
 import com.upv.muitss.arevi.logic.web.interfaces.ActivityMessage;
+
+import org.json.JSONObject;
+
+import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -220,6 +230,68 @@ public class AREVIRepository {
             @Override
             public void onFailure(@NonNull Call<Profile> call, @NonNull Throwable t) {
                 Utils.popProgressDialog(null, null);
+                Log.e(TAG, "Unable to submit post to API.");
+            }
+        });
+    }
+
+    public void postRound(Round round) {
+        if (TextUtils.isEmpty(Utils.getUserId()) || TextUtils.isEmpty(AppState.getInstance().getTask().id)
+                || TextUtils.isEmpty(AppState.getInstance().getProfile().id)) return;
+
+        round.userId = Utils.getUserId();
+        round.taskId = AppState.getInstance().getTask().id;
+        round.profileId = AppState.getInstance().getProfile().id;
+        apiService.postApiRound(round).enqueue(new Callback<Round>() {
+            @Override
+            public void onResponse(@NonNull Call<Round> call, @NonNull Response<Round> response) {
+
+                if(response.isSuccessful()) {
+                    Round apiRound = response.body();
+
+                    assert apiRound != null;
+
+                    AppState.getInstance().setRound(apiRound);
+                    Log.i(TAG, "post submitted to API." + apiRound.toString());
+
+                }
+                else {
+                    Log.i(TAG, "post submitted to API." + response.body());
+                }
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<Round> call, @NonNull Throwable t) {
+                Log.e(TAG, "Unable to submit post to API.");
+            }
+        });
+    }
+
+    public void patchRound(String id, List<Work> score, boolean completed) {
+        JsonObject json = new JsonObject();
+        GsonBuilder gsonBuilder = new GsonBuilder();
+        Gson gson = gsonBuilder.create();
+        json.add("score", gson.toJsonTree(score));
+        json.addProperty("completed", gson.toJson(completed));
+        apiService.patchApiRound(id, json).enqueue(new Callback<Round>() {
+            @Override
+            public void onResponse(@NonNull Call<Round> call, @NonNull Response<Round> response) {
+
+                if(response.isSuccessful()) {
+                    Round apiRound = response.body();
+
+                    assert apiRound != null;
+
+                    AppState.getInstance().setRound(apiRound);
+                    Log.i(TAG, "post submitted to API." + apiRound.toString());
+                }
+                else {
+                    Log.i(TAG, "post submitted to API." + response.body());
+                }
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<Round> call, @NonNull Throwable t) {
                 Log.e(TAG, "Unable to submit post to API.");
             }
         });

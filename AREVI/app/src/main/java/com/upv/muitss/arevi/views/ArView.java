@@ -1,6 +1,7 @@
 package com.upv.muitss.arevi.views;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Point;
 import android.net.Uri;
 import android.text.TextUtils;
@@ -28,10 +29,14 @@ import com.google.ar.sceneform.rendering.ViewRenderable;
 import com.google.ar.sceneform.ux.ArFragment;
 import com.google.ar.sceneform.ux.TransformableNode;
 import com.upv.muitss.arevi.ArActivity;
+import com.upv.muitss.arevi.MainActivity;
+import com.upv.muitss.arevi.PagerActivity;
 import com.upv.muitss.arevi.R;
 import com.upv.muitss.arevi.drawables.PointerDrawable;
 import com.upv.muitss.arevi.entities.PolyAsset;
+import com.upv.muitss.arevi.entities.Work;
 import com.upv.muitss.arevi.helpers.AppState;
+import com.upv.muitss.arevi.logic.web.implementations.AREVIRepository;
 
 import org.webrtc.SurfaceViewRenderer;
 
@@ -52,6 +57,8 @@ public class ArView extends ArFragment {
     private AnchorNode currentRandomAnchorNode;
     private static Random rand;
 
+    private Work currentScore;
+
     private static WeakReference<ArActivity> owner;
 
     public void init(WeakReference<ArActivity> pOwner) {
@@ -61,6 +68,8 @@ public class ArView extends ArFragment {
         rand = new Random();
 
         if (getView() == null) return;
+
+        currentScore = new Work();
 
         pointerView = getView().findViewById(R.id.sceneform_pointer);
         spinner= getView().findViewById(R.id.sceneform_progress_bar);
@@ -83,11 +92,7 @@ public class ArView extends ArFragment {
         getArSceneView().getScene().addOnUpdateListener(randomRenderListener);
     }
 
-    public void attachWebRTCView(){
-        if (webRTCNode == null) getArSceneView().getScene().addOnUpdateListener(webRtcRenderListener);
-        else removeViewRenderable();
-    }
-
+    ///ARCORE
     private Scene.OnUpdateListener randomRenderListener = frameTime -> {
 
         // Keep track of the first valid plane detected, update it
@@ -127,64 +132,6 @@ public class ArView extends ArFragment {
             if (hitTestChanged) {
                 pointer.setEnabled(AppState.getInstance().getIsHitting());
                 pointerView.invalidate();
-            }
-        }
-    }
-
-    private Scene.OnUpdateListener webRtcRenderListener = frameTime -> {
-
-        if (!AppState.getInstance().getIsTracking()) return;
-
-        Frame frame = getArSceneView().getArFrame();
-        if(frame == null) { return; }
-
-        Collection<Plane> planes = frame.getUpdatedTrackables(Plane.class);
-        if (planes.isEmpty()) return;
-        Plane anchorPlane = planes.iterator().next();
-
-        if (anchorPlane.getSubsumedBy() != null) {
-            anchorPlane = anchorPlane.getSubsumedBy();
-        }
-
-        Pose pose = anchorPlane.getCenterPose();
-        Anchor anchor = anchorPlane.createAnchor(pose);
-
-        ViewRenderable.builder()
-                .setView(owner.get(), R.layout.webrtc_view)
-                .build()
-                .thenAccept(renderable -> {
-                    renderable.setShadowCaster(false);
-                    renderable.setShadowReceiver(false);
-                    addViewRenderable(anchor, renderable);
-                });
-    };
-
-    private void addViewRenderable(Anchor anchor, ViewRenderable render) {
-        getArSceneView().getScene()
-                .removeOnUpdateListener(webRtcRenderListener);
-
-        TransformableNode node = new TransformableNode(getTransformationSystem());
-        node.setRenderable(render);
-        // Create the Sceneform AnchorNode
-        AnchorNode anchorNode = new AnchorNode(anchor);
-        anchorNode.addChild(node);
-
-        anchorNode.setParent(getArSceneView().getScene());
-        webRTCNode = anchorNode;
-
-        owner.get().MountViewData((SurfaceViewRenderer) render.getView());
-    }
-
-    private void removeViewRenderable(){
-        Toast.makeText(owner.get(), "Remove pointerView", Toast.LENGTH_SHORT).show();
-        getArSceneView().getScene().removeChild(webRTCNode);
-        Node parent = webRTCNode.getParent();
-        if (parent != null) {
-            Anchor anchorParent = ((AnchorNode) parent).getAnchor();
-            if (anchorParent != null){
-                anchorParent.detach();
-                webRTCNode.setParent(null);
-                webRTCNode = null;
             }
         }
     }
@@ -254,6 +201,12 @@ public class ArView extends ArFragment {
                     node.select();
 
                     spinner.setVisibility(View.GONE);
+
+                    currentScore.id = pa.assetId;
+                    currentScore.scaleV = pa.scaleV;
+                    currentScore.scaleV1 = pa.scaleV1;
+                    currentScore.scaleV2 = pa.scaleV2;
+
                     node.setOnTapListener(this::onTapListener);
                 }).exceptionally(throwable -> null);
     }
@@ -276,8 +229,20 @@ public class ArView extends ArFragment {
             a.detach();
             aNode.setAnchor(currentRandomAanchor);
 
+            boolean continueTask = owner.get().loadTask();
+
+            AppState.getInstance().addScore(currentScore);
+            if (AppState.getInstance().getRound().isLocal()) {
+                AREVIRepository.getInstance().postRound(AppState.getInstance().getRound());
+            } else {
+                AREVIRepository.getInstance().patchRound(AppState.getInstance().getRound().id, AppState.getInstance().getRound().score, !continueTask);
+            }
+
             currentRandomAnchorNode = null;
-            if (owner.get().loadTask()) getArSceneView().getScene().addOnUpdateListener(randomRenderListener);
+            if (continueTask) getArSceneView().getScene().addOnUpdateListener(randomRenderListener);
+            else {
+                startMainActivity();
+            }
         }
     }
 
@@ -309,6 +274,76 @@ public class ArView extends ArFragment {
         }
         owner.get().TouchView(getView(), pt);
         return wasHitting != AppState.getInstance().getIsHitting();
+    }
+
+    ///WEBRTC
+    private Scene.OnUpdateListener webRtcRenderListener = frameTime -> {
+
+        if (!AppState.getInstance().getIsTracking()) return;
+
+        Frame frame = getArSceneView().getArFrame();
+        if(frame == null) { return; }
+
+        Collection<Plane> planes = frame.getUpdatedTrackables(Plane.class);
+        if (planes.isEmpty()) return;
+        Plane anchorPlane = planes.iterator().next();
+
+        if (anchorPlane.getSubsumedBy() != null) {
+            anchorPlane = anchorPlane.getSubsumedBy();
+        }
+
+        Pose pose = anchorPlane.getCenterPose();
+        Anchor anchor = anchorPlane.createAnchor(pose);
+
+        ViewRenderable.builder()
+                .setView(owner.get(), R.layout.webrtc_view)
+                .build()
+                .thenAccept(renderable -> {
+                    renderable.setShadowCaster(false);
+                    renderable.setShadowReceiver(false);
+                    addViewRenderable(anchor, renderable);
+                });
+    };
+
+    public void attachWebRTCView(){
+        if (webRTCNode == null) getArSceneView().getScene().addOnUpdateListener(webRtcRenderListener);
+        else removeViewRenderable();
+    }
+
+    private void addViewRenderable(Anchor anchor, ViewRenderable render) {
+        getArSceneView().getScene()
+                .removeOnUpdateListener(webRtcRenderListener);
+
+        TransformableNode node = new TransformableNode(getTransformationSystem());
+        node.setRenderable(render);
+        // Create the Sceneform AnchorNode
+        AnchorNode anchorNode = new AnchorNode(anchor);
+        anchorNode.addChild(node);
+
+        anchorNode.setParent(getArSceneView().getScene());
+        webRTCNode = anchorNode;
+
+        owner.get().MountViewData((SurfaceViewRenderer) render.getView());
+    }
+
+    private void removeViewRenderable(){
+        Toast.makeText(owner.get(), "Remove pointerView", Toast.LENGTH_SHORT).show();
+        getArSceneView().getScene().removeChild(webRTCNode);
+        Node parent = webRTCNode.getParent();
+        if (parent != null) {
+            Anchor anchorParent = ((AnchorNode) parent).getAnchor();
+            if (anchorParent != null){
+                anchorParent.detach();
+                webRTCNode.setParent(null);
+                webRTCNode = null;
+            }
+        }
+    }
+
+    private void startMainActivity(){
+        Intent toMain = new Intent(owner.get(), MainActivity.class);
+        startActivity(toMain);
+        owner.get().finish();
     }
 
     private Point getScreenCenter() {

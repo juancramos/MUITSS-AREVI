@@ -2,12 +2,12 @@ package com.upv.muitss.arevi.helpers;
 
 import com.upv.muitss.arevi.entities.PolyAsset;
 import com.upv.muitss.arevi.entities.Profile;
+import com.upv.muitss.arevi.entities.Round;
 import com.upv.muitss.arevi.entities.Task;
 import com.upv.muitss.arevi.entities.User;
 import com.upv.muitss.arevi.entities.UserInfo;
 import com.upv.muitss.arevi.entities.Work;
 
-import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
@@ -53,6 +53,10 @@ public class AppState {
     public boolean workIsEmpty() { return this.work.isEmpty(); }
     public Work pollWork() { return this.work.poll(); }
     public void queueWork(List<Work> pWork) { this.work.addAll(pWork); }
+    private Round round;
+    public Round getRound() { return this.round; }
+    public void setRound(Round pRound) { this.round = pRound; }
+    public void addScore(Work pWork) { this.round.score.add(pWork); }
 
     private Queue<PolyAsset> polyQueue;
     public boolean polyQueueHasToLoad() { return this.polyQueue.size() < 2; }
@@ -81,6 +85,7 @@ public class AppState {
         polyQueue = new LinkedList<>();
         task = new Task();
         work = new LinkedList<>(task.work);
+        round = new Round();
     }
 }
 

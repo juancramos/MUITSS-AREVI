@@ -61,6 +61,7 @@ public class PolyRepository {
                         }
                     }
 
+                    item.assetId = work.id;
                     item.scaleV = work.scaleV;
                     item.scaleV1 = work.scaleV1;
                     item.scaleV2 = work.scaleV2;
