@@ -81,6 +81,7 @@ public class AREVIRepository {
             @Override
             public void onResponse(@NonNull Call<User> call, @NonNull Response<User> response) {
 
+                Utils.popProgressDialog(null, null);
                 if(response.isSuccessful()) {
                     User apiUser = response.body();
 
@@ -93,7 +94,6 @@ public class AREVIRepository {
                     logIn(caller);
                 }
                 else {
-                    Utils.popProgressDialog(null, null);
                     Log.i(TAG, "post submitted to API." + response.body());
                 }
             }
@@ -112,6 +112,7 @@ public class AREVIRepository {
             @Override
             public void onResponse(@NonNull Call<UserInfo> call, @NonNull Response<UserInfo> response) {
 
+                Utils.popProgressDialog(null, null);
                 if(response.isSuccessful()) {
                     UserInfo apiUserInfo = response.body();
 
@@ -121,11 +122,9 @@ public class AREVIRepository {
 
                     AppState.getInstance().setUserInfo(apiUserInfo);
 
-                    Utils.popProgressDialog(null, null);
                     if (caller != null) caller.onResponse(apiUserInfo);
                 }
                 else {
-                    Utils.popProgressDialog(null, null);
                     Log.i(TAG, "post submitted to API." + response.body());
                     if (caller != null) caller.onResponse(null);
                 }
@@ -146,6 +145,7 @@ public class AREVIRepository {
             @Override
             public void onResponse(@NonNull Call<UserInfo> call, @NonNull Response<UserInfo> response) {
 
+                Utils.popProgressDialog(null, null);
                 if(response.isSuccessful()) {
                     UserInfo apiUserInfo = response.body();
 
@@ -155,11 +155,9 @@ public class AREVIRepository {
 
                     AppState.getInstance().setUserInfo(apiUserInfo);
 
-                    Utils.popProgressDialog(null, null);
                     if (caller != null) caller.onResponse(apiUserInfo);
                 }
                 else {
-                    Utils.popProgressDialog(null, null);
                     Log.i(TAG, "post submitted to API." + response.body());
                     if (caller != null) caller.onResponse(null);
                 }
@@ -180,6 +178,7 @@ public class AREVIRepository {
             @Override
             public void onResponse(@NonNull Call<Profile> call, @NonNull Response<Profile> response) {
 
+                Utils.popProgressDialog(null, null);
                 if(response.isSuccessful()) {
                     Profile apiProfile = response.body();
 
@@ -187,11 +186,8 @@ public class AREVIRepository {
                     AppState.getInstance().setProfile(apiProfile);
 
                     Log.i(TAG, "post submitted to API." + apiProfile.toString());
-
-                    Utils.popProgressDialog(null, null);
                 }
                 else {
-                    Utils.popProgressDialog(null, null);
                     Log.i(TAG, "post submitted to API." + response.body());
                 }
             }
@@ -210,6 +206,7 @@ public class AREVIRepository {
             @Override
             public void onResponse(@NonNull Call<Profile> call, @NonNull Response<Profile> response) {
 
+                Utils.popProgressDialog(null, null);
                 if(response.isSuccessful()) {
                     Profile apiProfile = response.body();
 
@@ -217,11 +214,8 @@ public class AREVIRepository {
                     AppState.getInstance().setProfile(apiProfile);
 
                     Log.i(TAG, "post submitted to API." + apiProfile.toString());
-
-                    Utils.popProgressDialog(null, null);
                 }
                 else {
-                    Utils.popProgressDialog(null, null);
                     Log.i(TAG, "post submitted to API." + response.body());
                 }
             }
@@ -309,6 +303,7 @@ public class AREVIRepository {
                 public void onResponse(@NonNull Call<AccessToken> call, @NonNull Response<AccessToken> response) {
 
                     AppState.getInstance().getUser().fetchingData = false;
+                    Utils.popProgressDialog(null, null);
                     if(response.isSuccessful()) {
                         AccessToken token = response.body();
                         Log.i(TAG, "post submitted to API." + response.body());
@@ -320,11 +315,9 @@ public class AREVIRepository {
 
                         getApiUser(null);
 
-                        Utils.popProgressDialog(null, null);
                         if (caller != null) caller.onResponse(token.accessToken);
                     }
                     else {
-                        Utils.popProgressDialog(null, null);
                         Log.i(TAG, "post submitted to API." + response.body());
                         if (caller != null) caller.onResponse(null);
                     }
@@ -351,20 +344,22 @@ public class AREVIRepository {
             public void onResponse(@NonNull Call<DataResponse<User>> call, @NonNull Response<DataResponse<User>> response) {
 
                 AppState.getInstance().getUser().fetchingData = false;
+                Utils.popProgressDialog(null, null);
                 if(response.isSuccessful()) {
                     DataResponse<User> apiUser = response.body();
                     assert apiUser != null;
+                    if(apiUser.data.isEmpty()) {
+                        return;
+                    }
                     User user = apiUser.data.get(0);
 
                     Utils.saveUserId(user.id);
                     user.password = Utils.getLogIn().password;
                     AppState.getInstance().setUser(user);
 
-                    Utils.popProgressDialog(null, null);
                     Log.i(TAG, "post submitted to API." + apiUser.toString());
                 }
                 else {
-                    Utils.popProgressDialog(null, null);
                     Log.i(TAG, "post submitted to API." + response.body());
                 }
             }
@@ -383,19 +378,22 @@ public class AREVIRepository {
             @Override
             public void onResponse(@NonNull Call<DataResponse<UserInfo>> call, @NonNull Response<DataResponse<UserInfo>> response) {
 
+                Utils.popProgressDialog(null, null);
                 if(response.isSuccessful()) {
                     DataResponse<UserInfo> apiUserInfo = response.body();
                     assert apiUserInfo != null;
+                    if(apiUserInfo.data.isEmpty()) {
+                        if (caller != null) caller.onResponse(null);
+                        return;
+                    }
                     UserInfo userInfo = apiUserInfo.data.get(0);
 
                     AppState.getInstance().setUserInfo(userInfo);
                     if (caller != null) caller.onResponse(userInfo.id);
 
-                    Utils.popProgressDialog(null, null);
                     Log.i(TAG, "post submitted to API." + userInfo.toString());
                 }
                 else {
-                    Utils.popProgressDialog(null, null);
                     Log.i(TAG, "post submitted to API." + response.body());
                     if (caller != null) caller.onResponse(null);
                 }
@@ -415,19 +413,22 @@ public class AREVIRepository {
             @Override
             public void onResponse(@NonNull Call<DataResponse<Profile>> call, @NonNull Response<DataResponse<Profile>> response) {
 
+                Utils.popProgressDialog(null, null);
                 if(response.isSuccessful()) {
                     DataResponse<Profile> apiProfile = response.body();
                     assert apiProfile != null;
+                    if(apiProfile.data.isEmpty()) {
+                        if (caller != null) caller.onResponse(null);
+                        return;
+                    }
                     Profile profile = apiProfile.data.get(0);
 
                     AppState.getInstance().setProfile(profile);
                     if (caller != null) caller.onResponse(profile);
 
-                    Utils.popProgressDialog(null, null);
                     Log.i(TAG, "post submitted to API." + profile.toString());
                 }
                 else {
-                    Utils.popProgressDialog(null, null);
                     Log.i(TAG, "post submitted to API." + response.body());
                     if (caller != null) caller.onResponse(null);
                 }
