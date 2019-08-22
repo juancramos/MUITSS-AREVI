@@ -28,6 +28,7 @@ public interface AREVIApiService {
     String PROFILE_API_ROUTE = "/profile";
     String TASK_API_ROUTE = "/task";
     String ROUND_API_ROUTE = "/round";
+    String BUILD_VERSION_API_ROUTE = "/build-version";
 
     @GET(USER_API_ROUTE)
     Call<DataResponse<User>> getApiUser(@Query("") String id);
@@ -84,5 +85,9 @@ public interface AREVIApiService {
     @PATCH(ROUND_API_ROUTE + "/{id}")
     @Headers({ "Content-Type: application/json;charset=UTF-8"})
     Call<Round> patchApiRound(@Path("id") String id, @Body JsonObject object);
+
+
+    @GET(BUILD_VERSION_API_ROUTE)
+    Call<DataResponse<JsonObject>> findApiBuildVersion(@Query("enabled") int enabled);
 }
 

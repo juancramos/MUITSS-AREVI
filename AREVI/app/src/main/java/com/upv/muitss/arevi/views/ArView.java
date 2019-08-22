@@ -75,7 +75,7 @@ public class ArView extends ArFragment {
 
         if (getView() == null) return;
 
-        currentScore = new Work();
+        initCurrentScore();
 
         pointerView = getView().findViewById(R.id.sceneform_pointer);
         spinner= getView().findViewById(R.id.sceneform_progress_bar);
@@ -195,7 +195,10 @@ public class ArView extends ArFragment {
 
         currentPolyAsset = AppState.getInstance().pollPolyAsset();
 
-        if (currentPolyAsset == null || TextUtils.isEmpty(currentPolyAsset.modelUrl)) return;
+        if (currentPolyAsset == null || TextUtils.isEmpty(currentPolyAsset.modelUrl)) {
+            backToMain();
+            return;
+        }
 
         RenderableSource source = RenderableSource.builder().setSource(context,
                 Uri.parse(currentPolyAsset.modelUrl), RenderableSource.SourceType.GLTF2)
@@ -205,8 +208,7 @@ public class ArView extends ArFragment {
 
         ModelRenderable.builder().setRegistryId(currentPolyAsset.key)
                 .setSource(context, source)
-                .build()
-                .thenAccept(this::addModelToScene).exceptionally(throwable -> null);
+                .build().thenAccept(this::addModelToScene).exceptionally(throwable -> backToMain());
     }
 
     private void addModelToScene(ModelRenderable render) {
@@ -278,7 +280,8 @@ public class ArView extends ArFragment {
             boolean continueTask = owner.get().loadTask();
 
             AppState.getInstance().addScoreToRound(currentScore);
-            currentScore.reset();
+            initCurrentScore();
+
             if (AppState.getInstance().getRound().isLocal()) {
                 AREVIRepository.getInstance().postRound(AppState.getInstance().getRound());
             } else {
@@ -288,7 +291,7 @@ public class ArView extends ArFragment {
             currentRandomAnchorNode = null;
             if (continueTask) getArSceneView().getScene().addOnUpdateListener(randomRenderListener);
             else {
-                owner.get().startMainActivity();
+                backToMain();
             }
         }
     }
@@ -327,18 +330,12 @@ public class ArView extends ArFragment {
     public void attachInfoCardNode(TransformableNode parent, PolyAsset selectedItem) {
         polyAssetInfoNode = new Node();
         renderArView(R.layout.ar_model_info_view)
-                .thenAccept(
-                        (renderable) -> {
-                            renderable.setShadowCaster(false);
-                            renderable.setShadowReceiver(false);
-                            polyAssetInfoNode.setRenderable(renderable);
-                            setModelLabel(renderable, selectedItem);
-                        })
-                .exceptionally(
-                        (throwable) -> {
-                            throw new AssertionError(
-                                    "Could not load plane card view.", throwable);
-                        });
+                .thenAccept(renderable -> {
+                    renderable.setShadowCaster(false);
+                    renderable.setShadowReceiver(false);
+                    polyAssetInfoNode.setRenderable(renderable);
+                    setModelLabel(renderable, selectedItem);
+                }).exceptionally(throwable -> backToMain());
         polyAssetInfoNode.setParent(parent);
         float height = .5f;
         if (parent.getRenderable() instanceof ModelRenderable) {
@@ -386,7 +383,7 @@ public class ArView extends ArFragment {
         Anchor anchor = anchorPlane.createAnchor(pose);
 
         renderArView(R.layout.webrtc_view)
-                .thenAccept(renderable -> addViewRenderable(anchor, renderable)).exceptionally(throwable -> null);
+                .thenAccept(renderable -> addViewRenderable(anchor, renderable)) .exceptionally(throwable -> backToMain());
     };
 
     public void attachWebRTCView(){
@@ -435,6 +432,15 @@ public class ArView extends ArFragment {
         int w = getView().getWidth()/2;
         int h = getView().getHeight()/2;
         return new Point(w, h);
+    }
+
+    private Void backToMain(){
+        owner.get().startMainActivity();
+        return null;
+    }
+
+    private void initCurrentScore() {
+        currentScore = new Work();
     }
 
     @Override

@@ -154,6 +154,11 @@ public class Utils {
         userPreferences.saveUserPreferenceBool(Constants.USER_SELECTED_MODE, mode);
     }
 
+    public static void saveCurrentBuild(String buildVersion) {
+        UserPreferences userPreferences = UserPreferences.getInstance();
+        userPreferences.saveUserPreferenceString(Constants.CURRENT_BUILD, buildVersion);
+    }
+
     public static String getUserId(){
         UserPreferences userPreferences = UserPreferences.getInstance();
         return userPreferences.getUserPreferenceString(Constants.USER_ID);
@@ -162,6 +167,11 @@ public class Utils {
     public static String getSavedTheme(){
         UserPreferences userPreferences = UserPreferences.getInstance();
         return userPreferences.getUserPreferenceString(Constants.USER_SELECTED_THEME);
+    }
+
+    public static String getCurrentBuild(){
+        UserPreferences userPreferences = UserPreferences.getInstance();
+        return userPreferences.getUserPreferenceString(Constants.CURRENT_BUILD);
     }
 
     public static boolean getSavedMode(){

@@ -3,6 +3,7 @@ const userInfo = require('./user-info/user-info.service.js');
 const task = require('./task/task.service.js');
 const profile = require('./profile/profile.service.js');
 const round = require('./round/round.service.js');
+const buildVersion = require('./build-version/build-version.service.js');
 // eslint-disable-next-line no-unused-vars
 module.exports = function (app) {
   app.configure(EnumService);
@@ -11,4 +12,5 @@ module.exports = function (app) {
   app.configure(task);
   app.configure(profile);
   app.configure(round);
+  app.configure(buildVersion);
 };

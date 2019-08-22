@@ -72,10 +72,11 @@ public class ArActivity extends AppCompatActivity implements ActivityMessage {
     public boolean loadTask() {
         if(AppState.getInstance().workIsEmpty() && AppState.getInstance().polyQueueIsEmpty()) return false;
         runOnUiThread(() -> {
-            while (!AppState.getInstance().workIsEmpty() && AppState.getInstance().polyQueueHasToLoad()) {
+            while (!AppState.getInstance().workIsEmpty() && AppState.getInstance().getPolyLoadingCount() < 2) {
                 Work next = AppState.getInstance().pollWork();
 
                 PolyRepository.getInstance().getApiAsset(next);
+                AppState.getInstance().setPolyLoadingCount(AppState.getInstance().getPolyLoadingCount() + 1);
             }
         });
         return true;

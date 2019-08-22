@@ -7,6 +7,7 @@ public class Constants {
     static final String USER_EMAIL = "USER_EMAIL";
     static final String USER_PASSWORD = "USER_PASSWORD";
 
+    public static final String CURRENT_BUILD = "CURRENT_BUILD";
 
     public static final String APP_THEME_DEFAULT_FONT_SIZE = "APP_THEME_DEFAULT_FONT_SIZE";
     public static final String APP_THEME_MEDIUM_FONT_SIZE = "APP_THEME_MEDIUM_FONT_SIZE";

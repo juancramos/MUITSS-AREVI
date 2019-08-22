@@ -66,16 +66,21 @@ public class PolyRepository {
                     item.scaleV1 = work.scaleV1;
                     item.scaleV2 = work.scaleV2;
 
+                    AppState.getInstance().setPolyLoadingCount(AppState.getInstance().getPolyLoadingCount() - 1);
                     AppState.getInstance().queuePolyAsset(item);
                     Log.i(TAG, "post submitted to API." + obj.toString());
                 }
                 else {
+                    AppState.getInstance().setPolyLoadingCount(2);
+                    AppState.getInstance().clearPolyQueue();
                     Log.i(TAG, "post submitted to API." + response.body());
                 }
             }
 
             @Override
             public void onFailure(@NonNull Call<JsonObject> call, @NonNull Throwable t) {
+                AppState.getInstance().setPolyLoadingCount(2);
+                AppState.getInstance().clearPolyQueue();
                 Log.e(TAG, "Unable to submit post to API.");
             }
         });

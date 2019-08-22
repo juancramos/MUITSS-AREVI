@@ -58,9 +58,13 @@ public class AppState {
     public void setRound(Round pRound) { this.round = pRound; }
     public void addScoreToRound(Work pWork) { this.round.score.add(pWork); }
 
+    private int polyLoadingCount;
+    public int getPolyLoadingCount() { return this.polyLoadingCount; }
+    public void setPolyLoadingCount(int nCount){ this.polyLoadingCount = nCount; }
+
     private Queue<PolyAsset> polyQueue;
-    public boolean polyQueueHasToLoad() { return this.polyQueue.size() < 2; }
     public boolean polyQueueIsEmpty() { return this.polyQueue.isEmpty(); }
+    public void clearPolyQueue() { this.polyQueue.clear(); }
     public PolyAsset pollPolyAsset() { return this.polyQueue.poll(); }
     public void queuePolyAsset(PolyAsset polyAsset) { this.polyQueue.add(polyAsset); }
 
@@ -85,9 +89,11 @@ public class AppState {
         task = new Task();
         work = new LinkedList<>(task.work);
         round = new Round();
+        polyLoadingCount = 0;
     }
 
     public void resetAr(){
+        polyLoadingCount = 0;
         isTracking = false;
         isHitting = false;
         isFocusing = false;

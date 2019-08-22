@@ -17,11 +17,13 @@ import com.upv.muitss.arevi.entities.UserInfo;
 import com.upv.muitss.arevi.entities.UserLogIn;
 import com.upv.muitss.arevi.entities.Work;
 import com.upv.muitss.arevi.helpers.AppState;
+import com.upv.muitss.arevi.helpers.Constants;
 import com.upv.muitss.arevi.helpers.Utils;
 import com.upv.muitss.arevi.logic.web.interceptors.Instance;
 import com.upv.muitss.arevi.logic.web.interfaces.AREVIApiService;
 import com.upv.muitss.arevi.logic.web.interfaces.ActivityMessage;
 
+import java.util.Arrays;
 import java.util.List;
 
 import retrofit2.Call;
@@ -468,6 +470,39 @@ public class AREVIRepository {
 
             @Override
             public void onFailure(@NonNull Call<DataResponse<Task>> call, @NonNull Throwable t) {
+                Log.e(TAG, "Unable to submit post to API.");
+                if (caller != null) caller.onResponse(null);
+            }
+        });
+    }
+
+    public void getApiBuildVersion(ActivityMessage caller) {
+        apiService.findApiBuildVersion(1).enqueue(new Callback<DataResponse<JsonObject>>() {
+            @Override
+            public void onResponse(@NonNull Call<DataResponse<JsonObject>> call, @NonNull Response<DataResponse<JsonObject>> response) {
+
+                if(response.isSuccessful()) {
+                    DataResponse<JsonObject> apiBuildVersion = response.body();
+                    assert apiBuildVersion != null;
+                    if(apiBuildVersion.data.isEmpty()) {
+                        if (caller != null) caller.onResponse(Arrays.asList(Constants.CURRENT_BUILD, null));
+                        return;
+                    }
+
+                    JsonObject buildVersion = apiBuildVersion.data.get(0);
+
+                    if (caller != null) caller.onResponse(Arrays.asList(Constants.CURRENT_BUILD, buildVersion.get("version").getAsString()));
+
+                    Log.i(TAG, "post submitted to API." + buildVersion.get("version").getAsString());
+                }
+                else {
+                    Log.i(TAG, "post submitted to API." + response.body());
+                    if (caller != null) caller.onResponse(null);
+                }
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<DataResponse<JsonObject>> call, @NonNull Throwable t) {
                 Log.e(TAG, "Unable to submit post to API.");
                 if (caller != null) caller.onResponse(null);
             }

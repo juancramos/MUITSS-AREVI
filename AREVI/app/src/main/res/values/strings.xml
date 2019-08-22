@@ -3,6 +3,7 @@
     <string name="signaling_server_url" translatable="false">http://192.168.0.105:3030/</string>
     <string name="poly_server_url" translatable="false">https://poly.googleapis.com/</string>
     <string name="poly_server_api_key" translatable="false">XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX</string>
+    <string name="app_releases_url" translatable="false">https://github.com/judicapo/MUITSS-AREVI/releases/latest</string>
     
     <string name="app_name">AREVI</string>
     <string name="app_preferences_name">AREVI_Preferences</string>
@@ -41,6 +42,8 @@
     <string name="register_button_text">Register</string>
     <string name="far_activity_log_in_description_text">Start session to configure AREVI with your profile</string>
     <string name="frame_profile_config_login_text">Already registered?</string>
+    <string name="activity_main_update_app_text">There is a new version of AREVI</string>
+    <string name="activity_main_update_app_button_text">Download now</string>
     <string-array name="input_spinner_gender_list">
         <item>Male</item>
         <item>Female</item>

@@ -4,22 +4,28 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 
 import com.upv.muitss.arevi.entities.UserLogIn;
 import com.upv.muitss.arevi.helpers.AppState;
+import com.upv.muitss.arevi.helpers.Constants;
 import com.upv.muitss.arevi.helpers.UserPreferences;
 import com.upv.muitss.arevi.helpers.Utils;
 import com.upv.muitss.arevi.logic.web.implementations.AREVIRepository;
 import com.upv.muitss.arevi.logic.web.interfaces.ActivityMessage;
 
+import java.util.List;
+
 public class MainActivity extends AppCompatActivity implements ActivityMessage {
 
     public static Context appContext;
     private Button startArBtn, manageProfileBtn;
+    private View loginView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,6 +41,8 @@ public class MainActivity extends AppCompatActivity implements ActivityMessage {
         setTheme(Utils.getSavedThemeStyle());
         setContentView(R.layout.activity_main);
 
+        loginView = findViewById(R.id.update_app_layout_view);
+        loginView.setVisibility(View.GONE);
         startArBtn = findViewById(R.id.activity_main_ar_scene_btn);
         startArBtn.setEnabled(false);
         manageProfileBtn = findViewById(R.id.activity_main_manage_profile_btn);
@@ -121,13 +129,36 @@ public class MainActivity extends AppCompatActivity implements ActivityMessage {
         else if(response instanceof String && ((String)response).isEmpty()){
             startLogIn();
         }
+        else if(response instanceof List && !((List)response).isEmpty() && ((List)response).contains(Constants.CURRENT_BUILD)){
+            String buildVersion = (String) ((List)response).get(1);
+            String localBuildVersion = Utils.getCurrentBuild();
+            if (TextUtils.isEmpty(localBuildVersion)) {
+                Utils.saveCurrentBuild(buildVersion);
+            }
+            else if (!TextUtils.equals(buildVersion, localBuildVersion)){
+                loginView.setVisibility(View.VISIBLE);
+            }
+        }
         else {
             enableButtons();
+            AREVIRepository.getInstance().getApiBuildVersion(this);
         }
     }
 
     private void enableButtons() {
         startArBtn.setEnabled(true);
         manageProfileBtn.setEnabled(true);
+    }
+
+    public void onUpdateAppButtonClick(View view) {
+        String url = Utils.getResourceString(R.string.app_releases_url);
+
+        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+
+        if (intent.resolveActivity(getPackageManager()) != null) {
+            startActivity(intent);
+        }else{
+            Utils.showToast(this, "Can not load release!");
+        }
     }
 }
