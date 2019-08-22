@@ -1,7 +1,6 @@
 package com.upv.muitss.arevi.entities;
 
 import android.support.annotation.NonNull;
-import android.text.TextUtils;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;

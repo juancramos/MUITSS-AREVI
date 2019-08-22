@@ -6,7 +6,6 @@ import android.util.Log;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.upv.muitss.arevi.entities.AccessToken;
 import com.upv.muitss.arevi.entities.DataResponse;
@@ -22,8 +21,6 @@ import com.upv.muitss.arevi.helpers.Utils;
 import com.upv.muitss.arevi.logic.web.interceptors.Instance;
 import com.upv.muitss.arevi.logic.web.interfaces.AREVIApiService;
 import com.upv.muitss.arevi.logic.web.interfaces.ActivityMessage;
-
-import org.json.JSONObject;
 
 import java.util.List;
 

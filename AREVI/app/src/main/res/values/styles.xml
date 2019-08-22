@@ -71,12 +71,12 @@
         <item name="fillPrimaryColor">@color/colorPrimary</item>
         <item name="fillSecondaryColor">@color/colorSecondary</item>
         <item name="colorBackgroundFloating">@color/colorBackgroundDark</item>
+        <item name="android:colorBackgroundFloating">@color/colorBackgroundDark</item>
         <item name="radioButtonStyle">@style/MyRadioButtonStyle</item>
         <item name="android:radioButtonStyle">@style/MyRadioButtonStyle</item>
         <item name="checkboxStyle">@style/MyCheckBoxStyle</item>
         <item name="android:checkboxStyle">@style/MyCheckBoxStyle</item>
         <item name="android:imageButtonStyle">@style/MyImageButtonStyle</item>
-        <item name="android:colorBackgroundFloating">?attr/fillSecondaryColor</item>
     </style>
 
     <style name="FontSizeMediumDark" parent="AppThemeDark">

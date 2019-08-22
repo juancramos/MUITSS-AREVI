@@ -18,7 +18,6 @@ import com.google.gson.reflect.TypeToken;
 import com.upv.muitss.arevi.MainActivity;
 import com.upv.muitss.arevi.R;
 import com.upv.muitss.arevi.entities.UserLogIn;
-import com.upv.muitss.arevi.logic.web.interfaces.ActivityMessage;
 import com.upv.muitss.arevi.logic.webrtc.models.IceServer;
 
 import java.io.IOException;

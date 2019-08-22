@@ -3,10 +3,12 @@ package com.upv.muitss.arevi.views;
 import android.content.Context;
 import android.graphics.Point;
 import android.net.Uri;
+import android.support.annotation.NonNull;
 import android.text.TextUtils;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import com.google.ar.core.Anchor;
 import com.google.ar.core.Frame;
@@ -17,10 +19,13 @@ import com.google.ar.core.Session;
 import com.google.ar.core.Trackable;
 import com.google.ar.core.TrackingState;
 import com.google.ar.sceneform.AnchorNode;
+import com.google.ar.sceneform.Camera;
 import com.google.ar.sceneform.HitTestResult;
 import com.google.ar.sceneform.Node;
 import com.google.ar.sceneform.Scene;
 import com.google.ar.sceneform.assets.RenderableSource;
+import com.google.ar.sceneform.collision.Box;
+import com.google.ar.sceneform.math.Quaternion;
 import com.google.ar.sceneform.math.Vector3;
 import com.google.ar.sceneform.rendering.ModelRenderable;
 import com.google.ar.sceneform.rendering.ViewRenderable;
@@ -40,7 +45,9 @@ import org.webrtc.SurfaceViewRenderer;
 import java.lang.ref.WeakReference;
 import java.util.Collection;
 import java.util.List;
+import java.util.Objects;
 import java.util.Random;
+import java.util.concurrent.CompletableFuture;
 
 public class ArView extends ArFragment {
 
@@ -50,11 +57,13 @@ public class ArView extends ArFragment {
 
     private Plane firstPlane;
     private AnchorNode webRTCNode;
-    private Anchor currentRandomAanchor;
+    private Anchor currentRandomAnchor;
     private AnchorNode currentRandomAnchorNode;
+    private Node polyAssetInfoNode;
     private static Random rand;
 
     private Work currentScore;
+    private PolyAsset currentPolyAsset;
 
     private static WeakReference<ArActivity> owner;
 
@@ -131,6 +140,23 @@ public class ArView extends ArFragment {
                 pointerView.invalidate();
             }
         }
+
+        polyAssetInfoLookToCamera();
+    }
+
+    public void polyAssetInfoLookToCamera() {
+        if (getArSceneView().getScene() == null) {
+            return;
+        }
+        Camera camera = getArSceneView().getScene().getCamera();
+        // Rotate the card to look at the camera.
+        if (polyAssetInfoNode != null) {
+            Vector3 cameraPosition = camera.getWorldPosition();
+            Vector3 cardPosition = polyAssetInfoNode.getWorldPosition();
+            Vector3 direction = Vector3.subtract(cameraPosition, cardPosition);
+            Quaternion lookRotation = Quaternion.lookRotation(direction, Vector3.up());
+            polyAssetInfoNode.setWorldRotation(lookRotation);
+        }
     }
 
     private void randomPlacedPoly(Plane plane) {
@@ -150,7 +176,7 @@ public class ArView extends ArFragment {
 
         translation[0] += randomX;
         pose = new Pose(translation, rotation);
-        currentRandomAanchor = plane.createAnchor(pose);
+        currentRandomAnchor = plane.createAnchor(pose);
 
         if (currentRandomAnchorNode == null) {
             getCurrentRenderable();
@@ -158,7 +184,7 @@ public class ArView extends ArFragment {
             Anchor a = currentRandomAnchorNode.getAnchor();
             if (a == null) return;
             a.detach();
-            currentRandomAnchorNode.setAnchor(currentRandomAanchor);
+            currentRandomAnchorNode.setAnchor(currentRandomAnchor);
         }
     }
 
@@ -167,45 +193,49 @@ public class ArView extends ArFragment {
 
         if (context == null) return;
 
-        PolyAsset pa = AppState.getInstance().pollPolyAsset();
+        currentPolyAsset = AppState.getInstance().pollPolyAsset();
 
-        if (pa == null || TextUtils.isEmpty(pa.modelUrl)) return;
+        if (currentPolyAsset == null || TextUtils.isEmpty(currentPolyAsset.modelUrl)) return;
 
         RenderableSource source = RenderableSource.builder().setSource(context,
-                Uri.parse(pa.modelUrl), RenderableSource.SourceType.GLTF2)
+                Uri.parse(currentPolyAsset.modelUrl), RenderableSource.SourceType.GLTF2)
                 .setRecenterMode(RenderableSource.RecenterMode.ROOT)
                 .build();
 
 
-        ModelRenderable.builder().setRegistryId(pa.key)
+        ModelRenderable.builder().setRegistryId(currentPolyAsset.key)
                 .setSource(context, source)
                 .build()
-                .thenAccept(renderable -> {
-                    currentRandomAnchorNode = new AnchorNode(currentRandomAanchor);
-                    currentRandomAnchorNode.setParent(getArSceneView().getScene());
+                .thenAccept(this::addModelToScene).exceptionally(throwable -> null);
+    }
 
-                    // Create the transformable andy and add it to the anchor.
-                    TransformableNode node = new TransformableNode(getTransformationSystem());
-                    node.setRenderable(renderable);
+    private void addModelToScene(ModelRenderable render) {
+        currentScore.id = currentPolyAsset.assetId;
+        currentScore.scaleV = currentPolyAsset.scaleV;
+        currentScore.scaleV1 = currentPolyAsset.scaleV1;
+        currentScore.scaleV2 = currentPolyAsset.scaleV2;
 
-                    // Set the min and max scales of the ScaleController.
-                    node.getScaleController().setMinScale(0.1f);
+        currentRandomAnchorNode = new AnchorNode(currentRandomAnchor);
+        currentRandomAnchorNode.setParent(getArSceneView().getScene());
 
-                    // Set the local scale of the node BEFORE setting its parent
-                    node.setLocalScale(new Vector3(pa.scaleV, pa.scaleV1, pa.scaleV2));
+        // Create the transformable andy and add it to the anchor.
+        TransformableNode node = new TransformableNode(getTransformationSystem());
+        node.setRenderable(render);
 
-                    node.setParent(currentRandomAnchorNode);
-                    node.select();
+        attachInfoCardNode(node, currentPolyAsset);
 
-                    spinner.setVisibility(View.GONE);
+        // Set the min and max scales of the ScaleController.
+        node.getScaleController().setMinScale(0.1f);
 
-                    currentScore.id = pa.assetId;
-                    currentScore.scaleV = pa.scaleV;
-                    currentScore.scaleV1 = pa.scaleV1;
-                    currentScore.scaleV2 = pa.scaleV2;
+        // Set the local scale of the node BEFORE setting its parent
+        node.setLocalScale(new Vector3(currentScore.scaleV, currentScore.scaleV1, currentScore.scaleV2));
 
-                    node.setOnTapListener(this::onTapListener);
-                }).exceptionally(throwable -> null);
+        node.setParent(currentRandomAnchorNode);
+        node.select();
+
+        spinner.setVisibility(View.GONE);
+
+        node.setOnTapListener(this::onTapListener);
     }
 
     private void onTapListener(HitTestResult hitTestResult, MotionEvent motionEvent){
@@ -216,19 +246,39 @@ public class ArView extends ArFragment {
         }
 
         Node hitNode = hitTestResult.getNode();
+
         // Check for touching a Sceneform node
         if (hitNode != null) {
+            currentScore.scaleV = hitNode.getLocalScale().x;
+            currentScore.scaleV1 = hitNode.getLocalScale().y;
+            currentScore.scaleV2 = hitNode.getLocalScale().z;
+
             Utils.showToast(owner.get() , "We've hit Andy!!");
-            AnchorNode aNode = ((AnchorNode) hitNode.getParent());
-            assert aNode != null;
+
+            AnchorNode aNode = null;
+            while (aNode == null){
+                Node parent = hitNode.getParent();
+                if (parent == null) {
+                    return;
+                }
+                else {
+                    parent.removeChild(hitNode);
+                    hitNode = parent;
+                    if (hitNode instanceof AnchorNode){
+                        aNode = (AnchorNode) hitNode;
+                    }
+                }
+            }
+
             Anchor a = aNode.getAnchor();
             assert a != null;
             a.detach();
-            aNode.setAnchor(currentRandomAanchor);
+            aNode.setAnchor(currentRandomAnchor);
 
             boolean continueTask = owner.get().loadTask();
 
-            AppState.getInstance().addScore(currentScore);
+            AppState.getInstance().addScoreToRound(currentScore);
+            currentScore.reset();
             if (AppState.getInstance().getRound().isLocal()) {
                 AREVIRepository.getInstance().postRound(AppState.getInstance().getRound());
             } else {
@@ -269,9 +319,52 @@ public class ArView extends ArFragment {
                 }
             }
         }
-        owner.get().TouchView(getView(), pt);
+        owner.get().TouchView(this.getView(), pt);
         return wasHitting != AppState.getInstance().getIsHitting();
     }
+
+
+    public void attachInfoCardNode(TransformableNode parent, PolyAsset selectedItem) {
+        polyAssetInfoNode = new Node();
+        renderArView(R.layout.ar_model_info_view)
+                .thenAccept(
+                        (renderable) -> {
+                            renderable.setShadowCaster(false);
+                            renderable.setShadowReceiver(false);
+                            polyAssetInfoNode.setRenderable(renderable);
+                            setModelLabel(renderable, selectedItem);
+                        })
+                .exceptionally(
+                        (throwable) -> {
+                            throw new AssertionError(
+                                    "Could not load plane card view.", throwable);
+                        });
+        polyAssetInfoNode.setParent(parent);
+        float height = .5f;
+        if (parent.getRenderable() instanceof ModelRenderable) {
+            height = getRenderableHeight((ModelRenderable) parent.getRenderable());
+        }
+        polyAssetInfoNode.setLocalPosition(new Vector3(0, height, 0));
+    }
+
+    private float getRenderableHeight(ModelRenderable renderable) {
+        Box box = (Box) renderable.getCollisionShape();
+        return Objects.requireNonNull(box).getCenter().y + box.getExtents().y;
+    }
+
+    private void setModelLabel(@NonNull ViewRenderable viewRenderable,
+                               @NonNull PolyAsset selectedItem) {
+        TextView textView = (TextView) viewRenderable.getView();
+        textView.setText(String.format("%s by %s\n%s",
+                selectedItem.displayName, selectedItem.authorName, selectedItem.license));
+    }
+
+    public CompletableFuture<ViewRenderable> renderArView(int drawableId){
+        return ViewRenderable.builder()
+                .setView(owner.get(), drawableId)
+                .build();
+    }
+
 
     ///WEBRTC
     private Scene.OnUpdateListener webRtcRenderListener = frameTime -> {
@@ -292,14 +385,8 @@ public class ArView extends ArFragment {
         Pose pose = anchorPlane.getCenterPose();
         Anchor anchor = anchorPlane.createAnchor(pose);
 
-        ViewRenderable.builder()
-                .setView(owner.get(), R.layout.webrtc_view)
-                .build()
-                .thenAccept(renderable -> {
-                    renderable.setShadowCaster(false);
-                    renderable.setShadowReceiver(false);
-                    addViewRenderable(anchor, renderable);
-                });
+        renderArView(R.layout.webrtc_view)
+                .thenAccept(renderable -> addViewRenderable(anchor, renderable)).exceptionally(throwable -> null);
     };
 
     public void attachWebRTCView(){
@@ -310,6 +397,9 @@ public class ArView extends ArFragment {
     private void addViewRenderable(Anchor anchor, ViewRenderable render) {
         getArSceneView().getScene()
                 .removeOnUpdateListener(webRtcRenderListener);
+
+        render.setShadowCaster(false);
+        render.setShadowReceiver(false);
 
         TransformableNode node = new TransformableNode(getTransformationSystem());
         node.setRenderable(render);
@@ -356,11 +446,13 @@ public class ArView extends ArFragment {
 
         firstPlane = null;
         webRTCNode = null;
-        currentRandomAanchor = null;
+        currentRandomAnchor = null;
         currentRandomAnchorNode = null;
+        polyAssetInfoNode = null;
         rand = null;
 
         currentScore = null;
+        currentPolyAsset = null;
 
         owner = null;
         AppState.getInstance().resetAr();

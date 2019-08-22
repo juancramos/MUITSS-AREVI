@@ -1,6 +1,5 @@
 package com.upv.muitss.arevi.views;
 
-import android.opengl.Visibility;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.TextInputLayout;

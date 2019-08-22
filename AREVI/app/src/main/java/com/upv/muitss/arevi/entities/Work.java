@@ -29,4 +29,11 @@ public class Work {
                 ", scaleV2 = '" + scaleV2 + '\'' +
                 '}';
     }
+
+    public void reset() {
+        id = null;
+        scaleV = -1;
+        scaleV1 = -1;
+        scaleV2 = -1;
+    }
 }

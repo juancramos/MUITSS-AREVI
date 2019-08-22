@@ -34,7 +34,6 @@ import com.upv.muitss.arevi.views.ProfileConfigurationFragmentView;
 
 public class PagerActivity extends AppCompatActivity implements ActivityMessage {
 
-    private final String TAG = this.getClass().getCanonicalName();
     private CustomViewPager mViewPager;
     private ImageView[] indicators;
     private ImageButton mNextBtn, mBackBtn;

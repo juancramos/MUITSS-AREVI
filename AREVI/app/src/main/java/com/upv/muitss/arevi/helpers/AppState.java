@@ -56,7 +56,7 @@ public class AppState {
     private Round round;
     public Round getRound() { return this.round; }
     public void setRound(Round pRound) { this.round = pRound; }
-    public void addScore(Work pWork) { this.round.score.add(pWork); }
+    public void addScoreToRound(Work pWork) { this.round.score.add(pWork); }
 
     private Queue<PolyAsset> polyQueue;
     public boolean polyQueueHasToLoad() { return this.polyQueue.size() < 2; }
