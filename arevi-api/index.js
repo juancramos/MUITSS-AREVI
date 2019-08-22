@@ -4,6 +4,8 @@ const app = require('./app');
 const port = app.get('port');
 const server = app.listen(process.env.PORT || port);
 
+console.log(app.get("authentication"));
+
 process.on('unhandledRejection', (reason, p) =>
   logger.error('Unhandled Rejection at: Promise ', p, reason)
 );
