@@ -46,7 +46,7 @@
     "feathers-sequelize": "^4.1.1",
     "helmet": "^3.20.0",
     "mysql2": "^1.6.5",
-    "sequelize": "^4.44.2",
+    "sequelize": "^6.0.0",
     "serve-favicon": "^2.5.0",
     "winston": "^3.2.1"
   },

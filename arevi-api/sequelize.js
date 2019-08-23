@@ -6,7 +6,6 @@ module.exports = function (app) {
   let sequelizeParams = {
     dialect: 'mysql',
     logging: false,
-    operatorsAliases: false,
     define: {
       freezeTableName: true
     }
