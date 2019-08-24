@@ -1,11 +1,11 @@
 package com.upv.muitss.arevi.views;
 
+import android.app.Activity;
 import android.content.Context;
 import android.graphics.Point;
 import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.text.TextUtils;
-import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -20,7 +20,6 @@ import com.google.ar.core.Trackable;
 import com.google.ar.core.TrackingState;
 import com.google.ar.sceneform.AnchorNode;
 import com.google.ar.sceneform.Camera;
-import com.google.ar.sceneform.HitTestResult;
 import com.google.ar.sceneform.Node;
 import com.google.ar.sceneform.Scene;
 import com.google.ar.sceneform.assets.RenderableSource;
@@ -38,7 +37,6 @@ import com.upv.muitss.arevi.entities.PolyAsset;
 import com.upv.muitss.arevi.entities.Work;
 import com.upv.muitss.arevi.helpers.AppState;
 import com.upv.muitss.arevi.helpers.Utils;
-import com.upv.muitss.arevi.logic.web.implementations.AREVIRepository;
 
 import org.webrtc.SurfaceViewRenderer;
 
@@ -57,13 +55,14 @@ public class ArView extends ArFragment {
 
     private Plane firstPlane;
     private AnchorNode webRTCNode;
-    private Anchor currentRandomAnchor;
-    private AnchorNode currentRandomAnchorNode;
     private Node polyAssetInfoNode;
+    private PolyAsset currentPolyAsset;
+
     private static Random rand;
 
-    private Work currentScore;
-    private PolyAsset currentPolyAsset;
+    Work currentScore;
+    Anchor currentRandomAnchor;
+    AnchorNode currentRandomAnchorNode;
 
     private static WeakReference<ArActivity> owner;
 
@@ -98,8 +97,12 @@ public class ArView extends ArFragment {
         getArSceneView().getScene().addOnUpdateListener(randomRenderListener);
     }
 
+    public boolean loadTask(){
+        return owner.get().loadTask();
+    }
+
     ///ARCORE
-    private Scene.OnUpdateListener randomRenderListener = frameTime -> {
+    Scene.OnUpdateListener randomRenderListener = frameTime -> {
 
         // Keep track of the first valid plane detected, update it
         // if the plane is lost or subsumed.
@@ -221,7 +224,7 @@ public class ArView extends ArFragment {
         currentRandomAnchorNode.setParent(getArSceneView().getScene());
 
         // Create the transformable andy and add it to the anchor.
-        TransformableNode node = new TransformableNode(getTransformationSystem());
+        CustomTransformableNode node = new CustomTransformableNode(new WeakReference<>(this));
         node.setRenderable(render);
 
         attachInfoCardNode(node, currentPolyAsset);
@@ -236,64 +239,6 @@ public class ArView extends ArFragment {
         node.select();
 
         spinner.setVisibility(View.GONE);
-
-        node.setOnTapListener(this::onTapListener);
-    }
-
-    private void onTapListener(HitTestResult hitTestResult, MotionEvent motionEvent){
-
-        //We are only interested in the ACTION_UP events - anything else just return
-        if (motionEvent.getAction() != MotionEvent.ACTION_UP) {
-            return;
-        }
-
-        Node hitNode = hitTestResult.getNode();
-
-        // Check for touching a Sceneform node
-        if (hitNode != null) {
-            currentScore.scaleV = hitNode.getLocalScale().x;
-            currentScore.scaleV1 = hitNode.getLocalScale().y;
-            currentScore.scaleV2 = hitNode.getLocalScale().z;
-
-            Utils.showToast(owner.get() , "We've hit Andy!!");
-
-            AnchorNode aNode = null;
-            while (aNode == null){
-                Node parent = hitNode.getParent();
-                if (parent == null) {
-                    return;
-                }
-                else {
-                    parent.removeChild(hitNode);
-                    hitNode = parent;
-                    if (hitNode instanceof AnchorNode){
-                        aNode = (AnchorNode) hitNode;
-                    }
-                }
-            }
-
-            Anchor a = aNode.getAnchor();
-            assert a != null;
-            a.detach();
-            aNode.setAnchor(currentRandomAnchor);
-
-            boolean continueTask = owner.get().loadTask();
-
-            AppState.getInstance().addScoreToRound(currentScore);
-            initCurrentScore();
-
-            if (AppState.getInstance().getRound().isLocal()) {
-                AREVIRepository.getInstance().postRound(AppState.getInstance().getRound());
-            } else {
-                AREVIRepository.getInstance().patchRound(AppState.getInstance().getRound().id, AppState.getInstance().getRound().score, !continueTask);
-            }
-
-            currentRandomAnchorNode = null;
-            if (continueTask) getArSceneView().getScene().addOnUpdateListener(randomRenderListener);
-            else {
-                backToMain();
-            }
-        }
     }
 
     private boolean updateTracking() {
@@ -434,12 +379,12 @@ public class ArView extends ArFragment {
         return new Point(w, h);
     }
 
-    private Void backToMain(){
+    Void backToMain(){
         owner.get().startMainActivity();
         return null;
     }
 
-    private void initCurrentScore() {
+    public void initCurrentScore() {
         currentScore = new Work();
     }
 

@@ -18,6 +18,9 @@ public class Work {
     @SerializedName("scaleV2")
     @Expose
     public float scaleV2;
+    @SerializedName("distance")
+    @Expose
+    public float distance;
 
     @NonNull
     @Override
@@ -27,6 +30,7 @@ public class Work {
                 ", scaleV = '" + scaleV + '\'' +
                 ", scaleV1 = '" + scaleV1 + '\'' +
                 ", scaleV2 = '" + scaleV2 + '\'' +
+                ", distance = '" + distance + '\'' +
                 '}';
     }
 
