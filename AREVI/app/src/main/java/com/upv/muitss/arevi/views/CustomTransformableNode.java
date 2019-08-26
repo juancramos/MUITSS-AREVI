@@ -1,5 +1,7 @@
 package com.upv.muitss.arevi.views;
 
+import android.app.Activity;
+import android.view.GestureDetector;
 import android.view.MotionEvent;
 
 import com.google.ar.core.Anchor;
@@ -8,10 +10,9 @@ import com.google.ar.core.Pose;
 import com.google.ar.sceneform.AnchorNode;
 import com.google.ar.sceneform.HitTestResult;
 import com.google.ar.sceneform.Node;
+import com.google.ar.sceneform.math.Vector3;
+import com.google.ar.sceneform.rendering.ModelRenderable;
 import com.google.ar.sceneform.ux.TransformableNode;
-import com.google.ar.sceneform.ux.TransformationSystem;
-import com.upv.muitss.arevi.ArActivity;
-import com.upv.muitss.arevi.entities.Work;
 import com.upv.muitss.arevi.helpers.AppState;
 import com.upv.muitss.arevi.helpers.Utils;
 import com.upv.muitss.arevi.logic.web.implementations.AREVIRepository;
@@ -22,23 +23,99 @@ import java.util.Objects;
 public class CustomTransformableNode extends TransformableNode {
 
     private static WeakReference<ArView> owner;
+    private GestureDetector gestureDetector;
 
     CustomTransformableNode(WeakReference<ArView> pOwner) {
         super(pOwner.get().getTransformationSystem());
         owner = pOwner;
+        gestureDetector = new GestureDetector(owner.get().getContext(), new GestureListener());
     }
 
     @Override
     public boolean onTouchEvent (HitTestResult hitTestResult, MotionEvent motionEvent){
-        //We are only interested in the ACTION_UP events - anything else just return
-        if (motionEvent.getAction() != MotionEvent.ACTION_DOWN) {
-            return false;
+        // get masked (not specific to a pointer) action
+        int maskedAction = motionEvent.getActionMasked();
+
+        switch(maskedAction) {
+            case MotionEvent.ACTION_DOWN:
+            case MotionEvent.ACTION_POINTER_DOWN:
+                return onTouchEventSelect(hitTestResult);
+            case MotionEvent.ACTION_MOVE :
+                break;
+            case MotionEvent.ACTION_UP:
+            case MotionEvent.ACTION_POINTER_UP:
+            case MotionEvent.ACTION_CANCEL:
+                break;
+        }
+
+        this.gestureDetector.onTouchEvent(motionEvent);
+        return true;
+    }
+
+    private boolean onTouchEventSelect(HitTestResult hitTestResult){
+        if (AppState.getInstance().getIsLongPress()) {
+            return onTouchEventDown(hitTestResult);
         }
 
         Node hitNode = hitTestResult.getNode();
 
+        if (hitNode == null) return false;
+
+        CustomTransformableNode aNode = null;
+        if (hitNode instanceof CustomTransformableNode){
+            aNode = (CustomTransformableNode) hitNode;
+        }
+        else {
+            while (aNode == null){
+                Node parent = hitNode.getParent();
+                if (parent == null) {
+                    return false;
+                }
+                else {
+                    hitNode = parent;
+                    if (hitNode instanceof CustomTransformableNode){
+                        aNode = (CustomTransformableNode) hitNode;
+                    }
+                }
+            }
+        }
+
+        AnchorNode an = (AnchorNode) aNode.getParent();
+        if (an != null) {
+            an.removeChild(aNode);
+
+            ModelRenderable mr = (ModelRenderable) aNode.getRenderable();
+
+            CustomTransformableNode node = new CustomTransformableNode(new WeakReference<>(owner.get()));
+            node.setRenderable(mr);
+
+            owner.get().attachInfoCardNode(node, owner.get().currentPolyAsset);
+
+            // Set the min and max scales of the ScaleController.
+            node.getScaleController().setMinScale(0.01f);
+
+            float v = owner.get().currentScore.scaleV + 0.05F;
+            float v1 = owner.get().currentScore.scaleV1 + 0.05F;
+            float v2 = owner.get().currentScore.scaleV2 + 0.05F;
+
+            owner.get().currentScore.scaleV = v;
+            owner.get().currentScore.scaleV1 = v1;
+            owner.get().currentScore.scaleV2 = v2;
+
+            Vector3 v3 = new Vector3(v, v1, v2);
+            node.setLocalScale(v3);
+
+            node.setParent(an);
+        }
+        return true;
+    }
+
+    private boolean onTouchEventDown(HitTestResult hitTestResult){
+        Node hitNode = hitTestResult.getNode();
+        Activity ac = owner.get().getActivity();
+
         // Check for touching a Sceneform node
-        if (hitNode != null) {
+        if (hitNode != null && ac != null) {
             owner.get().currentScore.scaleV = hitNode.getLocalScale().x;
             owner.get().currentScore.scaleV1 = hitNode.getLocalScale().y;
             owner.get().currentScore.scaleV2 = hitNode.getLocalScale().z;
@@ -74,11 +151,10 @@ public class CustomTransformableNode extends TransformableNode {
 
             ///Compute the straight-line distance.
             float distanceMeters = (float) Math.sqrt(dx * dx + dy * dy + dz * dz);
-            Utils.showToast(owner.get().getActivity() ,"Distance from camera: " + distanceMeters + " metres");
+            Utils.showToast(ac ,"Distance from camera: " + distanceMeters + " metres");
             owner.get().currentScore.distance = distanceMeters;
 
             a.detach();
-            aNode.setAnchor(owner.get().currentRandomAnchor);
 
             boolean continueTask = owner.get().loadTask();
 
@@ -97,6 +173,14 @@ public class CustomTransformableNode extends TransformableNode {
                 owner.get().backToMain();
             }
         }
-        return false;
+        return true;
+    }
+
+    private class GestureListener extends GestureDetector.SimpleOnGestureListener {
+        // event when double tap occurs
+        @Override
+        public boolean onDoubleTap(MotionEvent e) {
+            return true;
+        }
     }
 }

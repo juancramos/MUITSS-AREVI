@@ -22,9 +22,9 @@ public class AppState {
     public boolean getIsHitting() { return this.isHitting; }
     public void setIsHitting(boolean pIsHitting) { this.isHitting = pIsHitting; }
 
-    private boolean isFocusing;
-    public boolean getIsFocusing() { return this.isFocusing; }
-    public void setIsFocusing(boolean pIsFocusing) { this.isFocusing = pIsFocusing; }
+    private boolean isLongPress;
+    public boolean getIsLongPress() { return this.isLongPress; }
+    public void setIsLongPress(boolean pIsFocusing) { this.isLongPress = pIsFocusing; }
 
     private boolean isCasting;
     public boolean getIsCasting() { return this.isCasting; }
@@ -81,7 +81,7 @@ public class AppState {
     private void initState(){
         isTracking = false;
         isHitting = false;
-        isFocusing = false;
+        isLongPress = false;
         user = new User();
         userInfo = new UserInfo();
         profile = new Profile();
@@ -96,7 +96,7 @@ public class AppState {
         polyLoadingCount = 0;
         isTracking = false;
         isHitting = false;
-        isFocusing = false;
+        isLongPress = false;
         polyQueue = new LinkedList<>();
         task = new Task();
         work = new LinkedList<>(task.work);

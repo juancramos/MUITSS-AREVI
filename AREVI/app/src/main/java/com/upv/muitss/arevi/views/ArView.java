@@ -56,13 +56,13 @@ public class ArView extends ArFragment {
     private Plane firstPlane;
     private AnchorNode webRTCNode;
     private Node polyAssetInfoNode;
-    private PolyAsset currentPolyAsset;
 
     private static Random rand;
 
     Work currentScore;
     Anchor currentRandomAnchor;
     AnchorNode currentRandomAnchorNode;
+    PolyAsset currentPolyAsset;
 
     private static WeakReference<ArActivity> owner;
 
@@ -230,7 +230,7 @@ public class ArView extends ArFragment {
         attachInfoCardNode(node, currentPolyAsset);
 
         // Set the min and max scales of the ScaleController.
-        node.getScaleController().setMinScale(0.1f);
+        node.getScaleController().setMinScale(0.05f);
 
         // Set the local scale of the node BEFORE setting its parent
         node.setLocalScale(new Vector3(currentScore.scaleV, currentScore.scaleV1, currentScore.scaleV2));
@@ -267,7 +267,6 @@ public class ArView extends ArFragment {
                 }
             }
         }
-        owner.get().TouchView(this.getView(), pt);
         return wasHitting != AppState.getInstance().getIsHitting();
     }
 
@@ -369,7 +368,7 @@ public class ArView extends ArFragment {
         }
     }
 
-    private Point getScreenCenter() {
+    public Point getScreenCenter() {
         if(getView() == null) {
             return new Point(0,0);
         }

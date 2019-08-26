@@ -124,14 +124,19 @@ public class ArActivity extends AppCompatActivity implements ActivityMessage {
 
     public void TouchView(View view, Point point)
     {
-        if (!AppState.getInstance().getIsFocusing()) return;
-
         int centerX = point.x;
         int centerY = point.y;
+
         view.dispatchTouchEvent(MotionEvent.obtain(SystemClock.uptimeMillis(),
                 SystemClock.uptimeMillis() + 100, MotionEvent.ACTION_DOWN, centerX, centerY, 0));
-        view.dispatchTouchEvent(MotionEvent.obtain(SystemClock.uptimeMillis(),
-                SystemClock.uptimeMillis() + 100, MotionEvent.ACTION_UP, centerX, centerY, 0));
+    }
+
+    public View getArViewHolder(){
+        return arView.getView();
+    }
+
+    public Point getArViewHolderCenter(){
+        return arView.getScreenCenter();
     }
 
     @Override

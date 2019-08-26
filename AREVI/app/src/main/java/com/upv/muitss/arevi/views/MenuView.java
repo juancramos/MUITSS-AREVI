@@ -1,5 +1,6 @@
 package com.upv.muitss.arevi.views;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Color;
@@ -39,7 +40,7 @@ public class MenuView extends LinearLayout {
         tintColor = ta.getColor(R.styleable.ViewStyle_fillPrimaryColor, -1);
         tintColorDisabled = ta.getColor(R.styleable.ViewStyle_fillSecondaryColor, -1);
 
-        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(160, 160);
+        LayoutParams layoutParams = new LayoutParams(160, 160);
         layoutParams.gravity = Gravity.CENTER;
 
         ImageView focus = new ImageView(getContext());
@@ -48,10 +49,14 @@ public class MenuView extends LinearLayout {
         focus.setScaleType(ImageView.ScaleType.FIT_CENTER);
         focus.setAdjustViewBounds(true);
         focus.setLayoutParams(layoutParams);
-        focus.setOnClickListener(view -> {
-            AppState.getInstance().setIsFocusing(!AppState.getInstance().getIsFocusing());
-            if (AppState.getInstance().getIsFocusing()) focus.setColorFilter(Color.RED);
-            else focus.setColorFilter(tintColor);
+        focus.setOnClickListener((v) -> {
+            owner.get().TouchView(owner.get().getArViewHolder(), owner.get().getArViewHolderCenter());
+            AppState.getInstance().setIsLongPress(false);
+        });
+        focus.setOnLongClickListener(v -> {
+            AppState.getInstance().setIsLongPress(true);
+            v.performClick();
+            return true;
         });
         this.addView(focus);
         cast = new ImageView(getContext());
