@@ -61,6 +61,7 @@ app.configure(socketio(function (io) {
             var clientsInRoom = io.sockets.adapter.rooms[room];
             var numClients = clientsInRoom ? Object.keys(clientsInRoom.sockets).length : 0;
             log('Room ' + room + ' now has ' + numClients + ' client(s)');
+            console.log('Room ' + room + ' now has ' + numClients + ' client(s)');
 
             if (numClients === 0) {
                 socket.join(room);

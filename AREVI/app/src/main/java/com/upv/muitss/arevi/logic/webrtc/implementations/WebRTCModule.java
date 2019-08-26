@@ -51,12 +51,10 @@ public class WebRTCModule implements SignalingInterface {
 
     public WebRTCModule (WeakReference<ArActivity> pOwner) {
         owner = pOwner;
-
         rootEglBase = EglBase.create();
     }
 
     public void InitRTC(Intent data){
-
         //Now create a VideoCapturer instance. Callback methods are there if you want to do something! Duh!
         videoCapturer = new ScreenCapturerAndroid(data, new MediaProjection.Callback() {
             @Override
@@ -65,7 +63,6 @@ public class WebRTCModule implements SignalingInterface {
                 Log.e(TAG, "user has revoked permissions");
             }
         });
-
     }
 
     /**
@@ -84,7 +81,6 @@ public class WebRTCModule implements SignalingInterface {
             }
         });
     }
-
 
     /**
      * Creating the local peerconnection instance
@@ -109,7 +105,7 @@ public class WebRTCModule implements SignalingInterface {
 
             @Override
             public void onAddStream(MediaStream mediaStream) {
-                Utils.showToast(owner.get() ,"Received Remote stream");
+                Utils.showToast(owner.get() ,Utils.getResourceString(R.string.webrtc_remote_stream_received));
                 super.onAddStream(mediaStream);
                 gotRemoteStream(mediaStream);
             }
@@ -163,7 +159,6 @@ public class WebRTCModule implements SignalingInterface {
                 e.printStackTrace();
             }
         });
-
     }
 
     /**
@@ -179,9 +174,9 @@ public class WebRTCModule implements SignalingInterface {
      */
     @Override
     public void onCreatedRoom() {
-        Utils.showToast(owner.get() ,"You created the room " + gotUserMedia);
+        Utils.showToast(owner.get() ,Utils.getResourceString(R.string.toast_room_creation) + gotUserMedia);
         if (gotUserMedia) {
-            SignallingClient.getInstance().emitMessage("got user media");
+            SignallingClient.getInstance().emitMessage();
         }
     }
 
@@ -190,28 +185,29 @@ public class WebRTCModule implements SignalingInterface {
      */
     @Override
     public void onJoinedRoom() {
-        Utils.showToast(owner.get() ,"You joined the room " + gotUserMedia);
+        Utils.showToast(owner.get() ,Utils.getResourceString(R.string.toast_room_join) + gotUserMedia);
         if (gotUserMedia) {
-            SignallingClient.getInstance().emitMessage("got user media");
+            SignallingClient.getInstance().emitMessage();
         }
     }
 
     @Override
     public void onNewPeerJoined() {
-        Utils.showToast(owner.get() ,"Remote Peer Joined");
+        Utils.showToast(owner.get() ,Utils.getResourceString(R.string.toast_remote_join));
     }
 
     @Override
     public void onRemoteHangUp(String msg) {
-        Utils.showToast(owner.get() ,"Remote Peer hungup");
+        Utils.showToast(owner.get() ,Utils.getResourceString(R.string.toast_remote_disconnected));
         owner.get().runOnUiThread(this::hangup);
     }
 
-    private void hangup() {
+    public void hangup() {
         try {
             localPeer.close();
             localPeer = null;
             SignallingClient.getInstance().close();
+            videoCapturer.stopCapture();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -223,7 +219,7 @@ public class WebRTCModule implements SignalingInterface {
      */
     @Override
     public void onOfferReceived(final JSONObject data) {
-        Utils.showToast(owner.get() ,"Received Offer");
+        Utils.showToast(owner.get() ,Utils.getResourceString(R.string.toast_remote_offer_received));
         owner.get().runOnUiThread(() -> {
             if (!SignallingClient.getInstance().isInitiator && !SignallingClient.getInstance().isStarted) {
                 onTryToStart();
@@ -252,13 +248,11 @@ public class WebRTCModule implements SignalingInterface {
     /**
      * SignallingCallback - Called when remote peer sends answer to your offer
      */
-
     @Override
     public void onAnswerReceived(JSONObject data) {
-        Utils.showToast(owner.get() ,"Received Answer");
+        Utils.showToast(owner.get() ,Utils.getResourceString(R.string.toast_remote_answer_received));
         try {
             localPeer.setRemoteDescription(new CustomSdpObserver("localSetRemote"), new SessionDescription(SessionDescription.Type.fromCanonicalForm(data.getString("type").toLowerCase()), data.getString("sdp")));
-            //updateVideoViews(true);
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -276,19 +270,9 @@ public class WebRTCModule implements SignalingInterface {
         }
     }
 
-
-//    public void MountLocalView(SurfaceViewRenderer videoView) {
-//
-//        videoView.setMirror(false);
-//        videoView.init(rootEglBase.getEglBaseContext(), null);
-//        videoView.setZOrderMediaOverlay(true);
-//
-//        localVideoView = videoView;
-//
-//        localVideoTrack.addSink(localVideoView);
-//    }
-
     public void MountRemoteView(SurfaceViewRenderer videoView) {
+        if (remoteVideoView != null) return;
+
         //Initialize PeerConnectionFactory globals.
         //Params are context, initAudio,initVideo and videoCodecHwAcceleration
         PeerConnectionFactory.initialize(PeerConnectionFactory.InitializationOptions
@@ -308,17 +292,9 @@ public class WebRTCModule implements SignalingInterface {
         getIceServers();
         SignallingClient.getInstance().init(this, Utils.getResourceString(R.string.signaling_server_url));
 
-
-        //Create MediaConstraints - Will be useful for specifying video and audio constraints. More on this later!
-        // MediaConstraints constraints = new MediaConstraints();
-
         //Create a VideoSource instance
         VideoSource videoSource = peerConnectionFactory.createVideoSource(videoCapturer.isScreencast());
         localVideoTrack = peerConnectionFactory.createVideoTrack("100", videoSource);
-
-        //create an AudioSource instance
-//        AudioSource audioSource = peerConnectionFactory.createAudioSource(constraints);
-//        localAudioTrack = peerConnectionFactory.createAudioTrack("101", audioSource);
 
         //we will start capturing the video from the camera
         //params are width,height and fps
@@ -353,6 +329,15 @@ public class WebRTCModule implements SignalingInterface {
                 peerIceServers.add(peerIceServer);
             }
         }
+    }
+
+    public void reset() {
+        gotUserMedia = false;
+        peerConnectionFactory = null;
+        localVideoTrack = null;
+        remoteVideoView = null;
+        localPeer = null;
+        peerIceServers = new ArrayList<>();
     }
 }
 

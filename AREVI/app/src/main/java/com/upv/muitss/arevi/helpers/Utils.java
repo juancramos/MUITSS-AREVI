@@ -105,10 +105,10 @@ public class Utils {
             TextInputLayout parent = (TextInputLayout) view.getParent().getParent();
             parent.setError(null);
             if (Utils.isNullOrEmpty(textFromEditView)) {
-                parent.setError("Can not be empty");
+                parent.setError(getResourceString(R.string.form_validation_error_empty));
             }
             else if (editText.getInputType() == (InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS) && Utils.emailValidation(textFromEditView)){
-                parent.setError("Enter a valid email");
+                parent.setError(getResourceString(R.string.form_validation_error_email));
             }
             return textFromEditView;
         }

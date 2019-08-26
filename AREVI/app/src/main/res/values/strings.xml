@@ -1,6 +1,8 @@
 <resources>
     <string name="ice_candidates_file_name" translatable="false">ice_servers.json</string>
     <string name="signaling_server_url" translatable="false">http://192.168.0.105:3030/</string>
+    <string name="default_signaling_server_url" translatable="false">http://localhost:3030/</string>
+    <string name="default_signaling_server_room" translatable="false">room/</string>
     <string name="poly_server_url" translatable="false">https://poly.googleapis.com/</string>
     <string name="poly_server_api_key" translatable="false">XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX</string>
     <string name="app_releases_url" translatable="false">https://github.com/judicapo/MUITSS-AREVI/releases/latest</string>
@@ -44,6 +46,19 @@
     <string name="frame_profile_config_login_text">Already registered?</string>
     <string name="activity_main_update_app_text">There is a new version of AREVI</string>
     <string name="activity_main_update_app_button_text">Download now</string>
+    <string name="form_validation_error_empty">Required field!</string>
+    <string name="form_validation_error_email">Not a valid email!</string>
+    <string name="webrtc_remote_stream_received">Received Remote stream</string>
+    <string name="toast_register_AREVI">Please register in AREVI</string>
+    <string name="toast_error_loading_release">Error loading release!</string>
+    <string name="toast_no_task_AREVI">No tasks available in AREVI</string>
+    <string name="toast_room_creation">Created the room </string>
+    <string name="toast_room_join">Joined the room </string>
+    <string name="toast_remote_join">Remote peer joined</string>
+    <string name="toast_remote_disconnected">Remote peer disconnected</string>
+    <string name="toast_remote_offer_received">Received offer</string>
+    <string name="toast_remote_answer_received">Received answer</string>
+    <string name="dialog_loading_text">Loading…</string>
     <string-array name="input_spinner_gender_list">
         <item>Male</item>
         <item>Female</item>

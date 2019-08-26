@@ -4,7 +4,7 @@
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_margin_half">8dp</dimen>
     <dimen name="activity_margin_border">10dp</dimen>
-    <dimen name="ar_activity_ar_scene_margin_bottom">50dp</dimen>
-    <dimen name="ar_activity_menu_margin_top">-50dp</dimen>
-    <dimen name="ar_activity_menu_layout_height">50dp</dimen>
+    <dimen name="ar_activity_ar_scene_margin_bottom">60dp</dimen>
+    <dimen name="ar_activity_menu_margin_top">-60dp</dimen>
+    <dimen name="ar_activity_menu_layout_height">60dp</dimen>
 </resources>

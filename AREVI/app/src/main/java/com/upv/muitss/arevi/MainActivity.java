@@ -55,7 +55,7 @@ public class MainActivity extends AppCompatActivity implements ActivityMessage {
 
         if (userLogIn.isValidState()){
             runOnUiThread(()->{
-                Utils.popProgressDialog(this, "Loading...");
+                Utils.popProgressDialog(this, Utils.getResourceString(R.string.dialog_loading_text));
                 AREVIRepository.getInstance().logIn(userLogIn,this);
             });
         }
@@ -67,7 +67,7 @@ public class MainActivity extends AppCompatActivity implements ActivityMessage {
 
     public void onStartArButtonClick(View view) {
         if (AppState.getInstance().getUser().isLocal()) {
-            Utils.showToast(this, "Please register in AREVI");
+            Utils.showToast(this, Utils.getResourceString(R.string.toast_register_AREVI));
             startProfileWizard();
             return;
         }
@@ -158,7 +158,7 @@ public class MainActivity extends AppCompatActivity implements ActivityMessage {
         if (intent.resolveActivity(getPackageManager()) != null) {
             startActivity(intent);
         }else{
-            Utils.showToast(this, "Can not load release!");
+            Utils.showToast(this, Utils.getResourceString(R.string.toast_error_loading_release));
         }
     }
 }

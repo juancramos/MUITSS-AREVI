@@ -39,7 +39,7 @@ public class MenuView extends LinearLayout {
         tintColor = ta.getColor(R.styleable.ViewStyle_fillPrimaryColor, -1);
         tintColorDisabled = ta.getColor(R.styleable.ViewStyle_fillSecondaryColor, -1);
 
-        LayoutParams layoutParams = new LayoutParams(160, 160);
+        LayoutParams layoutParams = new LayoutParams(220, 220);
         layoutParams.gravity = Gravity.CENTER;
 
         ImageView focus = new ImageView(getContext());
@@ -57,6 +57,7 @@ public class MenuView extends LinearLayout {
             v.performClick();
             return true;
         });
+        focus.setPadding(10,0,10,0);
         this.addView(focus);
         cast = new ImageView(getContext());
         cast.setImageResource(R.drawable.ic_cast_black_24dp);
@@ -65,12 +66,22 @@ public class MenuView extends LinearLayout {
         cast.setContentDescription("cast");
         cast.setLayoutParams(layoutParams);
         cast.setOnClickListener(view -> {
+            if (!AppState.getInstance().getIsTracking()) return;
+
             AppState.getInstance().setIsCasting(!AppState.getInstance().getIsCasting());
             owner.get().arAttachWebRTCView();
 
             if (AppState.getInstance().getIsCasting()) cast.setColorFilter(Color.RED);
             else cast.setColorFilter(tintColor);
         });
+        cast.setOnLongClickListener(v -> {
+            if (!AppState.getInstance().getIsTracking()) return false;
+            else if (AppState.getInstance().getIsCasting())
+                owner.get().setRemoteVideoViewVisibility();
+            return true;
+        });
+        if (AppState.getInstance().getIsCasting()) cast.setColorFilter(Color.RED);
+        cast.setPadding(10,0,10,0);
         this.addView(cast);
     }
 

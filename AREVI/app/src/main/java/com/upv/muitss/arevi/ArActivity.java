@@ -86,36 +86,19 @@ public class ArActivity extends AppCompatActivity implements ActivityMessage {
         arView.attachWebRTCView();
     }
 
-    private void startScreenCapture() {
-        MediaProjectionManager mediaProjectionManager = (MediaProjectionManager) getApplication().getSystemService(
-                Context.MEDIA_PROJECTION_SERVICE);
-        Log.i(TAG, "Requesting confirmation");
-        // This initiates a prompt dialog for the user to confirm screen projection.
-        startActivityForResult(
-                mediaProjectionManager.createScreenCaptureIntent(),
-                CAPTURE_PERMISSION_REQUEST_CODE);
+    public void setRemoteVideoViewVisibility() {
+        arView.setRemoteVideoViewVisibility();
+    }
+
+    public void resetWebRTCModule(){
+        webRTCModule.hangup();
+        webRTCModule.reset();
     }
 
     public void startMainActivity(){
         Intent toMain = new Intent(ArActivity.this, MainActivity.class);
         startActivity(toMain);
         finish();
-    }
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == CAPTURE_PERMISSION_REQUEST_CODE) {
-            if (resultCode != Activity.RESULT_OK) {
-                gallery.setCastButtonEnabled(false);
-                return;
-            }
-
-            Log.i(TAG, "Starting screen capture");
-
-            webRTCModule = new WebRTCModule(weakReference);
-
-            webRTCModule.InitRTC(data);
-        }
     }
 
     public void MountViewData(SurfaceViewRenderer remoteVideoView){
@@ -139,6 +122,30 @@ public class ArActivity extends AppCompatActivity implements ActivityMessage {
         return arView.getScreenCenter();
     }
 
+    private void startScreenCapture() {
+        MediaProjectionManager mediaProjectionManager = (MediaProjectionManager) getApplication().getSystemService(
+                Context.MEDIA_PROJECTION_SERVICE);
+        Log.i(TAG, "Requesting confirmation");
+        // This initiates a prompt dialog for the user to confirm screen projection.
+        startActivityForResult(
+                mediaProjectionManager.createScreenCaptureIntent(),
+                CAPTURE_PERMISSION_REQUEST_CODE);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == CAPTURE_PERMISSION_REQUEST_CODE) {
+            if (resultCode != Activity.RESULT_OK) {
+                gallery.setCastButtonEnabled(false);
+                return;
+            }
+
+            Log.i(TAG, "Starting screen capture");
+            webRTCModule = new WebRTCModule(weakReference);
+            webRTCModule.InitRTC(data);
+        }
+    }
+
     @Override
     public void onDestroy() {
         super.onDestroy();
@@ -157,7 +164,7 @@ public class ArActivity extends AppCompatActivity implements ActivityMessage {
             loadTask();
         }
         else if (response == null) {
-            Utils.showToast(this, "No tasks available in AREVI");
+            Utils.showToast(this, Utils.getResourceString(R.string.toast_no_task_AREVI));
             startMainActivity();
         }
     }

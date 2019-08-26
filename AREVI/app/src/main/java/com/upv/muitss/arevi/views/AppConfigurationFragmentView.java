@@ -46,7 +46,7 @@ public class AppConfigurationFragmentView extends Fragment implements ActivityMe
         boolean userLogin = Utils.getLogIn().isValidState();
 
         if (userLogin) {
-            Utils.popProgressDialog(getActivity(), "Loading...");
+            Utils.popProgressDialog(getActivity(), Utils.getResourceString(R.string.dialog_loading_text));
             AREVIRepository.getInstance().getApiProfile(Utils.getUserId(), this);
         }
         else {

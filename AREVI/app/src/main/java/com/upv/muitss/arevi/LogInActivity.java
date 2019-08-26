@@ -51,7 +51,7 @@ public class LogInActivity extends AppCompatActivity implements ActivityMessage 
 
         if (userLogIn.isValidState()){
             runOnUiThread(()->{
-                Utils.popProgressDialog(this, "Loading...");
+                Utils.popProgressDialog(this, Utils.getResourceString(R.string.dialog_loading_text));
                 AREVIRepository.getInstance().logIn(userLogIn,this);
             });
         }

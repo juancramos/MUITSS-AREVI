@@ -21,6 +21,15 @@ public class Work {
     @SerializedName("distance")
     @Expose
     public float distance;
+    @SerializedName("seconds")
+    @Expose
+    public int seconds;
+    @SerializedName("minutes")
+    @Expose
+    public int minutes;
+    @SerializedName("milliSeconds")
+    @Expose
+    public int milliSeconds;
 
     @NonNull
     @Override

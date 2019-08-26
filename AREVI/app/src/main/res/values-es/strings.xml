@@ -38,6 +38,19 @@
     <string name="frame_profile_config_login_text">¿Ya estás registrado?</string>
     <string name="activity_main_update_app_text">Hay una nueva versión de AREVI</string>
     <string name="activity_main_update_app_button_text">Descargar ahora</string>
+    <string name="form_validation_error_empty">Campo requerido!</string>
+    <string name="form_validation_error_email">No es correo valido!</string>
+    <string name="webrtc_remote_stream_received">Canal remoto encontrado</string>
+    <string name="toast_register_AREVI">Por favor registrate en AREVI</string>
+    <string name="toast_error_loading_release">Error cargando descarga!</string>
+    <string name="toast_no_task_AREVI">No hay tareas disponibles en AREVI</string>
+    <string name="toast_room_creation">Se creó la sala </string>
+    <string name="toast_room_join">Conectado a la sala </string>
+    <string name="toast_remote_join">Se ha unido un participante</string>
+    <string name="toast_remote_disconnected">Participante abandona la sala</string>
+    <string name="toast_remote_offer_received">Hay canal disponible</string>
+    <string name="toast_remote_answer_received">Conexión iniciada</string>
+    <string name="dialog_loading_text">Cargando…</string>
     <string-array name="input_spinner_gender_list">
         <item>Masculino</item>
         <item>femenino</item>

@@ -49,7 +49,7 @@ public class ARConfigurationFragmentView extends Fragment implements ActivityMes
         boolean userLogin = Utils.getLogIn().isValidState();
 
         if (userLogin) {
-            Utils.popProgressDialog(getActivity(), "Loading...");
+            Utils.popProgressDialog(getActivity(), Utils.getResourceString(R.string.dialog_loading_text));
             AREVIRepository.getInstance().getApiProfile(Utils.getUserId(), this);
         }
         else {

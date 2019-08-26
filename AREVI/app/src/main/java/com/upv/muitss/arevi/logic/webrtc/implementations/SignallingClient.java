@@ -2,6 +2,10 @@ package com.upv.muitss.arevi.logic.webrtc.implementations;
 
 import android.annotation.SuppressLint;
 import android.util.Log;
+
+import com.upv.muitss.arevi.R;
+import com.upv.muitss.arevi.helpers.Utils;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.webrtc.IceCandidate;
@@ -57,8 +61,8 @@ class SignallingClient {
         }
         if (instance.roomName == null) {
             //set the room name here
-            instance.roomName = "room";
-            instance.signalingServer = "http://localhost:3030";
+            instance.roomName = Utils.getResourceString(R.string.default_signaling_server_room);
+            instance.signalingServer = Utils.getResourceString(R.string.default_signaling_server_url);
         }
         return instance;
     }
@@ -93,7 +97,6 @@ class SignallingClient {
                 emitInitStatement(roomName);
             }
 
-
             //room created event.
             socket.on("created", args -> {
                 Log.d("SignallingClient", "created call() called with: args = [" + Arrays.toString(args) + "]");
@@ -102,7 +105,12 @@ class SignallingClient {
             });
 
             //room is full event
-            socket.on("full", args -> Log.d("SignallingClient", "full call() called with: args = [" + Arrays.toString(args) + "]"));
+            socket.on("full", args -> {
+                Log.d("SignallingClient", "full call() called with: args = [" + Arrays.toString(args) + "]");
+                if (!roomName.isEmpty()) {
+                    emitInitStatement(roomName + socket.id());
+                }
+            });
 
             //peer joined event
             socket.on("join", args -> {
@@ -165,9 +173,9 @@ class SignallingClient {
         socket.emit("create or join", message);
     }
 
-    void emitMessage(String message) {
-        Log.d("SignallingClient", "emitMessage() called with: message = [" + message + "]");
-        socket.emit("message", message);
+    void emitMessage() {
+        Log.d("SignallingClient", "emitMessage() called with: message = [" + "got user media" + "]");
+        socket.emit("message", "got user media");
     }
 
     void emitMessage(SessionDescription message) {

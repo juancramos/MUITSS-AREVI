@@ -38,7 +38,7 @@ var sdpConstraints = {
 
 /////////////////////////////////////////////
 
-var room = 'room';
+let room = 'room';
 // Could prompt for room name:
 room = prompt('Enter room name:');
 
@@ -105,9 +105,17 @@ socket.on('message', function (message) {
 });
 
 ////////////////////////////////////////////////////
+var playing = false;
+const localVideo = document.querySelector('#localVideo');
+const remoteVideo = document.querySelector('#remoteVideo');
+const startCast = document.querySelector('#startCast');
 
-var localVideo = document.querySelector('#localVideo');
-var remoteVideo = document.querySelector('#remoteVideo');
+startCast.addEventListener("click", function () {
+  if (!playing) {
+    playing = true;
+    localVideo.play();
+  }
+});
 
 navigator.mediaDevices.getUserMedia({
   audio: true,
@@ -145,9 +153,7 @@ var constraints = {
 console.log('Getting user media with constraints', constraints);
 
 if (location.hostname !== 'localhost') {
-  requestTurn(
-    'https://computeengineondemand.appspot.com/turn?username=41784574&key=4080218913'
-  );
+  requestTurn();
 }
 
 function maybeStart() {
@@ -225,7 +231,7 @@ function onCreateSessionDescriptionError(error) {
   trace('Failed to create session description: ' + error.toString());
 }
 
-function requestTurn(turnURL) {
+function requestTurn() {
   var turnExists = false;
   for (var i in pcConfig.iceServers) {
     if (pcConfig.iceServers[i].urls.substr(0, 5) === 'turn:') {
@@ -235,22 +241,7 @@ function requestTurn(turnURL) {
     }
   }
   if (!turnExists) {
-    console.log('Getting TURN server from ', turnURL);
-    // No TURN server. Get one from computeengineondemand.appspot.com:
-    var xhr = new XMLHttpRequest();
-    xhr.onreadystatechange = function () {
-      if (xhr.readyState === 4 && xhr.status === 200) {
-        var turnServer = JSON.parse(xhr.responseText);
-        console.log('Got TURN server: ', turnServer);
-        pcConfig.iceServers.push({
-          'urls': 'turn:' + turnServer.username + '@' + turnServer.turn,
-          'credential': turnServer.password
-        });
-        turnReady = true;
-      }
-    };
-    xhr.open('GET', turnURL, true);
-    xhr.send();
+    console.log("no available TURN");
   }
 }
 

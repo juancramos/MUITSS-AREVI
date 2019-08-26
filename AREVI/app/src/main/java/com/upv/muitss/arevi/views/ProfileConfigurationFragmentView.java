@@ -66,7 +66,7 @@ public class ProfileConfigurationFragmentView extends Fragment implements Activi
         }
 
         if (userLogin && !userInfo) {
-            Utils.popProgressDialog(getActivity(), "Loading...");
+            Utils.popProgressDialog(getActivity(), Utils.getResourceString(R.string.dialog_loading_text));
             AREVIRepository.getInstance().getApiUserInfo(Utils.getUserId(), this);
         }
         else {
