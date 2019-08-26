@@ -1,6 +1,5 @@
 package com.upv.muitss.arevi.views;
 
-import android.app.Activity;
 import android.content.Context;
 import android.graphics.Point;
 import android.net.Uri;

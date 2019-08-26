@@ -1,6 +1,5 @@
 package com.upv.muitss.arevi.views;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Color;
