@@ -85,7 +85,7 @@ public class MainActivity extends AppCompatActivity implements ActivityMessage {
     }
 
     private void startProfileWizard(){
-        Intent toAct = new Intent(MainActivity.this, PagerActivity.class);
+        Intent toAct = new Intent(MainActivity.this, ProfileActivity.class);
         startActivity(toAct);
     }
 

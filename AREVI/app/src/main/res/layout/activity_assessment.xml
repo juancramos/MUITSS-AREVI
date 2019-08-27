@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/main_content"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".PagerActivity">
+    tools:context=".AssessmentActivity">
 
     <com.upv.muitss.arevi.views.CustomViewPager
         android:id="@+id/view_pager_container"
@@ -68,13 +67,6 @@
                 android:layout_height="8dp"
                 android:layout_marginEnd="@dimen/activity_margin_half"
                 android:background="@drawable/indicator_selected" />
-
-            <ImageView
-                android:id="@+id/intro_indicator_1"
-                android:layout_width="8dp"
-                android:layout_height="8dp"
-                android:layout_marginEnd="@dimen/activity_margin_half"
-                android:background="@drawable/indicator_unselected" />
 
             <ImageView
                 android:id="@+id/intro_indicator_2"

@@ -32,7 +32,7 @@ import com.upv.muitss.arevi.views.CustomViewPager;
 import com.upv.muitss.arevi.views.ProfileConfigurationFragmentView;
 
 
-public class PagerActivity extends AppCompatActivity implements ActivityMessage {
+public class ProfileActivity extends AppCompatActivity implements ActivityMessage {
 
     private CustomViewPager mViewPager;
     private ImageView[] indicators;
@@ -44,7 +44,7 @@ public class PagerActivity extends AppCompatActivity implements ActivityMessage 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setTheme(Utils.getSavedThemeStyle());
-        setContentView(R.layout.activity_pager);
+        setContentView(R.layout.activity_profile);
 
         // Create the adapter that will return a fragment for each of the three
         // primary sections of the activity.
@@ -221,7 +221,7 @@ public class PagerActivity extends AppCompatActivity implements ActivityMessage 
     }
 
     private void startMainActivity(){
-        Intent toMain = new Intent(PagerActivity.this, MainActivity.class);
+        Intent toMain = new Intent(ProfileActivity.this, MainActivity.class);
         startActivity(toMain);
         finish();
     }
@@ -235,7 +235,7 @@ public class PagerActivity extends AppCompatActivity implements ActivityMessage 
     }
 
     public void onLogInProfileButtonClick(View view) {
-        Intent toAct = new Intent(PagerActivity.this, LogInActivity.class);
+        Intent toAct = new Intent(ProfileActivity.this, LogInActivity.class);
         startActivity(toAct);
     }
 

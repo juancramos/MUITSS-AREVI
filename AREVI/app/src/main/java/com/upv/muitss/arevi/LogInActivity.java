@@ -63,7 +63,7 @@ public class LogInActivity extends AppCompatActivity implements ActivityMessage 
     public void onRegisterButtonClick(View view) { startProfileWizard(); }
 
     private void startProfileWizard(){
-        Intent toAct = new Intent(this, PagerActivity.class);
+        Intent toAct = new Intent(this, ProfileActivity.class);
         startActivity(toAct);
     }
 
