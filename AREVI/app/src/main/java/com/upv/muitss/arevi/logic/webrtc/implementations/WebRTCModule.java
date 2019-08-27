@@ -7,8 +7,8 @@ import android.view.View;
 
 import com.upv.muitss.arevi.ArActivity;
 import com.upv.muitss.arevi.R;
-import com.upv.muitss.arevi.logic.webrtc.models.IceServer;
 import com.upv.muitss.arevi.helpers.Utils;
+import com.upv.muitss.arevi.models.IceServer;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -32,9 +32,7 @@ import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.upv.muitss.arevi.logic.webrtc.implementations.SignallingClient.*;
-
-public class WebRTCModule implements SignalingInterface {
+public class WebRTCModule implements SignallingClient.SignalingInterface {
 
     private static WeakReference<ArActivity> owner;
     private final String TAG = this.getClass().getCanonicalName();

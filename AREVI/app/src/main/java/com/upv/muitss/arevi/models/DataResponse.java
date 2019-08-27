@@ -1,4 +1,4 @@
-package com.upv.muitss.arevi.entities;
+package com.upv.muitss.arevi.models;
 
 import android.support.annotation.NonNull;
 

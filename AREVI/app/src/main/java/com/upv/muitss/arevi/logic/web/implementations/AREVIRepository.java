@@ -7,8 +7,8 @@ import android.util.Log;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
-import com.upv.muitss.arevi.entities.AccessToken;
-import com.upv.muitss.arevi.entities.DataResponse;
+import com.upv.muitss.arevi.models.AccessToken;
+import com.upv.muitss.arevi.models.DataResponse;
 import com.upv.muitss.arevi.entities.Profile;
 import com.upv.muitss.arevi.entities.Round;
 import com.upv.muitss.arevi.entities.Task;
@@ -409,6 +409,12 @@ public class AREVIRepository {
     }
 
     public void getApiProfile(String userId, ActivityMessage caller) {
+        Profile p = AppState.getInstance().getProfile();
+        if (p != null && p.getConfiguration() != null && !TextUtils.isEmpty(p.getConfiguration().getUseGoogleCardboard())) {
+            if (caller != null) caller.onResponse(p);
+            Utils.popProgressDialog(null, null);
+            return;
+        }
         apiService.findApiProfile(userId, 1).enqueue(new Callback<DataResponse<Profile>>() {
             @Override
             public void onResponse(@NonNull Call<DataResponse<Profile>> call, @NonNull Response<DataResponse<Profile>> response) {
@@ -444,6 +450,12 @@ public class AREVIRepository {
     }
 
     public void getApiTask(ActivityMessage caller) {
+        Task t = AppState.getInstance().getTask();
+        if (t != null && !TextUtils.isEmpty(t.getEnabled())) {
+            if (caller != null) caller.onResponse(t);
+            Utils.popProgressDialog(null, null);
+            return;
+        }
         apiService.findApiTask(1).enqueue(new Callback<DataResponse<Task>>() {
             @Override
             public void onResponse(@NonNull Call<DataResponse<Task>> call, @NonNull Response<DataResponse<Task>> response) {

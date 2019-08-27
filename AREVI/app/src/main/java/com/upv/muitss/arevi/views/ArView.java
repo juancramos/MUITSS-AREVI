@@ -26,17 +26,16 @@ import com.google.ar.sceneform.collision.Box;
 import com.google.ar.sceneform.math.Quaternion;
 import com.google.ar.sceneform.math.Vector3;
 import com.google.ar.sceneform.rendering.ModelRenderable;
-import com.google.ar.sceneform.rendering.Renderable;
 import com.google.ar.sceneform.rendering.ViewRenderable;
 import com.google.ar.sceneform.ux.ArFragment;
 import com.google.ar.sceneform.ux.TransformableNode;
 import com.upv.muitss.arevi.ArActivity;
 import com.upv.muitss.arevi.R;
 import com.upv.muitss.arevi.drawables.PointerDrawable;
-import com.upv.muitss.arevi.entities.PolyAsset;
 import com.upv.muitss.arevi.entities.Work;
 import com.upv.muitss.arevi.helpers.AppState;
 import com.upv.muitss.arevi.helpers.Timer;
+import com.upv.muitss.arevi.models.PolyAsset;
 
 import org.webrtc.SurfaceViewRenderer;
 

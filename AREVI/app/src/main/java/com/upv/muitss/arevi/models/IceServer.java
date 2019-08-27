@@ -1,4 +1,4 @@
-package com.upv.muitss.arevi.logic.webrtc.models;
+package com.upv.muitss.arevi.models;
 
 import android.support.annotation.NonNull;
 
@@ -27,4 +27,3 @@ public class IceServer {
                 '}';
     }
 }
-

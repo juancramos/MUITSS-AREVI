@@ -1,12 +1,12 @@
 package com.upv.muitss.arevi.helpers;
 
-import com.upv.muitss.arevi.entities.PolyAsset;
 import com.upv.muitss.arevi.entities.Profile;
 import com.upv.muitss.arevi.entities.Round;
 import com.upv.muitss.arevi.entities.Task;
 import com.upv.muitss.arevi.entities.User;
 import com.upv.muitss.arevi.entities.UserInfo;
 import com.upv.muitss.arevi.entities.Work;
+import com.upv.muitss.arevi.models.PolyAsset;
 
 import java.util.LinkedList;
 import java.util.List;

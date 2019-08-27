@@ -6,12 +6,12 @@ import android.util.Log;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.upv.muitss.arevi.R;
-import com.upv.muitss.arevi.entities.PolyAsset;
 import com.upv.muitss.arevi.entities.Work;
 import com.upv.muitss.arevi.helpers.AppState;
 import com.upv.muitss.arevi.helpers.Utils;
 import com.upv.muitss.arevi.logic.web.interceptors.Instance;
 import com.upv.muitss.arevi.logic.web.interfaces.PolyApiService;
+import com.upv.muitss.arevi.models.PolyAsset;
 
 import retrofit2.Call;
 import retrofit2.Callback;

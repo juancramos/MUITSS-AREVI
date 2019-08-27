@@ -12,6 +12,7 @@ import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 
+import com.upv.muitss.arevi.entities.Profile;
 import com.upv.muitss.arevi.entities.Task;
 import com.upv.muitss.arevi.entities.Work;
 import com.upv.muitss.arevi.helpers.AppState;
@@ -41,30 +42,13 @@ public class ArActivity extends AppCompatActivity implements ActivityMessage {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setTheme(Utils.getSavedThemeStyle());
-        setContentView(R.layout.activity_ar);
-
-        // Get the Intent that called for this Activity to open
-        //Intent activityThatCalled = getIntent();
-        // Get the data that was sent
-        // String previousActivity = activityThatCalled.getExtras().getString("callingActivity");
-
-        arView = (ArView) getSupportFragmentManager().findFragmentById(R.id.sceneform_fragment);
-        gallery = findViewById(R.id.gallery_layout);
-
-        assert arView != null && gallery != null;
-
-        weakReference = new WeakReference<>(this);
-        arView.init(weakReference);
-        gallery.init(weakReference);
-
-        startScreenCapture();
 
         boolean userLogin = Utils.getLogIn().isValidState();
 
         if (userLogin) {
             runOnUiThread(() -> {
-                AREVIRepository.getInstance().getApiTask(this);
                 AREVIRepository.getInstance().getApiProfile(Utils.getUserId(), this);
+                AREVIRepository.getInstance().getApiTask(this);
             });
         }
     }
@@ -156,12 +140,38 @@ public class ArActivity extends AppCompatActivity implements ActivityMessage {
         webRTCModule= null;
     }
 
+    public void configurationChanged(boolean orientation){
+        // Checks the orientation of the screen
+        if (orientation) {
+            setContentView(R.layout.activity_ar_landscape);
+        }
+        else {
+            setContentView(R.layout.activity_ar);
+        }
+        arView = (ArView) getSupportFragmentManager().findFragmentById(R.id.sceneform_fragment);
+        gallery = findViewById(R.id.gallery_layout);
+
+        if (gallery == null || arView == null) startMainActivity();
+
+        weakReference = new WeakReference<>(this);
+        arView.init(weakReference);
+        gallery.init(weakReference);
+
+        startScreenCapture();
+    }
+
+
     @Override
     public <T> void onResponse(T response) {
         if (response instanceof Task){
             AppState.getInstance().queueWork(((Task) response).work);
 
             loadTask();
+        }
+        else if (response instanceof Profile){
+            Profile p = (Profile) response;
+
+            configurationChanged(p.getConfiguration().getUseGoogleCardboardBoolean());
         }
         else if (response == null) {
             Utils.showToast(this, Utils.getResourceString(R.string.toast_no_task_AREVI));

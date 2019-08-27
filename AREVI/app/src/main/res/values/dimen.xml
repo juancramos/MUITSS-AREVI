@@ -7,4 +7,7 @@
     <dimen name="ar_activity_ar_scene_margin_bottom">60dp</dimen>
     <dimen name="ar_activity_menu_margin_top">-60dp</dimen>
     <dimen name="ar_activity_menu_layout_height">60dp</dimen>
+    <dimen name="ar_activity_ar_scene_margin_left">60dp</dimen>
+    <dimen name="ar_activity_menu_margin_left">-60dp</dimen>
+    <dimen name="ar_activity_menu_layout_width">60dp</dimen>
 </resources>

@@ -15,13 +15,13 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.upv.muitss.arevi.R;
+import com.upv.muitss.arevi.enums.AgeType;
+import com.upv.muitss.arevi.enums.EducationType;
+import com.upv.muitss.arevi.enums.GenderType;
 import com.upv.muitss.arevi.helpers.AppState;
 import com.upv.muitss.arevi.helpers.Utils;
 import com.upv.muitss.arevi.logic.web.implementations.AREVIRepository;
 import com.upv.muitss.arevi.logic.web.interfaces.ActivityMessage;
-
-import java.util.Arrays;
-import java.util.List;
 
 public class ProfileConfigurationFragmentView extends Fragment implements ActivityMessage {
     /**
@@ -29,9 +29,6 @@ public class ProfileConfigurationFragmentView extends Fragment implements Activi
      * fragment.
      */
     private static final String ARG_SECTION_NUMBER = "section_number";
-    private static final List<String> genders = Arrays.asList("Male", "Female","Other (specify)");
-    private static final List<String> ages = Arrays.asList("17 or younger", "18-20", "21-29", "30-39", "40-49", "50-59", "60 or older");
-    private static final List<String> educations = Arrays.asList("Less than high school degree", "High school degree or equivalent", "Some college but no degree", "Associate degree", "Bachelor degree", "Graduate degree");
 
     private View rootView;
 
@@ -121,14 +118,14 @@ public class ProfileConfigurationFragmentView extends Fragment implements Activi
         TextView otherGenderText = rootView.findViewById(R.id.text_view_layout_gender);
 
         Spinner genderSpinner = rootView.findViewById(R.id.input_spinner_gender);
-        genderSpinner.setSelection(getIndex(genderSpinner, AppState.getInstance().getUserInfo().gender));
-        AppState.getInstance().getUserInfo().gender = genders.get(genderSpinner.getFirstVisiblePosition());
+        genderSpinner.setSelection(GenderType.getGenderType(AppState.getInstance().getUserInfo().gender));
+        AppState.getInstance().getUserInfo().gender = GenderType.getGenderType(genderSpinner.getFirstVisiblePosition());
         genderSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 otherGenderLayout.setVisibility(position == 2 ? View.VISIBLE : View.GONE);
                 otherGenderText.setVisibility(position == 2 ? View.VISIBLE : View.GONE);
-                AppState.getInstance().getUserInfo().gender = genders.get(position);
+                AppState.getInstance().getUserInfo().gender = GenderType.getGenderType(position);
             }
 
             @Override
@@ -151,12 +148,12 @@ public class ProfileConfigurationFragmentView extends Fragment implements Activi
         });
 
         Spinner ageSpinner = rootView.findViewById(R.id.input_spinner_age);
-        ageSpinner.setSelection(getIndex(ageSpinner, AppState.getInstance().getUserInfo().age));
-        AppState.getInstance().getUserInfo().age = ages.get(ageSpinner.getFirstVisiblePosition());
+        ageSpinner.setSelection(AgeType.getAgeType(AppState.getInstance().getUserInfo().age));
+        AppState.getInstance().getUserInfo().age = AgeType.getAgeType(ageSpinner.getFirstVisiblePosition());
         ageSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                AppState.getInstance().getUserInfo().age = ages.get(position);
+                AppState.getInstance().getUserInfo().age = AgeType.getAgeType(position);
             }
 
             @Override
@@ -165,34 +162,23 @@ public class ProfileConfigurationFragmentView extends Fragment implements Activi
         });
 
         Spinner educationSpinner = rootView.findViewById(R.id.input_spinner_education);
-        educationSpinner.setSelection(getIndex(educationSpinner, AppState.getInstance().getUserInfo().education));
-        AppState.getInstance().getUserInfo().education = educations.get(educationSpinner.getFirstVisiblePosition());
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(rootView.getContext(),
+                R.array.input_spinner_education_list, android.R.layout.simple_spinner_item);
+        adapter.setDropDownViewResource(R.layout.spinner_wrap_text_adapter);
+        educationSpinner.setAdapter(adapter);
+        educationSpinner.setSelection(EducationType.getEducationType(AppState.getInstance().getUserInfo().education));
+        AppState.getInstance().getUserInfo().education = EducationType.getEducationType(educationSpinner.getFirstVisiblePosition());
         educationSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                AppState.getInstance().getUserInfo().education = educations.get(position);
+                AppState.getInstance().getUserInfo().education = EducationType.getEducationType(position);
             }
 
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
             }
         });
-        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(rootView.getContext(),
-                R.array.input_spinner_education_list, android.R.layout.simple_spinner_item);
-        adapter.setDropDownViewResource(R.layout.spinner_wrap_text_adapter);
-        educationSpinner.setAdapter(adapter);
     }
-
-    private int getIndex(Spinner spinner, String myString){
-        for (int i=0;i<spinner.getCount();i++){
-            if (spinner.getItemAtPosition(i).toString().equalsIgnoreCase(myString)){
-                return i;
-            }
-        }
-
-        return 0;
-    }
-
 
     @Override
     public <T> void onResponse(T response) {

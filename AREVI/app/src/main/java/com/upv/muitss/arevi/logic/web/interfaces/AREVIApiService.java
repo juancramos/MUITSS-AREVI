@@ -1,8 +1,8 @@
 package com.upv.muitss.arevi.logic.web.interfaces;
 
 import com.google.gson.JsonObject;
-import com.upv.muitss.arevi.entities.AccessToken;
-import com.upv.muitss.arevi.entities.DataResponse;
+import com.upv.muitss.arevi.models.AccessToken;
+import com.upv.muitss.arevi.models.DataResponse;
 import com.upv.muitss.arevi.entities.Profile;
 import com.upv.muitss.arevi.entities.Round;
 import com.upv.muitss.arevi.entities.Task;
