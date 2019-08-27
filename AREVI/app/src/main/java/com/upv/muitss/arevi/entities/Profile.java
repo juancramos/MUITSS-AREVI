@@ -10,9 +10,9 @@ public class Profile {
     @SerializedName("id")
     @Expose
     public String id;
-    @SerializedName("profileName")
+    @SerializedName("name")
     @Expose
-    public String profileName;
+    public String name;
     @SerializedName("enabled")
     @Expose
     public String enabled;
@@ -28,7 +28,7 @@ public class Profile {
     public String toString() {
         return "profile = {" +
                 "id = '" + id + '\'' +
-                ", profileName = '" + profileName + '\'' +
+                ", name = '" + name + '\'' +
                 ", configuration = '" + configuration.toString() + '\'' +
                 ", enabled = '" + enabled + '\'' +
                 ", userId = '" + userId + '\'' +

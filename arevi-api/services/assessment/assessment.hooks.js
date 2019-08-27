@@ -1,29 +1,26 @@
-const preventChangeRole = require('../../hooks/user/role-hook')
 const { authenticate } = require('@feathersjs/authentication').hooks;
 const checkPermissions = require('feathers-permissions');
 const { iff } = require('feathers-hooks-common');
 const { restrictToOwner } = require('feathers-authentication-hooks');
-const { hashPassword } = require('@feathersjs/authentication-local').hooks;
 const restrict = [
-  authenticate('jwt'),
   checkPermissions({
     roles: ['admin'],
     field: 'role',
     error: false
   }),
   iff(context => !context.params.permitted,
-    restrictToOwner({ idField: 'id', ownerField: 'id' })
+    restrictToOwner({ idField: 'id', ownerField: 'userId' })
   )
 ];
 
 module.exports = {
   before: {
-    all: [],
+    all: [authenticate('jwt')],
     find: [...restrict],
     get: [...restrict],
-    create: [preventChangeRole(), hashPassword("password")],
-    update: [preventChangeRole(), ...restrict, hashPassword("password")],
-    patch: [preventChangeRole(), ...restrict, hashPassword("password")],
+    create: [],
+    update: [...restrict],
+    patch: [...restrict],
     remove: [...restrict]
   },
 

@@ -54,6 +54,7 @@ module.exports = function (app) {
     user.hasOne(models.user_info, { foreignKey: { allowNull: false } });
     user.hasMany(models.profile, { foreignKey: { allowNull: false } });
     user.hasMany(models.round, { foreignKey: { allowNull: false } });
+    user.hasMany(models.assessment, { foreignKey: { allowNull: false } });
   };
 
   return user;

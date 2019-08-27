@@ -5,21 +5,31 @@ const DataTypes = Sequelize.DataTypes;
 
 module.exports = function (app) {
   const sequelizeClient = app.get('sequelizeClient');
-  const task = sequelizeClient.define('task',
+  const assessment = sequelizeClient.define('assessment',
     {
       id: {
         type: DataTypes.UUID,
         defaultValue: DataTypes.UUIDV4,
         primaryKey: true
       },
-      work: {
+      name: {
+        type: DataTypes.STRING,
+        allowNull: false
+      },
+      type: {
+        type: DataTypes.ENUM({
+          values: ['SUS', 'NASA']
+        }),
+        allowNull: false
+      },
+      content: {
         type: DataTypes.JSON,
         allowNull: false
       },
-      enabled: {
+      completed: {
         type: DataTypes.BOOLEAN,
         allowNull: false,
-        defaultValue: true
+        defaultValue: false
       }
     },
     {
@@ -32,12 +42,10 @@ module.exports = function (app) {
   );
 
   // eslint-disable-next-line no-unused-vars
-  task.associate = function (models) {
+  assessment.associate = function (models) {
     // Define associations here
     // See http://docs.sequelizejs.com/en/latest/docs/associations/
-    task.hasMany(models.round, { foreignKey: { allowNull: false } });
-    task.hasMany(models.assessment, { foreignKey: { allowNull: false } });
   };
 
-  return task;
+  return assessment;
 };

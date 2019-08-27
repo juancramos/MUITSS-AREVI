@@ -320,14 +320,14 @@ public class PagerActivity extends AppCompatActivity implements ActivityMessage 
             Configuration c = p.getConfiguration();
             c.setSelectedAppTheme(theme);
             p.setConfiguration(c);
-            p.profileName = Profile.class.getSimpleName() + "-" + theme;
+            p.name = Profile.class.getSimpleName() + "-" + theme;
 
             AppState.getInstance().setProfile(p);
 
             if (AppState.getInstance().getProfile().isLocal()){
                 AREVIRepository.getInstance().postProfile(AppState.getInstance().getProfile());
             }
-            else if (Utils.getLogIn().isValidState() && p.profileName.equals(AppState.getInstance().getProfile().profileName)) {
+            else if (Utils.getLogIn().isValidState() && p.name.equals(AppState.getInstance().getProfile().name)) {
                 AREVIRepository.getInstance().updateProfile(AppState.getInstance().getProfile().id, AppState.getInstance().getProfile());
             }
         }

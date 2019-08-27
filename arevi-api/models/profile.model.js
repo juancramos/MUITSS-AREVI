@@ -12,7 +12,7 @@ module.exports = function (app) {
         defaultValue: DataTypes.UUIDV4,
         primaryKey: true
       },
-      profileName: {
+      name: {
         type: DataTypes.STRING,
         allowNull: false
       },
@@ -40,6 +40,7 @@ module.exports = function (app) {
     // Define associations here
     // See http://docs.sequelizejs.com/en/latest/docs/associations/
     profile.hasMany(models.round, { foreignKey: { allowNull: false } });
+    profile.hasMany(models.assessment, { foreignKey: { allowNull: false } });
   };
 
   return profile;

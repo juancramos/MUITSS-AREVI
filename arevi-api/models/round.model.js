@@ -35,6 +35,7 @@ module.exports = function (app) {
   round.associate = function (models) {
     // Define associations here
     // See http://docs.sequelizejs.com/en/latest/docs/associations/
+    round.hasMany(models.assessment, { foreignKey: { allowNull: false } });
   };
 
   return round;
