@@ -48,5 +48,9 @@ public class Work {
         scaleV = -1;
         scaleV1 = -1;
         scaleV2 = -1;
+        distance = -1;
+        seconds = -1;
+        minutes = -1;
+        milliSeconds = -1;
     }
 }

@@ -1,6 +1,7 @@
 package com.upv.muitss.arevi.logic.web.interfaces;
 
 import com.google.gson.JsonObject;
+import com.upv.muitss.arevi.entities.Assessment;
 import com.upv.muitss.arevi.models.AccessToken;
 import com.upv.muitss.arevi.models.DataResponse;
 import com.upv.muitss.arevi.entities.Profile;
@@ -28,6 +29,7 @@ public interface AREVIApiService {
     String PROFILE_API_ROUTE = "/profile";
     String TASK_API_ROUTE = "/task";
     String ROUND_API_ROUTE = "/round";
+    String ASSESSMENT_API_ROUTE = "/assessment";
     String BUILD_VERSION_API_ROUTE = "/build-version";
 
     @GET(USER_API_ROUTE)
@@ -78,6 +80,10 @@ public interface AREVIApiService {
     Call<DataResponse<Task>> findApiTask(@Query("enabled") int enabled);
 
 
+    @GET(ROUND_API_ROUTE)
+    Call<DataResponse<Round>> findApiRound(@Query("completed") int completed, @Query("$limit") int limit
+            , @Query("$sort[createdAt]") int order);
+
     @POST(ROUND_API_ROUTE)
     @Headers({ "Content-Type: application/json;charset=UTF-8"})
     Call<Round> postApiRound(@Body Round pRound);
@@ -85,6 +91,15 @@ public interface AREVIApiService {
     @PATCH(ROUND_API_ROUTE + "/{id}")
     @Headers({ "Content-Type: application/json;charset=UTF-8"})
     Call<Round> patchApiRound(@Path("id") String id, @Body JsonObject object);
+
+
+    @POST(ASSESSMENT_API_ROUTE)
+    @Headers({ "Content-Type: application/json;charset=UTF-8"})
+    Call<Assessment> postApiAssessment(@Body Assessment pRound);
+
+    @PATCH(ASSESSMENT_API_ROUTE + "/{id}")
+    @Headers({ "Content-Type: application/json;charset=UTF-8"})
+    Call<Assessment> patchApiAssessment(@Path("id") String id, @Body JsonObject object);
 
 
     @GET(BUILD_VERSION_API_ROUTE)

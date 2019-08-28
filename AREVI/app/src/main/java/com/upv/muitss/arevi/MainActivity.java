@@ -72,12 +72,8 @@ public class MainActivity extends AppCompatActivity implements ActivityMessage {
             return;
         }
 
-        Intent navigateIntent = new Intent(this, ArActivity.class);
+        Intent navigateIntent = new Intent(MainActivity.this, ArInstructionsActivity.class);
         startActivity(navigateIntent);
-
-//         final int result = 1;
-//         getNameScreenIntent.putExtra("callingActivity", "MainActivity");
-//         startActivityForResult(getNameScreenIntent, result);
     }
 
     public void onLogInButtonClick(View view) {

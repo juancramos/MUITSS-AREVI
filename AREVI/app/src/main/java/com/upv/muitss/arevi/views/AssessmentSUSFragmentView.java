@@ -6,7 +6,6 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
@@ -17,8 +16,9 @@ import com.upv.muitss.arevi.entities.Assessment;
 import com.upv.muitss.arevi.entities.Content;
 import com.upv.muitss.arevi.enums.AssessmentType;
 import com.upv.muitss.arevi.helpers.AppState;
-import com.upv.muitss.arevi.helpers.Constants;
 import com.upv.muitss.arevi.helpers.Utils;
+
+import java.util.Locale;
 
 public class AssessmentSUSFragmentView extends Fragment {
     /**
@@ -51,8 +51,11 @@ public class AssessmentSUSFragmentView extends Fragment {
 
         View rootView = null;
 
-        if (section == 0) {
+        if (section == 2) {
             rootView = inflater.inflate(R.layout.fragment_pager_assessment_sus_1, container, false);
+
+            TextView tittle = rootView.findViewById(R.id.section_label);
+            tittle.setText(String.format(Locale.getDefault(), "%s %d / %d", tittle.getText(), 1, 2));
 
             TextView t1 = rootView.findViewById(R.id.sus_1_text);
             RadioGroup rg1 = rootView.findViewById(R.id.sus_1_radio_group);
@@ -110,8 +113,11 @@ public class AssessmentSUSFragmentView extends Fragment {
             });
 
         }
-        else if (section == 1) {
+        else if (section == 3) {
             rootView = inflater.inflate(R.layout.fragment_pager_assessment_sus_2, container, false);
+
+            TextView tittle = rootView.findViewById(R.id.section_label);
+            tittle.setText(String.format(Locale.getDefault(), "%s %d / %d", tittle.getText(), 2, 2));
 
             TextView t6 = rootView.findViewById(R.id.sus_6_text);
             RadioGroup rg6 = rootView.findViewById(R.id.sus_6_radio_group);
@@ -182,6 +188,8 @@ public class AssessmentSUSFragmentView extends Fragment {
         }
 
         Assessment currentAssessment = AppState.getInstance().getAssessmentByType(AssessmentType.SUS);
+        currentAssessment.name = AssessmentType.SUS.toString() + '-'
+                + AppState.getInstance().getProfile().name + '-' + Utils.getLogIn().email;
         currentAssessment.type = AssessmentType.SUS;
         AppState.getInstance().addAssessment(currentAssessment);
         return rootView;

@@ -173,7 +173,7 @@ public class ProfileActivity extends AppCompatActivity implements ActivityMessag
 
         boolean hasErrors = !appState.getUser().isValidState() || !appState.getUserInfo().isValidState();
 
-        if (!hasErrors && !AppState.getInstance().getUser().fetchingData) {
+        if (!hasErrors && !AppState.getInstance().isFetchingData()) {
             Utils.popProgressDialog(this, Utils.getResourceString(R.string.dialog_loading_text));
             if (Utils.getLogIn().isValidState() && !AppState.getInstance().getUser().isLocal()){
                 AREVIRepository.getInstance().updateUser(AppState.getInstance().getUser().id, AppState.getInstance().getUser(), this);

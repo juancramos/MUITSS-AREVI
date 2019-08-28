@@ -7,6 +7,8 @@ import android.util.Log;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
+import com.upv.muitss.arevi.entities.Assessment;
+import com.upv.muitss.arevi.entities.Content;
 import com.upv.muitss.arevi.models.AccessToken;
 import com.upv.muitss.arevi.models.DataResponse;
 import com.upv.muitss.arevi.entities.Profile;
@@ -45,7 +47,7 @@ public class AREVIRepository {
     }
 
     public void registerUser(User user, ActivityMessage caller) {
-        user.fetchingData = true;
+        AppState.getInstance().setFetchingData(true);
         apiService.postApiUser(user).enqueue(new Callback<User>() {
             @Override
             public void onResponse(@NonNull Call<User> call, @NonNull Response<User> response) {
@@ -76,7 +78,7 @@ public class AREVIRepository {
     }
 
     public void updateUser(String id, User user, ActivityMessage caller) {
-        user.fetchingData = true;
+        AppState.getInstance().setFetchingData(true);
         apiService.patchApiUser(id, user).enqueue(new Callback<User>() {
             @Override
             public void onResponse(@NonNull Call<User> call, @NonNull Response<User> response) {
@@ -290,6 +292,73 @@ public class AREVIRepository {
         });
     }
 
+    public void postAssessment(Assessment assessment) {
+        AppState.getInstance().setFetchingData(true);
+        if (TextUtils.isEmpty(Utils.getUserId()) || TextUtils.isEmpty(AppState.getInstance().getTask().id)
+                || TextUtils.isEmpty(AppState.getInstance().getProfile().id)
+                || TextUtils.isEmpty(AppState.getInstance().getRound().id)) return;
+
+        assessment.userId = Utils.getUserId();
+        assessment.taskId = AppState.getInstance().getTask().id;
+        assessment.profileId = AppState.getInstance().getProfile().id;
+        assessment.roundId = AppState.getInstance().getRound().id;
+        apiService.postApiAssessment(assessment).enqueue(new Callback<Assessment>() {
+            @Override
+            public void onResponse(@NonNull Call<Assessment> call, @NonNull Response<Assessment> response) {
+
+                if(response.isSuccessful()) {
+                    Assessment apiAssessment = response.body();
+
+                    assert apiAssessment != null;
+
+                    AppState.getInstance().addAssessment(apiAssessment);
+                    AppState.getInstance().setFetchingData(false);
+                    Log.i(TAG, "post submitted to API." + apiAssessment.toString());
+
+                }
+                else {
+                    Log.i(TAG, "post submitted to API." + response.body());
+                }
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<Assessment> call, @NonNull Throwable t) {
+                AppState.getInstance().setFetchingData(false);
+                Log.e(TAG, "Unable to submit post to API.");
+            }
+        });
+    }
+
+    public void patchAssessment(String id, List<Content> content, boolean completed) {
+        JsonObject json = new JsonObject();
+        GsonBuilder gsonBuilder = new GsonBuilder();
+        Gson gson = gsonBuilder.create();
+        json.add("content", gson.toJsonTree(content));
+        json.addProperty("completed", gson.toJson(completed));
+        apiService.patchApiAssessment(id, json).enqueue(new Callback<Assessment>() {
+            @Override
+            public void onResponse(@NonNull Call<Assessment> call, @NonNull Response<Assessment> response) {
+
+                if(response.isSuccessful()) {
+                    Assessment apiAssessment = response.body();
+
+                    assert apiAssessment != null;
+
+                    AppState.getInstance().addAssessment(apiAssessment);
+                    Log.i(TAG, "post submitted to API." + apiAssessment.toString());
+                }
+                else {
+                    Log.i(TAG, "post submitted to API." + response.body());
+                }
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<Assessment> call, @NonNull Throwable t) {
+                Log.e(TAG, "Unable to submit post to API.");
+            }
+        });
+    }
+
     private void logIn(ActivityMessage caller){
         logIn(Utils.getLogIn(), caller);
     }
@@ -297,12 +366,12 @@ public class AREVIRepository {
     public void logIn(UserLogIn userLogIn, ActivityMessage caller){
         if (!TextUtils.isEmpty(userLogIn.email) && !TextUtils.isEmpty(userLogIn.password)){
 
-            AppState.getInstance().getUser().fetchingData = true;
+            AppState.getInstance().setFetchingData(true);
             apiService.authApi(new UserLogIn(userLogIn.email, userLogIn.password)).enqueue(new Callback<AccessToken>() {
                 @Override
                 public void onResponse(@NonNull Call<AccessToken> call, @NonNull Response<AccessToken> response) {
 
-                    AppState.getInstance().getUser().fetchingData = false;
+                    AppState.getInstance().setFetchingData(false);
                     Utils.popProgressDialog(null, null);
                     if(response.isSuccessful()) {
                         AccessToken token = response.body();
@@ -325,7 +394,7 @@ public class AREVIRepository {
 
                 @Override
                 public void onFailure(@NonNull Call<AccessToken> call, @NonNull Throwable t) {
-                    AppState.getInstance().getUser().fetchingData = false;
+                    AppState.getInstance().setFetchingData(false);
                     Utils.popProgressDialog(null, null);
                     Log.e(TAG, "Unable to submit post to API.");
                     if (caller != null) caller.onResponse(null);
@@ -338,12 +407,12 @@ public class AREVIRepository {
     }
 
     private void getApiUser(String userId) {
-        AppState.getInstance().getUser().fetchingData = true;
+        AppState.getInstance().setFetchingData(true);
         apiService.getApiUser(userId).enqueue(new Callback<DataResponse<User>>() {
             @Override
             public void onResponse(@NonNull Call<DataResponse<User>> call, @NonNull Response<DataResponse<User>> response) {
 
-                AppState.getInstance().getUser().fetchingData = false;
+                AppState.getInstance().setFetchingData(false);
                 Utils.popProgressDialog(null, null);
                 if(response.isSuccessful()) {
                     DataResponse<User> apiUser = response.body();
@@ -366,7 +435,7 @@ public class AREVIRepository {
 
             @Override
             public void onFailure(@NonNull Call<DataResponse<User>> call, @NonNull Throwable t) {
-                AppState.getInstance().getUser().fetchingData = false;
+                AppState.getInstance().setFetchingData(false);
                 Utils.popProgressDialog(null, null);
                 Log.e(TAG, "Unable to submit post to API.");
             }
@@ -410,7 +479,7 @@ public class AREVIRepository {
 
     public void getApiProfile(String userId, ActivityMessage caller) {
         Profile p = AppState.getInstance().getProfile();
-        if (p != null && p.getConfiguration() != null && !TextUtils.isEmpty(p.getConfiguration().getUseGoogleCardboard())) {
+        if (p != null && !TextUtils.isEmpty(p.id)  && p.getConfiguration() != null && !TextUtils.isEmpty(p.getConfiguration().getUseGoogleCardboard())) {
             if (caller != null) caller.onResponse(p);
             Utils.popProgressDialog(null, null);
             return;
@@ -451,7 +520,7 @@ public class AREVIRepository {
 
     public void getApiTask(ActivityMessage caller) {
         Task t = AppState.getInstance().getTask();
-        if (t != null && !TextUtils.isEmpty(t.getEnabled())) {
+        if (t != null && !TextUtils.isEmpty(t.id) && !TextUtils.isEmpty(t.getEnabled())) {
             if (caller != null) caller.onResponse(t);
             Utils.popProgressDialog(null, null);
             return;
@@ -485,6 +554,41 @@ public class AREVIRepository {
             public void onFailure(@NonNull Call<DataResponse<Task>> call, @NonNull Throwable t) {
                 Log.e(TAG, "Unable to submit post to API.");
                 if (caller != null) caller.onResponse(null);
+            }
+        });
+    }
+
+    public void getApiRound() {
+        Round r = AppState.getInstance().getRound();
+        if (r != null && !TextUtils.isEmpty(r.id) && !TextUtils.isEmpty(r.getCompleted())) {
+            Utils.popProgressDialog(null, null);
+            return;
+        }
+        apiService.findApiRound(1, 1, -1).enqueue(new Callback<DataResponse<Round>>() {
+            @Override
+            public void onResponse(@NonNull Call<DataResponse<Round>> call, @NonNull Response<DataResponse<Round>> response) {
+
+                if(response.isSuccessful()) {
+                    DataResponse<Round> apiRound = response.body();
+                    assert apiRound != null;
+                    if(apiRound.data.isEmpty()) {
+                        return;
+                    }
+
+                    Round round = apiRound.data.get(0);
+
+                    AppState.getInstance().setRound(round);
+
+                    Log.i(TAG, "post submitted to API." + round.toString());
+                }
+                else {
+                    Log.i(TAG, "post submitted to API." + response.body());
+                }
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<DataResponse<Round>> call, @NonNull Throwable t) {
+                Log.e(TAG, "Unable to submit post to API.");
             }
         });
     }

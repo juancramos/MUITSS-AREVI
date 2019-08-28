@@ -33,7 +33,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="start|center"
             android:text="@string/pager_skip_button_text"
-            android:onClick="onSkipButtonClick"
+            android:onClick="onSkipAssessmentButtonClick"
             style="@style/Widget.AppCompat.Button.Borderless"
             android:ellipsize="end"
             android:hyphenationFrequency="normal"
@@ -48,7 +48,7 @@
             android:padding="@dimen/activity_horizontal_margin"
             android:src="@drawable/ic_chevron_left_24dp"
             android:visibility="gone"
-            android:onClick="onBackButtonClick"
+            android:onClick="onBackAssessmentButtonClick"
             style="@style/Widget.AppCompat.Button.Borderless"
             android:ellipsize="end"
             android:hyphenationFrequency="normal"
@@ -73,6 +73,22 @@
                 style="@style/Widget.AppCompat.Button.Borderless"
                 android:layout_width="8dp"
                 android:layout_height="8dp"
+                android:layout_marginEnd="@dimen/activity_margin_half"
+                android:background="@drawable/indicator_unselected" />
+
+            <ImageView
+                android:id="@+id/intro_indicator_2_assessment"
+                style="@style/Widget.AppCompat.Button.Borderless"
+                android:layout_width="8dp"
+                android:layout_height="8dp"
+                android:layout_marginEnd="@dimen/activity_margin_half"
+                android:background="@drawable/indicator_unselected" />
+
+            <ImageView
+                android:id="@+id/intro_indicator_3_assessment"
+                style="@style/Widget.AppCompat.Button.Borderless"
+                android:layout_width="8dp"
+                android:layout_height="8dp"
                 android:background="@drawable/indicator_unselected" />
 
         </LinearLayout>
@@ -84,7 +100,7 @@
             android:layout_gravity="end|center"
             android:text="@string/pager_finish_button_text"
             android:visibility="gone"
-            android:onClick="onFinishButtonClick"
+            android:onClick="onFinishAssessmentButtonClick"
             style="@style/Widget.AppCompat.Button.Borderless"
             android:ellipsize="end"
             android:hyphenationFrequency="normal"
@@ -98,7 +114,7 @@
             android:layout_gravity="end|center"
             android:padding="@dimen/activity_horizontal_margin"
             android:src="@drawable/ic_chevron_right_24dp"
-            android:onClick="onNextButtonClick"
+            android:onClick="onNextAssessmentButtonClick"
             style="@style/Widget.AppCompat.Button.Borderless"
             android:ellipsize="end"
             android:hyphenationFrequency="normal"

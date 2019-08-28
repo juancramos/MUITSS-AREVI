@@ -430,7 +430,6 @@ public class ArView extends ArFragment {
         currentPolyAsset = null;
 
         owner = null;
-        AppState.getInstance().resetAr();
     }
 }
 

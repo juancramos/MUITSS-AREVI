@@ -9,6 +9,9 @@ public class Constants {
 
     public static final String CURRENT_BUILD = "CURRENT_BUILD";
 
+    public static final String CURRENT_FINISHED_ROUND = "CURRENT_FINISHED_ROUND";
+    public static final String CURRENT_FINISHED_TASK = "CURRENT_FINISHED_TASK";
+
     public static final String APP_THEME_DEFAULT_FONT_SIZE = "APP_THEME_DEFAULT_FONT_SIZE";
     public static final String APP_THEME_MEDIUM_FONT_SIZE = "APP_THEME_MEDIUM_FONT_SIZE";
     public static final String APP_THEME_LARGE_FONT_SIZE = "APP_THEME_LARGE_FONT_SIZE";

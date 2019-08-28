@@ -75,17 +75,31 @@ public class AppState {
 
     private List<Assessment> assessments;
     public List<Assessment> getAssessments() { return this.assessments; }
-    public void setAssessment(List<Assessment> lAssessment) { this.assessments = lAssessment; }
+    public void setAssessments(List<Assessment> lAssessment) { this.assessments = lAssessment; }
     public void addAssessment(Assessment pAssessment) {
         Assessment ca = getAssessmentByType(pAssessment.type);
-        if (ca.type != null && ca.type.equals(pAssessment.type)) return;
-        this.assessments.add(pAssessment);
+        if (ca.type != null && ca.type.equals(pAssessment.type)) {
+            ca.id = pAssessment.id;
+            ca.name = pAssessment.name;
+            ca.type = pAssessment.type;
+            ca.content = pAssessment.content;
+            ca.completed = pAssessment.completed;
+            ca.userId = pAssessment.userId;
+            ca.profileId = pAssessment.profileId;
+            ca.taskId = pAssessment.taskId;
+            ca.roundId = pAssessment.roundId;
+        }
+        else this.assessments.add(pAssessment);
     }
     public Assessment getAssessmentByType(AssessmentType pAssessmentType) {
         Assessment assessment = this.assessments.stream().filter(a -> a.type.equals(pAssessmentType)).findFirst().orElse(null);
         if (assessment == null) assessment = new Assessment();
         return assessment;
     }
+
+    private boolean fetchingData;
+    public boolean isFetchingData() { return fetchingData; }
+    public void setFetchingData(boolean fetchingData) { this.fetchingData = fetchingData; }
 
     private static AppState instance;
 
@@ -98,6 +112,7 @@ public class AppState {
     }
 
     private void initState(){
+        fetchingData = false;
         isTracking = false;
         isHitting = false;
         isLongPress = false;
@@ -121,6 +136,10 @@ public class AppState {
         task = new Task();
         work = new LinkedList<>(task.work);
         round = new Round();
+    }
+
+    public void resetAssessment(){
+        assessments = new LinkedList<>();
     }
 }
 

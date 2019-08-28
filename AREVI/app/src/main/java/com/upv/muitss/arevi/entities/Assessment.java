@@ -26,17 +26,37 @@ public class Assessment {
     @SerializedName("completed")
     @Expose
     public String completed;
+    @SerializedName("roundId")
+    @Expose
+    public String roundId;
+    @SerializedName("taskId")
+    @Expose
+    public String taskId;
+    @SerializedName("profileId")
+    @Expose
+    public String profileId;
+    @SerializedName("userId")
+    @Expose
+    public String userId;
 
     @NonNull
     @Override
     public String toString() {
-        return "profile = {" +
+        return "assessment = {" +
                 "id = '" + id + '\'' +
                 ", name = '" + name + '\'' +
                 ", type = '" + type + '\'' +
                 ", content = '" + content.toString() + '\'' +
                 ", completed = '" + completed + '\'' +
+                ", roundId = '" + roundId + '\'' +
+                ", taskId = '" + taskId + '\'' +
+                ", profileId = '" + profileId + '\'' +
+                ", userId = '" + userId + '\'' +
                 '}';
+    }
+
+    public boolean isLocal(){
+        return TextUtils.isEmpty(id);
     }
 
     public void addContent(Content pContent) {

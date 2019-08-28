@@ -1,0 +1,268 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ArInstructionsActivity">
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/section_label"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/ar_instructions_description_tittle"
+            android:ellipsize="end"
+            android:gravity="top|center"
+            android:hyphenationFrequency="normal"
+            android:breakStrategy="simple"
+            android:scrollHorizontally="false"
+            android:textSize="?attr/titleTextSize"
+            android:textStyle="bold"/>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:layout_marginLeft="@dimen/activity_margin_border"
+            android:layout_marginRight="@dimen/activity_margin_border"
+            android:layout_gravity="bottom"
+            android:background="?attr/fillPrimaryColor"  />
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="center"
+            android:padding="@dimen/activity_horizontal_margin">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/activity_horizontal_margin"
+                android:gravity="center"
+                android:text="@string/ar_instructions_description_text"
+                android:ellipsize="end"
+                android:hyphenationFrequency="normal"
+                android:breakStrategy="simple"
+                android:scrollHorizontally="false"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="start"
+            android:paddingLeft="@dimen/activity_horizontal_margin"
+            android:paddingRight="@dimen/activity_horizontal_margin"
+            android:id="@+id/fragment_ar_instructions_view">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center">
+
+                <ImageView
+                    android:layout_width="76dp"
+                    android:layout_height="76dp"
+                    android:padding="10dp"
+                    android:layout_gravity="center"
+                    android:adjustViewBounds="true"
+                    android:layout_marginTop="@dimen/activity_margin_half"
+                    android:src="@drawable/ic_fiber_manual_record_black_24dp"
+                    android:scaleType="fitCenter"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="6dp"
+                    android:text="@string/fragment_ar_pointer_text"
+                    android:ellipsize="end"
+                    android:hyphenationFrequency="normal"
+                    android:breakStrategy="simple"
+                    android:scrollHorizontally="false" />
+
+            </LinearLayout>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="2dp"
+                android:layout_marginLeft="@dimen/activity_margin_border"
+                android:layout_marginRight="@dimen/activity_margin_border"
+                android:layout_gravity="bottom"
+                android:background="?attr/fillPrimaryColor"  />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center">
+
+                <ProgressBar
+                    style="@android:style/Widget.DeviceDefault.ProgressBar.Large"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:progressDrawable="@drawable/ic_progress_bar_black_24dp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/fragment_ar_progress_bar_text"
+                    android:ellipsize="end"
+                    android:hyphenationFrequency="normal"
+                    android:breakStrategy="simple"
+                    android:scrollHorizontally="false" />
+
+            </LinearLayout>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="2dp"
+                android:layout_marginLeft="@dimen/activity_margin_border"
+                android:layout_marginRight="@dimen/activity_margin_border"
+                android:layout_gravity="bottom"
+                android:background="?attr/fillPrimaryColor"  />
+            <LinearLayout
+                android:id="@+id/ar_instructions_focus_view"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center">
+
+                <ImageView
+                    android:layout_width="76dp"
+                    android:layout_height="76dp"
+                    android:padding="5dp"
+                    android:layout_gravity="center"
+                    android:adjustViewBounds="true"
+                    android:layout_marginTop="@dimen/activity_margin_half"
+                    android:src="@drawable/ic_center_focus_strong_black_60dp"
+                    android:scaleType="fitCenter"/>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="6dp"
+                        android:text="@string/fragment_ar_focus_push_text"
+                        android:ellipsize="end"
+                        android:hyphenationFrequency="normal"
+                        android:breakStrategy="simple"
+                        android:scrollHorizontally="false" />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="6dp"
+                        android:text="@string/fragment_ar_focus_hold_text"
+                        android:ellipsize="end"
+                        android:hyphenationFrequency="normal"
+                        android:breakStrategy="simple"
+                        android:scrollHorizontally="false" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/ar_instructions_trigger_view"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center">
+
+                <ImageView
+                    android:layout_width="76dp"
+                    android:layout_height="76dp"
+                    android:padding="5dp"
+                    android:layout_gravity="center"
+                    android:adjustViewBounds="true"
+                    android:layout_marginTop="@dimen/activity_margin_half"
+                    android:src="@drawable/ic_adjust_black_24dp"
+                    android:scaleType="fitCenter"/>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="6dp"
+                        android:text="@string/fragment_ar_trigger_push_text"
+                        android:ellipsize="end"
+                        android:hyphenationFrequency="normal"
+                        android:breakStrategy="simple"
+                        android:scrollHorizontally="false" />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="6dp"
+                        android:text="@string/fragment_ar_trigger_hold_text"
+                        android:ellipsize="end"
+                        android:hyphenationFrequency="normal"
+                        android:breakStrategy="simple"
+                        android:scrollHorizontally="false" />
+                </LinearLayout>
+            </LinearLayout>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="2dp"
+                android:layout_marginLeft="@dimen/activity_margin_border"
+                android:layout_marginRight="@dimen/activity_margin_border"
+                android:layout_gravity="bottom"
+                android:background="?attr/fillPrimaryColor"  />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center">
+
+                <ImageView
+                    android:layout_width="76dp"
+                    android:layout_height="76dp"
+                    android:padding="10dp"
+                    android:layout_gravity="center"
+                    android:adjustViewBounds="true"
+                    android:layout_marginTop="@dimen/activity_margin_half"
+                    android:src="@drawable/ic_cast_black_24dp"
+                    android:scaleType="fitCenter"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="6dp"
+                    android:text="@string/fragment_ar_cast_push_text"
+                    android:ellipsize="end"
+                    android:hyphenationFrequency="normal"
+                    android:breakStrategy="simple"
+                    android:scrollHorizontally="false" />
+
+            </LinearLayout>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="2dp"
+                android:layout_marginLeft="@dimen/activity_margin_border"
+                android:layout_marginRight="@dimen/activity_margin_border"
+                android:layout_gravity="bottom"
+                android:background="?attr/fillPrimaryColor"  />
+
+            <Button
+                android:id="@+id/activity_instructions_ar_scene.btn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingTop="@dimen/activity_horizontal_margin"
+                android:text="@string/ar_instructions_start_button_text"
+                android:onClick="onEnterArButtonClick"
+                android:ellipsize="end"
+                android:hyphenationFrequency="normal"
+                android:breakStrategy="simple"
+                android:scrollHorizontally="false" />
+        </LinearLayout>
+
+    </LinearLayout>
+
+</ScrollView>

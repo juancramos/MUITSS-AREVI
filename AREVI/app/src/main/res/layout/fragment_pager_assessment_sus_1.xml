@@ -79,7 +79,7 @@
                 android:layout_gravity="start"
                 android:paddingStart="@dimen/activity_horizontal_margin"
                 android:paddingEnd="0dp"
-                android:maxWidth="200dp"
+                android:maxWidth="150dp"
                 android:text="@string/system_usability_scale_1_text"
                 android:ellipsize="end"
                 android:hyphenationFrequency="normal"
@@ -93,7 +93,7 @@
                 android:layout_gravity="end"
                 android:paddingStart="0dp"
                 android:paddingEnd="@dimen/activity_horizontal_margin"
-                android:maxWidth="200dp"
+                android:maxWidth="150dp"
                 android:text="@string/system_usability_scale_5_text"
                 android:ellipsize="end"
                 android:hyphenationFrequency="normal"
@@ -135,31 +135,31 @@
                     android:id="@+id/sus_1_1_radio_button"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/system_usability_scale_answer_1_text"/>
+                    android:text="@string/assessment_answer_1_text"/>
 
                 <RadioButton
                     android:id="@+id/sus_1_2_radio_button"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/system_usability_scale_answer_2_text"/>
+                    android:text="@string/assessment_answer_2_text"/>
 
                 <RadioButton
                     android:id="@+id/sus_1_3_radio_button"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/system_usability_scale_answer_3_text"/>
+                    android:text="@string/assessment_answer_3_text"/>
 
                 <RadioButton
                     android:id="@+id/sus_1_4_radio_button"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/system_usability_scale_answer_4_text"/>
+                    android:text="@string/assessment_answer_4_text"/>
 
                 <RadioButton
                     android:id="@+id/sus_1_5_radio_button"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/system_usability_scale_answer_5_text"/>
+                    android:text="@string/assessment_answer_5_text"/>
             </RadioGroup>
 
             <TextView
@@ -187,31 +187,31 @@
                     android:id="@+id/sus_2_1_radio_button"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/system_usability_scale_answer_1_text"/>
+                    android:text="@string/assessment_answer_1_text"/>
 
                 <RadioButton
                     android:id="@+id/sus_2_2_radio_button"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/system_usability_scale_answer_2_text"/>
+                    android:text="@string/assessment_answer_2_text"/>
 
                 <RadioButton
                     android:id="@+id/sus_2_3_radio_button"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/system_usability_scale_answer_3_text"/>
+                    android:text="@string/assessment_answer_3_text"/>
 
                 <RadioButton
                     android:id="@+id/sus_2_4_radio_button"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/system_usability_scale_answer_4_text"/>
+                    android:text="@string/assessment_answer_4_text"/>
 
                 <RadioButton
                     android:id="@+id/sus_2_5_radio_button"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/system_usability_scale_answer_5_text"/>
+                    android:text="@string/assessment_answer_5_text"/>
             </RadioGroup>
 
             <TextView
@@ -239,31 +239,31 @@
                     android:id="@+id/sus_3_1_radio_button"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/system_usability_scale_answer_1_text"/>
+                    android:text="@string/assessment_answer_1_text"/>
 
                 <RadioButton
                     android:id="@+id/sus_3_2_radio_button"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/system_usability_scale_answer_2_text"/>
+                    android:text="@string/assessment_answer_2_text"/>
 
                 <RadioButton
                     android:id="@+id/sus_3_3_radio_button"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/system_usability_scale_answer_3_text"/>
+                    android:text="@string/assessment_answer_3_text"/>
 
                 <RadioButton
                     android:id="@+id/sus_3_4_radio_button"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/system_usability_scale_answer_4_text"/>
+                    android:text="@string/assessment_answer_4_text"/>
 
                 <RadioButton
                     android:id="@+id/sus_3_5_radio_button"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/system_usability_scale_answer_5_text"/>
+                    android:text="@string/assessment_answer_5_text"/>
             </RadioGroup>
 
             <TextView
@@ -291,31 +291,31 @@
                     android:id="@+id/sus_4_1_radio_button"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/system_usability_scale_answer_1_text"/>
+                    android:text="@string/assessment_answer_1_text"/>
 
                 <RadioButton
                     android:id="@+id/sus_4_2_radio_button"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/system_usability_scale_answer_2_text"/>
+                    android:text="@string/assessment_answer_2_text"/>
 
                 <RadioButton
                     android:id="@+id/sus_4_3_radio_button"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/system_usability_scale_answer_3_text"/>
+                    android:text="@string/assessment_answer_3_text"/>
 
                 <RadioButton
                     android:id="@+id/sus_4_4_radio_button"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/system_usability_scale_answer_4_text"/>
+                    android:text="@string/assessment_answer_4_text"/>
 
                 <RadioButton
                     android:id="@+id/sus_4_5_radio_button"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/system_usability_scale_answer_5_text"/>
+                    android:text="@string/assessment_answer_5_text"/>
             </RadioGroup>
 
             <TextView
@@ -343,31 +343,31 @@
                     android:id="@+id/sus_5_1_radio_button"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/system_usability_scale_answer_1_text"/>
+                    android:text="@string/assessment_answer_1_text"/>
 
                 <RadioButton
                     android:id="@+id/sus_5_2_radio_button"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/system_usability_scale_answer_2_text"/>
+                    android:text="@string/assessment_answer_2_text"/>
 
                 <RadioButton
                     android:id="@+id/sus_5_3_radio_button"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/system_usability_scale_answer_3_text"/>
+                    android:text="@string/assessment_answer_3_text"/>
 
                 <RadioButton
                     android:id="@+id/sus_5_4_radio_button"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/system_usability_scale_answer_4_text"/>
+                    android:text="@string/assessment_answer_4_text"/>
 
                 <RadioButton
                     android:id="@+id/sus_5_5_radio_button"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/system_usability_scale_answer_5_text"/>
+                    android:text="@string/assessment_answer_5_text"/>
             </RadioGroup>
         </LinearLayout>
 

@@ -9,6 +9,7 @@ import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.SparseArray;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,7 +17,12 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 
+import com.upv.muitss.arevi.enums.AssessmentType;
+import com.upv.muitss.arevi.helpers.AppState;
+import com.upv.muitss.arevi.helpers.Constants;
 import com.upv.muitss.arevi.helpers.Utils;
+import com.upv.muitss.arevi.logic.web.implementations.AREVIRepository;
+import com.upv.muitss.arevi.views.AssessmentNASAFragmentView;
 import com.upv.muitss.arevi.views.AssessmentSUSFragmentView;
 import com.upv.muitss.arevi.views.CustomViewPager;
 
@@ -33,19 +39,36 @@ public class AssessmentActivity extends AppCompatActivity {
         setTheme(Utils.getSavedThemeStyle());
         setContentView(R.layout.activity_assessment);
 
+        // Get the Intent that called for this Activity to open
+        Intent callerIntent = getIntent();
+        // Get the data that was sent
+        AppState.getInstance().getTask().id = callerIntent.getStringExtra(Constants.CURRENT_FINISHED_TASK);
+        AppState.getInstance().getRound().id = callerIntent.getStringExtra(Constants.CURRENT_FINISHED_ROUND);
+
+        runOnUiThread(() ->{
+            if (TextUtils.isEmpty(AppState.getInstance().getTask().id)){
+                AREVIRepository.getInstance().getApiTask(null);
+            }
+            if (TextUtils.isEmpty(AppState.getInstance().getRound().id)){
+                AREVIRepository.getInstance().getApiRound();
+            }
+        });
+
         // Create the adapter that will return a fragment for each of the three
         // primary sections of the activity.
         SectionsPagerAdapter mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
 
         ImageView zero = findViewById(R.id.intro_indicator_0_assessment);
         ImageView one = findViewById(R.id.intro_indicator_1_assessment);
+        ImageView two = findViewById(R.id.intro_indicator_2_assessment);
+        ImageView three = findViewById(R.id.intro_indicator_3_assessment);
 
         mNextBtn = findViewById(R.id.intro_btn_next_assessment);
         mBackBtn = findViewById(R.id.intro_btn_back_assessment);
         mFinishBtn = findViewById(R.id.intro_btn_finish_assessment);
         mSkipBtn = findViewById(R.id.intro_btn_skip_assessment);
 
-        indicators = new ImageView[]{zero, one};
+        indicators = new ImageView[]{zero, one, two, three};
 
         // Set up the ViewPager with the sections adapter.
         mViewPager = findViewById(R.id.view_pager_container_assessment);
@@ -63,9 +86,9 @@ public class AssessmentActivity extends AppCompatActivity {
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
                 mViewPager.setPagingEnabled(true);
 
-                if (position == 1 && validateProfileFormError()) {
+                if (position > 1 && validateProfileFormError(position)) {
                     mViewPager.setPagingEnabled(false);
-                    page = page == 1 ? page - 1 : page;
+                    page = page - 1;
                     mViewPager.setCurrentItem(page, true);
                 }
                 /*
@@ -82,28 +105,23 @@ public class AssessmentActivity extends AppCompatActivity {
                 if (fragment != null) {
                     fragment.onResume();
                 }
-
-                switch (position) {
-                    case 0:
-                        if (validateProfileFormError()){
-                            position = position - 1;
-                            mViewPager.setCurrentItem(page, true);
-                            mViewPager.setPagingEnabled(false);
-                            break;
-                        }
-                        mViewPager.setBackgroundColor(color1);
-                        Utils.hideKeyboardFrom(getBaseContext(), mViewPager);
-                        break;
-                    case 1:
-                        mViewPager.setBackgroundColor(color1);
-                        Utils.hideKeyboardFrom(getBaseContext(), mViewPager);
-                        break;
+                if (position == 2) {
+                    if (!validateProfileFormError(position)) {
+                        sendAssessmentToApi(AssessmentType.NASA);
+                    }
                 }
+                if (position > 0 && validateProfileFormError(position)) {
+                    position = position - 1;
+                    mViewPager.setCurrentItem(page, true);
+                    mViewPager.setPagingEnabled(false);
+                }
+                mViewPager.setBackgroundColor(color1);
+                Utils.hideKeyboardFrom(getBaseContext(), mViewPager);
                 page = position;
                 updateIndicators(page);
 
-                mNextBtn.setVisibility(position == 1 ? View.GONE : View.VISIBLE);
-                mFinishBtn.setVisibility(position == 1 ? View.VISIBLE : View.GONE);
+                mNextBtn.setVisibility(position == 3 ? View.GONE : View.VISIBLE);
+                mFinishBtn.setVisibility(position == 3 ? View.VISIBLE : View.GONE);
                 mBackBtn.setVisibility(position == 0 ? View.GONE : View.VISIBLE);
                 mSkipBtn.setVisibility(position == 0 ? View.VISIBLE : View.GONE);
             }
@@ -119,12 +137,16 @@ public class AssessmentActivity extends AppCompatActivity {
         });
     }
 
-    public boolean validateProfileFormError(){
-        boolean hasErrors = false;
+    public boolean validateProfileFormError(int position){
+        boolean hasErrors;
 
-        if (page > 1)
+        if (position <= 1)
+            hasErrors = Utils.validateForm(findViewById(R.id.fragment_pager_assessment_nasa_1));
+        else if (position == 2)
+            hasErrors = Utils.validateForm(findViewById(R.id.fragment_pager_assessment_nasa_2));
+        else if (position == 3)
             hasErrors = Utils.validateForm(findViewById(R.id.fragment_pager_assessment_sus_1));
-        else if (page < 1)
+        else
             hasErrors = Utils.validateForm(findViewById(R.id.fragment_pager_assessment_sus_2));
 
         return hasErrors;
@@ -141,7 +163,7 @@ public class AssessmentActivity extends AppCompatActivity {
      * one of the sections/tabs/pages.
      */
     public class SectionsPagerAdapter extends FragmentPagerAdapter {
-        private int NUM_ITEMS = 2;
+        private int NUM_ITEMS = 4;
         private SparseArray<String> mFragmentTags;
         private FragmentManager mFragmentManager;
 
@@ -162,8 +184,12 @@ public class AssessmentActivity extends AppCompatActivity {
         public Fragment getItem(int position) {
             switch (position) {
                 case 0:
-                    return AssessmentSUSFragmentView.newInstance(position);
+                    return AssessmentNASAFragmentView.newInstance(position);
                 case 1:
+                    return AssessmentNASAFragmentView.newInstance(position);
+                case 2:
+                    return AssessmentSUSFragmentView.newInstance(position);
+                case 3:
                     return AssessmentSUSFragmentView.newInstance(position);
                 default:
                     return null;
@@ -206,30 +232,66 @@ public class AssessmentActivity extends AppCompatActivity {
         }
     }
 
-    public void onSkipButtonClick(View view) {
+    public void onSkipAssessmentButtonClick(View view) {
         startMainActivity();
     }
 
-    public void onBackButtonClick(View view) {
+    public void onBackAssessmentButtonClick(View view) {
         page -= 1;
         mViewPager.setCurrentItem(page, true);
     }
 
-    public void onFinishButtonClick(View view) {
-        startMainActivity();
-    }
-
-    public void onNextButtonClick(View view) {
+    public void onFinishAssessmentButtonClick(View view) {
+        page += 1;
         view.setFocusable(true);
         view.setFocusableInTouchMode(true);
         view.requestFocus();
 
-        boolean notComplete = validateProfileFormError();
+        boolean notComplete = validateProfileFormError(page);
 
         view.setFocusable(false);
         view.setFocusableInTouchMode(false);
         if (notComplete) return;
+        runOnUiThread(() -> {
+            sendAssessmentToApi(AssessmentType.SUS);
+        });
+        page -= 1;
+        startMainActivity();
+    }
+
+    public void onNextAssessmentButtonClick(View view) {
+        view.setFocusable(true);
+        view.setFocusableInTouchMode(true);
+        view.requestFocus();
+
+        boolean notComplete = validateProfileFormError(page);
+
+        view.setFocusable(false);
+        view.setFocusableInTouchMode(false);
+        if (notComplete) return;
+        if (page == 1) {
+            sendAssessmentToApi(AssessmentType.NASA);
+        }
         page += 1;
         mViewPager.setCurrentItem(page, true);
+    }
+
+    private void sendAssessmentToApi(AssessmentType assessmentType){
+        runOnUiThread(() -> {
+            if (!AppState.getInstance().isFetchingData()) {
+                if (AppState.getInstance().getAssessmentByType(assessmentType).isLocal()) {
+                    AREVIRepository.getInstance().postAssessment(AppState.getInstance().getAssessmentByType(assessmentType));
+                } else {
+                    AREVIRepository.getInstance().patchAssessment(AppState.getInstance().getAssessmentByType(assessmentType).id,
+                            AppState.getInstance().getAssessmentByType(assessmentType).content, true);
+                }
+            }
+        });
+    }
+
+    @Override
+    public void onStart(){
+        super.onStart();
+        AppState.getInstance().resetAssessment();
     }
 }

@@ -2,7 +2,7 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_height="wrap_content"
     android:layout_width="match_parent"
-    android:id="@+id/fragment_pager_assessment_sus_2">
+    android:id="@+id/fragment_pager_assessment_nasa_2">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -20,7 +20,7 @@
                 android:layout_gravity="center"
                 android:adjustViewBounds="true"
                 android:layout_marginTop="@dimen/activity_margin_half"
-                android:src="@drawable/ic_assignment_turned_in_black_24dp"
+                android:src="@drawable/ic_assignment_black_24dp"
                 android:scaleType="fitCenter"
                 android:contentDescription="@string/indicator_of_context_action_image_text" />
         </FrameLayout>
@@ -29,7 +29,7 @@
             android:id="@+id/section_label"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/system_usability_scale_tittle_text"
+            android:text="@string/task_load_index_tittle_text"
             android:ellipsize="end"
             android:gravity="top|center"
             android:hyphenationFrequency="normal"
@@ -58,13 +58,14 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/activity_horizontal_margin"
                 android:gravity="center"
-                android:text="@string/system_usability_scale_instructions_text"
+                android:text="@string/task_load_index_instructions_text"
                 android:ellipsize="end"
                 android:hyphenationFrequency="normal"
                 android:breakStrategy="simple"
                 android:scrollHorizontally="false"/>
 
         </LinearLayout>
+
 
         <FrameLayout
             android:layout_width="match_parent"
@@ -80,7 +81,7 @@
                 android:paddingStart="@dimen/activity_horizontal_margin"
                 android:paddingEnd="0dp"
                 android:maxWidth="150dp"
-                android:text="@string/system_usability_scale_1_text"
+                android:text="@string/task_load_index_performance_1_text"
                 android:ellipsize="end"
                 android:hyphenationFrequency="normal"
                 android:breakStrategy="simple"
@@ -94,35 +95,44 @@
                 android:paddingStart="0dp"
                 android:paddingEnd="@dimen/activity_horizontal_margin"
                 android:maxWidth="150dp"
-                android:text="@string/system_usability_scale_5_text"
+                android:text="@string/task_load_index_performance_5_text"
                 android:ellipsize="end"
                 android:hyphenationFrequency="normal"
                 android:breakStrategy="simple"
                 android:scrollHorizontally="false"/>
 
         </FrameLayout>
-
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:gravity="start"
-            android:padding="@dimen/activity_horizontal_margin"
-            android:id="@+id/fragment_pager_profile_config_form">
+            android:paddingStart="@dimen/activity_horizontal_margin"
+            android:paddingEnd="@dimen/activity_horizontal_margin">
 
             <TextView
-                android:id="@+id/sus_6_text"
+                android:id="@+id/nasa_6_tittle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:textStyle="bold|italic"
                 android:layout_marginTop="@dimen/activity_horizontal_margin"
-                android:text="@string/system_usability_scale_question_6_text"
+                android:text="@string/task_load_index_question_5_tittle"
+                android:ellipsize="end"
+                android:hyphenationFrequency="normal"
+                android:breakStrategy="simple"
+                android:scrollHorizontally="false"/>
+            <TextView
+                android:id="@+id/nasa_6_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/task_load_index_question_5_text"
                 android:ellipsize="end"
                 android:hyphenationFrequency="normal"
                 android:breakStrategy="simple"
                 android:scrollHorizontally="false"/>
 
             <RadioGroup
-                android:id="@+id/sus_6_radio_group"
+                android:id="@+id/nasa_6_radio_group"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
@@ -132,271 +142,140 @@
                 android:scrollHorizontally="false">
 
                 <RadioButton
-                    android:id="@+id/sus_6_1_radio_button"
+                    android:id="@+id/nasa_6_1_radio_button"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/assessment_answer_1_text"/>
 
                 <RadioButton
-                    android:id="@+id/sus_6_2_radio_button"
+                    android:id="@+id/nasa_6_2_radio_button"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/assessment_answer_2_text"/>
 
                 <RadioButton
-                    android:id="@+id/sus_6_3_radio_button"
+                    android:id="@+id/nasa_6_3_radio_button"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/assessment_answer_3_text"/>
 
                 <RadioButton
-                    android:id="@+id/sus_6_4_radio_button"
+                    android:id="@+id/nasa_6_4_radio_button"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/assessment_answer_4_text"/>
 
                 <RadioButton
-                    android:id="@+id/sus_6_5_radio_button"
+                    android:id="@+id/nasa_6_5_radio_button"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/assessment_answer_5_text"/>
             </RadioGroup>
-
-            <TextView
-                android:id="@+id/sus_7_text"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/activity_horizontal_margin"
-                android:text="@string/system_usability_scale_question_7_text"
-                android:ellipsize="end"
-                android:hyphenationFrequency="normal"
-                android:breakStrategy="simple"
-                android:scrollHorizontally="false"/>
-
-            <RadioGroup
-                android:id="@+id/sus_7_radio_group"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:ellipsize="end"
-                android:hyphenationFrequency="normal"
-                android:breakStrategy="simple"
-                android:scrollHorizontally="false">
-
-                <RadioButton
-                    android:id="@+id/sus_7_1_radio_button"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/assessment_answer_1_text"/>
-
-                <RadioButton
-                    android:id="@+id/sus_7_2_radio_button"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/assessment_answer_2_text"/>
-
-                <RadioButton
-                    android:id="@+id/sus_7_3_radio_button"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/assessment_answer_3_text"/>
-
-                <RadioButton
-                    android:id="@+id/sus_7_4_radio_button"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/assessment_answer_4_text"/>
-
-                <RadioButton
-                    android:id="@+id/sus_7_5_radio_button"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/assessment_answer_5_text"/>
-            </RadioGroup>
-
-            <TextView
-                android:id="@+id/sus_8_text"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/activity_horizontal_margin"
-                android:text="@string/system_usability_scale_question_8_text"
-                android:ellipsize="end"
-                android:hyphenationFrequency="normal"
-                android:breakStrategy="simple"
-                android:scrollHorizontally="false"/>
-
-            <RadioGroup
-                android:id="@+id/sus_8_radio_group"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:ellipsize="end"
-                android:hyphenationFrequency="normal"
-                android:breakStrategy="simple"
-                android:scrollHorizontally="false">
-
-                <RadioButton
-                    android:id="@+id/sus_8_1_radio_button"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/assessment_answer_1_text"/>
-
-                <RadioButton
-                    android:id="@+id/sus_8_2_radio_button"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/assessment_answer_2_text"/>
-
-                <RadioButton
-                    android:id="@+id/sus_8_3_radio_button"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/assessment_answer_3_text"/>
-
-                <RadioButton
-                    android:id="@+id/sus_8_4_radio_button"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/assessment_answer_4_text"/>
-
-                <RadioButton
-                    android:id="@+id/sus_8_5_radio_button"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/assessment_answer_5_text"/>
-            </RadioGroup>
-
-            <TextView
-                android:id="@+id/sus_9_text"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/activity_horizontal_margin"
-                android:text="@string/system_usability_scale_question_9_text"
-                android:ellipsize="end"
-                android:hyphenationFrequency="normal"
-                android:breakStrategy="simple"
-                android:scrollHorizontally="false"/>
-
-            <RadioGroup
-                android:id="@+id/sus_9_radio_group"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:ellipsize="end"
-                android:hyphenationFrequency="normal"
-                android:breakStrategy="simple"
-                android:scrollHorizontally="false">
-
-                <RadioButton
-                    android:id="@+id/sus_9_1_radio_button"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/assessment_answer_1_text"/>
-
-                <RadioButton
-                    android:id="@+id/sus_9_2_radio_button"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/assessment_answer_2_text"/>
-
-                <RadioButton
-                    android:id="@+id/sus_9_3_radio_button"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/assessment_answer_3_text"/>
-
-                <RadioButton
-                    android:id="@+id/sus_9_4_radio_button"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/assessment_answer_4_text"/>
-
-                <RadioButton
-                    android:id="@+id/sus_9_5_radio_button"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/assessment_answer_5_text"/>
-            </RadioGroup>
-
-            <TextView
-                android:id="@+id/sus_10_text"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/activity_horizontal_margin"
-                android:text="@string/system_usability_scale_question_10_text"
-                android:ellipsize="end"
-                android:hyphenationFrequency="normal"
-                android:breakStrategy="simple"
-                android:scrollHorizontally="false"/>
-
-            <RadioGroup
-                android:id="@+id/sus_10_radio_group"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:ellipsize="end"
-                android:hyphenationFrequency="normal"
-                android:breakStrategy="simple"
-                android:scrollHorizontally="false">
-
-                <RadioButton
-                    android:id="@+id/sus_10_1_radio_button"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/assessment_answer_1_text"/>
-
-                <RadioButton
-                    android:id="@+id/sus_10_2_radio_button"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/assessment_answer_2_text"/>
-
-                <RadioButton
-                    android:id="@+id/sus_10_3_radio_button"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/assessment_answer_3_text"/>
-
-                <RadioButton
-                    android:id="@+id/sus_10_4_radio_button"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/assessment_answer_4_text"/>
-
-                <RadioButton
-                    android:id="@+id/sus_10_5_radio_button"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/assessment_answer_5_text"/>
-            </RadioGroup>
-
-
-            <TextView
-                android:id="@+id/sus_11_text"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/system_usability_scale_free_question_text"
-                android:ellipsize="end"
-                android:hyphenationFrequency="normal"
-                android:breakStrategy="simple"
-                android:scrollHorizontally="false"/>
-            <android.support.design.widget.TextInputLayout
-                android:id="@+id/text_input_layout_scale_free_answer_text_input"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content">
-
-                <EditText
-                    android:id="@+id/system_usability_scale_free_answer_text_input"
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:inputType="textMultiLine"
-                    android:lines="6"
-                    android:minLines="4"
-                    android:scrollbars="vertical"/>
-
-            </android.support.design.widget.TextInputLayout>
         </LinearLayout>
 
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal"
+            android:paddingStart="@dimen/activity_horizontal_margin"
+            android:paddingEnd="@dimen/activity_horizontal_margin"
+            android:paddingTop="@dimen/activity_horizontal_margin"
+            android:gravity="top|center">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="start"
+                android:layout_gravity="start"
+                android:maxWidth="160dp"
+                android:text="@string/task_load_index_1_text"
+                android:ellipsize="end"
+                android:hyphenationFrequency="normal"
+                android:breakStrategy="simple"
+                android:scrollHorizontally="false"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="end"
+                android:layout_gravity="end"
+                android:maxWidth="160dp"
+                android:text="@string/task_load_index_5_text"
+                android:ellipsize="end"
+                android:hyphenationFrequency="normal"
+                android:breakStrategy="simple"
+                android:scrollHorizontally="false"/>
+
+        </FrameLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="start"
+            android:paddingStart="@dimen/activity_horizontal_margin"
+            android:paddingEnd="@dimen/activity_horizontal_margin">
+            <TextView
+                android:id="@+id/nasa_7_tittle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textStyle="bold|italic"
+                android:layout_marginTop="@dimen/activity_horizontal_margin"
+                android:text="@string/task_load_index_question_6_tittle"
+                android:ellipsize="end"
+                android:hyphenationFrequency="normal"
+                android:breakStrategy="simple"
+                android:scrollHorizontally="false"/>
+            <TextView
+                android:id="@+id/nasa_7_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/task_load_index_question_6_text"
+                android:ellipsize="end"
+                android:hyphenationFrequency="normal"
+                android:breakStrategy="simple"
+                android:scrollHorizontally="false"/>
+
+            <RadioGroup
+                android:id="@+id/nasa_7_radio_group"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:ellipsize="end"
+                android:hyphenationFrequency="normal"
+                android:breakStrategy="simple"
+                android:scrollHorizontally="false">
+
+                <RadioButton
+                    android:id="@+id/nasa_7_1_radio_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/assessment_answer_1_text"/>
+
+                <RadioButton
+                    android:id="@+id/nasa_7_2_radio_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/assessment_answer_2_text"/>
+
+                <RadioButton
+                    android:id="@+id/nasa_7_3_radio_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/assessment_answer_3_text"/>
+
+                <RadioButton
+                    android:id="@+id/nasa_7_4_radio_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/assessment_answer_4_text"/>
+
+                <RadioButton
+                    android:id="@+id/nasa_7_5_radio_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/assessment_answer_5_text"/>
+            </RadioGroup>
+        </LinearLayout>
     </LinearLayout>
 
 </ScrollView>

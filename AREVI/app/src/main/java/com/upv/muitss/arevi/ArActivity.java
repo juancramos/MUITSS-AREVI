@@ -16,6 +16,7 @@ import com.upv.muitss.arevi.entities.Profile;
 import com.upv.muitss.arevi.entities.Task;
 import com.upv.muitss.arevi.entities.Work;
 import com.upv.muitss.arevi.helpers.AppState;
+import com.upv.muitss.arevi.helpers.Constants;
 import com.upv.muitss.arevi.helpers.Utils;
 import com.upv.muitss.arevi.logic.web.implementations.AREVIRepository;
 import com.upv.muitss.arevi.logic.web.implementations.PolyRepository;
@@ -41,6 +42,7 @@ public class ArActivity extends AppCompatActivity implements ActivityMessage {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setTheme(Utils.getSavedThemeStyle());
 
         boolean userLogin = Utils.getLogIn().isValidState();
 
@@ -87,8 +89,13 @@ public class ArActivity extends AppCompatActivity implements ActivityMessage {
     }
 
     public void startAssessmentActivity(){
-        Intent toMain = new Intent(ArActivity.this, AssessmentActivity.class);
-        startActivity(toMain);
+        String roundId = AppState.getInstance().getRound().id;
+        String taskId = AppState.getInstance().getTask().id;
+        Intent assessmentIntent = new Intent(ArActivity.this, AssessmentActivity.class);
+        assessmentIntent.putExtra(Constants.CURRENT_FINISHED_ROUND, roundId);
+        assessmentIntent.putExtra(Constants.CURRENT_FINISHED_TASK, taskId);
+        startActivity(assessmentIntent);
+
         finish();
     }
 
@@ -138,6 +145,12 @@ public class ArActivity extends AppCompatActivity implements ActivityMessage {
     }
 
     @Override
+    public void onStart(){
+        super.onStart();
+        AppState.getInstance().resetAr();
+    }
+
+    @Override
     public void onDestroy() {
         super.onDestroy();
 
@@ -149,7 +162,6 @@ public class ArActivity extends AppCompatActivity implements ActivityMessage {
 
     public void configurationChanged(boolean orientation){
         // Checks the orientation of the screen
-        setTheme(Utils.getSavedThemeStyle());
         if (orientation) {
             setContentView(R.layout.activity_ar_landscape);
         }

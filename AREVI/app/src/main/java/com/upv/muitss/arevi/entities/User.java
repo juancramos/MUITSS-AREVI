@@ -23,9 +23,6 @@ public class User {
     @Expose
     private String enabled;
 
-
-    public boolean fetchingData;
-
     @NonNull
     @Override
     public String toString() {
