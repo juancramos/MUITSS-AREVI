@@ -142,12 +142,20 @@ public class AssessmentActivity extends AppCompatActivity {
 
         if (position <= 1)
             hasErrors = Utils.validateForm(findViewById(R.id.fragment_pager_assessment_nasa_1));
-        else if (position == 2)
+        else if (position == 2) {
             hasErrors = Utils.validateForm(findViewById(R.id.fragment_pager_assessment_nasa_2));
+            if (!hasErrors){
+                AppState.getInstance().getAssessmentByType(AssessmentType.NASA).completed = "1";
+            }
+        }
         else if (position == 3)
             hasErrors = Utils.validateForm(findViewById(R.id.fragment_pager_assessment_sus_1));
-        else
+        else {
             hasErrors = Utils.validateForm(findViewById(R.id.fragment_pager_assessment_sus_2));
+            if (!hasErrors){
+                AppState.getInstance().getAssessmentByType(AssessmentType.SUS).completed = "1";
+            }
+        }
 
         return hasErrors;
     }
