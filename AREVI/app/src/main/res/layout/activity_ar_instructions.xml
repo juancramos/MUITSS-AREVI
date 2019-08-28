@@ -62,6 +62,7 @@
                 android:hyphenationFrequency="normal"
                 android:breakStrategy="simple"
                 android:scrollHorizontally="false"
+                android:textSize="?attr/editTextSize"
                 style="@style/Widget.MaterialComponents.Button.TextButton"/>
         </LinearLayout>
 
