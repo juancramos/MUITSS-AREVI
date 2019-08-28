@@ -11,6 +11,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
@@ -83,18 +85,36 @@ public class Utils {
         return theme;
     }
 
-    public static void validateForm(View view) {
+    private static boolean validateForm(View view, boolean hasErrors) {
+        boolean he = validateForm(view);
+        if (hasErrors) he = true;
+        return he;
+    }
+
+    public static boolean validateForm(View view) {
+        boolean hasErrors = false;
         if (view instanceof ViewGroup) {
             ViewGroup viewGroup = (ViewGroup)view;
             for (int i = 0; i < viewGroup.getChildCount(); i++) {
                 View v = viewGroup.getChildAt(i);
                 if (v instanceof EditText) {
-                    validateInput(v);
+                    EditText editText = (EditText) v;
+                    if (editText.getMaxLines() > 1) {
+                        hasErrors = false;
+                    }
+                    else if (validateInput(v) == null){
+                        hasErrors = true;
+                    }
+                } else if (v instanceof RadioGroup) {
+                    if (validateInput(v) == null){
+                        hasErrors = true;
+                    }
                 } else{
-                    validateForm(v);
+                    hasErrors = validateForm(v, hasErrors);
                 }
             }
         }
+        return hasErrors;
     }
 
     public static String validateInput(View view) {
@@ -104,6 +124,9 @@ public class Utils {
             // Reset errors.
             TextInputLayout parent = (TextInputLayout) view.getParent().getParent();
             parent.setError(null);
+            if (editText.getMaxLines() > 1) {
+                return textFromEditView;
+            }
             if (Utils.isNullOrEmpty(textFromEditView)) {
                 parent.setError(getResourceString(R.string.form_validation_error_empty));
             }
@@ -111,6 +134,18 @@ public class Utils {
                 parent.setError(getResourceString(R.string.form_validation_error_email));
             }
             return textFromEditView;
+        }
+        else if (view instanceof RadioGroup) {
+            RadioGroup rg = (RadioGroup)view;
+            int rbId = rg.getCheckedRadioButtonId();
+            int max = rg.getChildCount() - 1;
+            RadioButton rb = (RadioButton) rg.getChildAt(max);
+            rb.setError(null);
+            if (rbId <= 0){
+                rb.setError(getResourceString(R.string.form_validation_error_empty));
+                return null;
+            }
+            return rb.getText().toString();
         }
         return null;
     }

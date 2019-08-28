@@ -1,0 +1,377 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_height="wrap_content"
+    android:layout_width="match_parent"
+    android:id="@+id/fragment_pager_assessment_sus_1">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <ImageView
+                android:id="@+id/section_img"
+                android:layout_width="200dp"
+                android:layout_height="200dp"
+                android:layout_gravity="center"
+                android:adjustViewBounds="true"
+                android:layout_marginTop="@dimen/activity_margin_half"
+                android:src="@drawable/ic_assignment_black_24dp"
+                android:scaleType="fitCenter"
+                android:contentDescription="@string/indicator_of_context_action_image_text" />
+        </FrameLayout>
+
+        <TextView
+            android:id="@+id/section_label"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/system_usability_scale_tittle_text"
+            android:ellipsize="end"
+            android:gravity="top|center"
+            android:hyphenationFrequency="normal"
+            android:breakStrategy="simple"
+            android:scrollHorizontally="false"
+            android:textSize="?attr/titleTextSize"
+            android:textStyle="bold"/>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:layout_marginLeft="@dimen/activity_margin_border"
+            android:layout_marginRight="@dimen/activity_margin_border"
+            android:layout_gravity="bottom"
+            android:background="?attr/fillPrimaryColor"  />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="center"
+            android:padding="@dimen/activity_horizontal_margin">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/activity_horizontal_margin"
+                android:gravity="center"
+                android:text="@string/system_usability_scale_instructions_text"
+                android:ellipsize="end"
+                android:hyphenationFrequency="normal"
+                android:breakStrategy="simple"
+                android:scrollHorizontally="false"/>
+
+        </LinearLayout>
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal"
+            android:gravity="top|center">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="start"
+                android:layout_gravity="start"
+                android:paddingStart="@dimen/activity_horizontal_margin"
+                android:paddingEnd="0dp"
+                android:maxWidth="200dp"
+                android:text="@string/system_usability_scale_1_text"
+                android:ellipsize="end"
+                android:hyphenationFrequency="normal"
+                android:breakStrategy="simple"
+                android:scrollHorizontally="false"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="end"
+                android:layout_gravity="end"
+                android:paddingStart="0dp"
+                android:paddingEnd="@dimen/activity_horizontal_margin"
+                android:maxWidth="200dp"
+                android:text="@string/system_usability_scale_5_text"
+                android:ellipsize="end"
+                android:hyphenationFrequency="normal"
+                android:breakStrategy="simple"
+                android:scrollHorizontally="false"/>
+
+        </FrameLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="start"
+            android:padding="@dimen/activity_horizontal_margin"
+            android:id="@+id/fragment_pager_profile_config_form">
+
+            <TextView
+                android:id="@+id/sus_1_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/activity_horizontal_margin"
+                android:text="@string/system_usability_scale_question_1_text"
+                android:ellipsize="end"
+                android:hyphenationFrequency="normal"
+                android:breakStrategy="simple"
+                android:scrollHorizontally="false"/>
+
+            <RadioGroup
+                android:id="@+id/sus_1_radio_group"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:ellipsize="end"
+                android:hyphenationFrequency="normal"
+                android:breakStrategy="simple"
+                android:scrollHorizontally="false">
+
+                <RadioButton
+                    android:id="@+id/sus_1_1_radio_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/system_usability_scale_answer_1_text"/>
+
+                <RadioButton
+                    android:id="@+id/sus_1_2_radio_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/system_usability_scale_answer_2_text"/>
+
+                <RadioButton
+                    android:id="@+id/sus_1_3_radio_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/system_usability_scale_answer_3_text"/>
+
+                <RadioButton
+                    android:id="@+id/sus_1_4_radio_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/system_usability_scale_answer_4_text"/>
+
+                <RadioButton
+                    android:id="@+id/sus_1_5_radio_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/system_usability_scale_answer_5_text"/>
+            </RadioGroup>
+
+            <TextView
+                android:id="@+id/sus_2_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/activity_horizontal_margin"
+                android:text="@string/system_usability_scale_question_2_text"
+                android:ellipsize="end"
+                android:hyphenationFrequency="normal"
+                android:breakStrategy="simple"
+                android:scrollHorizontally="false"/>
+
+            <RadioGroup
+                android:id="@+id/sus_2_radio_group"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:ellipsize="end"
+                android:hyphenationFrequency="normal"
+                android:breakStrategy="simple"
+                android:scrollHorizontally="false">
+
+                <RadioButton
+                    android:id="@+id/sus_2_1_radio_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/system_usability_scale_answer_1_text"/>
+
+                <RadioButton
+                    android:id="@+id/sus_2_2_radio_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/system_usability_scale_answer_2_text"/>
+
+                <RadioButton
+                    android:id="@+id/sus_2_3_radio_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/system_usability_scale_answer_3_text"/>
+
+                <RadioButton
+                    android:id="@+id/sus_2_4_radio_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/system_usability_scale_answer_4_text"/>
+
+                <RadioButton
+                    android:id="@+id/sus_2_5_radio_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/system_usability_scale_answer_5_text"/>
+            </RadioGroup>
+
+            <TextView
+                android:id="@+id/sus_3_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/activity_horizontal_margin"
+                android:text="@string/system_usability_scale_question_3_text"
+                android:ellipsize="end"
+                android:hyphenationFrequency="normal"
+                android:breakStrategy="simple"
+                android:scrollHorizontally="false"/>
+
+            <RadioGroup
+                android:id="@+id/sus_3_radio_group"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:ellipsize="end"
+                android:hyphenationFrequency="normal"
+                android:breakStrategy="simple"
+                android:scrollHorizontally="false">
+
+                <RadioButton
+                    android:id="@+id/sus_3_1_radio_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/system_usability_scale_answer_1_text"/>
+
+                <RadioButton
+                    android:id="@+id/sus_3_2_radio_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/system_usability_scale_answer_2_text"/>
+
+                <RadioButton
+                    android:id="@+id/sus_3_3_radio_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/system_usability_scale_answer_3_text"/>
+
+                <RadioButton
+                    android:id="@+id/sus_3_4_radio_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/system_usability_scale_answer_4_text"/>
+
+                <RadioButton
+                    android:id="@+id/sus_3_5_radio_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/system_usability_scale_answer_5_text"/>
+            </RadioGroup>
+
+            <TextView
+                android:id="@+id/sus_4_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/activity_horizontal_margin"
+                android:text="@string/system_usability_scale_question_4_text"
+                android:ellipsize="end"
+                android:hyphenationFrequency="normal"
+                android:breakStrategy="simple"
+                android:scrollHorizontally="false"/>
+
+            <RadioGroup
+                android:id="@+id/sus_4_radio_group"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:ellipsize="end"
+                android:hyphenationFrequency="normal"
+                android:breakStrategy="simple"
+                android:scrollHorizontally="false">
+
+                <RadioButton
+                    android:id="@+id/sus_4_1_radio_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/system_usability_scale_answer_1_text"/>
+
+                <RadioButton
+                    android:id="@+id/sus_4_2_radio_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/system_usability_scale_answer_2_text"/>
+
+                <RadioButton
+                    android:id="@+id/sus_4_3_radio_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/system_usability_scale_answer_3_text"/>
+
+                <RadioButton
+                    android:id="@+id/sus_4_4_radio_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/system_usability_scale_answer_4_text"/>
+
+                <RadioButton
+                    android:id="@+id/sus_4_5_radio_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/system_usability_scale_answer_5_text"/>
+            </RadioGroup>
+
+            <TextView
+                android:id="@+id/sus_5_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/activity_horizontal_margin"
+                android:text="@string/system_usability_scale_question_5_text"
+                android:ellipsize="end"
+                android:hyphenationFrequency="normal"
+                android:breakStrategy="simple"
+                android:scrollHorizontally="false"/>
+
+            <RadioGroup
+                android:id="@+id/sus_5_radio_group"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:ellipsize="end"
+                android:hyphenationFrequency="normal"
+                android:breakStrategy="simple"
+                android:scrollHorizontally="false">
+
+                <RadioButton
+                    android:id="@+id/sus_5_1_radio_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/system_usability_scale_answer_1_text"/>
+
+                <RadioButton
+                    android:id="@+id/sus_5_2_radio_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/system_usability_scale_answer_2_text"/>
+
+                <RadioButton
+                    android:id="@+id/sus_5_3_radio_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/system_usability_scale_answer_3_text"/>
+
+                <RadioButton
+                    android:id="@+id/sus_5_4_radio_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/system_usability_scale_answer_4_text"/>
+
+                <RadioButton
+                    android:id="@+id/sus_5_5_radio_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/system_usability_scale_answer_5_text"/>
+            </RadioGroup>
+        </LinearLayout>
+
+    </LinearLayout>
+
+</ScrollView>
+

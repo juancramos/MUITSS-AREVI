@@ -41,7 +41,6 @@ public class ArActivity extends AppCompatActivity implements ActivityMessage {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setTheme(Utils.getSavedThemeStyle());
 
         boolean userLogin = Utils.getLogIn().isValidState();
 
@@ -50,6 +49,8 @@ public class ArActivity extends AppCompatActivity implements ActivityMessage {
                 AREVIRepository.getInstance().getApiProfile(Utils.getUserId(), this);
                 AREVIRepository.getInstance().getApiTask(this);
             });
+        } else {
+            startMainActivity();
         }
     }
 
@@ -81,6 +82,12 @@ public class ArActivity extends AppCompatActivity implements ActivityMessage {
 
     public void startMainActivity(){
         Intent toMain = new Intent(ArActivity.this, MainActivity.class);
+        startActivity(toMain);
+        finish();
+    }
+
+    public void startAssessmentActivity(){
+        Intent toMain = new Intent(ArActivity.this, AssessmentActivity.class);
         startActivity(toMain);
         finish();
     }
@@ -142,12 +149,14 @@ public class ArActivity extends AppCompatActivity implements ActivityMessage {
 
     public void configurationChanged(boolean orientation){
         // Checks the orientation of the screen
+        setTheme(Utils.getSavedThemeStyle());
         if (orientation) {
             setContentView(R.layout.activity_ar_landscape);
         }
         else {
             setContentView(R.layout.activity_ar);
         }
+
         arView = (ArView) getSupportFragmentManager().findFragmentById(R.id.sceneform_fragment);
         gallery = findViewById(R.id.gallery_layout);
 

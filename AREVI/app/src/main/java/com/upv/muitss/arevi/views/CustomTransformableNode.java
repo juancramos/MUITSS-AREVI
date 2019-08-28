@@ -158,7 +158,7 @@ public class CustomTransformableNode extends TransformableNode {
 
                 if (continueTask) owner.get().getArSceneView().getScene().addOnUpdateListener(owner.get().randomRenderListener);
                 else {
-                    owner.get().backToMain();
+                    owner.get().startAssessmentActivity();
                 }
             }
             else return false;

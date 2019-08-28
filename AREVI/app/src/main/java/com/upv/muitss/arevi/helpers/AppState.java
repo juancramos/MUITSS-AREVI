@@ -1,13 +1,18 @@
 package com.upv.muitss.arevi.helpers;
 
+import android.text.TextUtils;
+
+import com.upv.muitss.arevi.entities.Assessment;
 import com.upv.muitss.arevi.entities.Profile;
 import com.upv.muitss.arevi.entities.Round;
 import com.upv.muitss.arevi.entities.Task;
 import com.upv.muitss.arevi.entities.User;
 import com.upv.muitss.arevi.entities.UserInfo;
 import com.upv.muitss.arevi.entities.Work;
+import com.upv.muitss.arevi.enums.AssessmentType;
 import com.upv.muitss.arevi.models.PolyAsset;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
@@ -68,6 +73,20 @@ public class AppState {
     public PolyAsset pollPolyAsset() { return this.polyQueue.poll(); }
     public void queuePolyAsset(PolyAsset polyAsset) { this.polyQueue.add(polyAsset); }
 
+    private List<Assessment> assessments;
+    public List<Assessment> getAssessments() { return this.assessments; }
+    public void setAssessment(List<Assessment> lAssessment) { this.assessments = lAssessment; }
+    public void addAssessment(Assessment pAssessment) {
+        Assessment ca = getAssessmentByType(pAssessment.type);
+        if (ca.type != null && ca.type.equals(pAssessment.type)) return;
+        this.assessments.add(pAssessment);
+    }
+    public Assessment getAssessmentByType(AssessmentType pAssessmentType) {
+        Assessment assessment = this.assessments.stream().filter(a -> a.type.equals(pAssessmentType)).findFirst().orElse(null);
+        if (assessment == null) assessment = new Assessment();
+        return assessment;
+    }
+
     private static AppState instance;
 
     public static AppState getInstance() {
@@ -90,6 +109,7 @@ public class AppState {
         work = new LinkedList<>(task.work);
         round = new Round();
         polyLoadingCount = 0;
+        assessments = new ArrayList<>();
     }
 
     public void resetAr(){

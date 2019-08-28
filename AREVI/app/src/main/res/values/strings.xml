@@ -6,7 +6,7 @@
     <string name="poly_server_url" translatable="false">https://poly.googleapis.com/</string>
     <string name="poly_server_api_key" translatable="false">XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX</string>
     <string name="app_releases_url" translatable="false">https://github.com/judicapo/MUITSS-AREVI/releases/latest</string>
-    
+
     <string name="app_name">AREVI</string>
     <string name="app_preferences_name">AREVI_Preferences</string>
     <string name="app_title">AREVI app</string>
@@ -83,4 +83,24 @@
     </string-array>
     <string name="frame_profile_config_privacy_compliance_text">By continuing you are agreeing to share your information for research purposes.</string>
     <string name="use_cardboard_switch_text">Use Google Cardboard?</string>
+    <string name="system_usability_scale_tittle_text">System Usability Scale</string>
+    <string name="system_usability_scale_1_text">1. Strongly Disagree</string>
+    <string name="system_usability_scale_5_text">5. Strongly Agree</string>
+    <string name="system_usability_scale_instructions_text">Instructions: For each of the following statements, mark one box that best describes your reactions to AREVI today.</string>
+    <string name="system_usability_scale_answer_1_text">1</string>
+    <string name="system_usability_scale_answer_2_text">2</string>
+    <string name="system_usability_scale_answer_3_text">3</string>
+    <string name="system_usability_scale_answer_4_text">4</string>
+    <string name="system_usability_scale_answer_5_text">5</string>
+    <string name="system_usability_scale_question_1_text">1. I think that I would like to use this application frequently.</string>
+    <string name="system_usability_scale_question_2_text">2. I found this application unnecessarily complex.</string>
+    <string name="system_usability_scale_question_3_text">3. I thought this application was easy to use.</string>
+    <string name="system_usability_scale_question_4_text">4. I think that I would need assistance to be able to use this application.</string>
+    <string name="system_usability_scale_question_5_text">5. I found the various functions in this application were well integrated.</string>
+    <string name="system_usability_scale_question_6_text">6. I thought there was too much inconsistency in this application.</string>
+    <string name="system_usability_scale_question_7_text">7. I would imagine that most people would learn to use this application very quickly.</string>
+    <string name="system_usability_scale_question_8_text">8. I found this application very cumbersome/awkward to use.</string>
+    <string name="system_usability_scale_question_9_text">9. I felt very confident using this application.</string>
+    <string name="system_usability_scale_question_10_text">10. I needed to learn a lot of things before I could get going with this application.</string>
+    <string name="system_usability_scale_free_question_text">Please provide any comments about this application:</string>
 </resources>

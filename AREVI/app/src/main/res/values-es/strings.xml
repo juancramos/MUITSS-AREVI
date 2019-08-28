@@ -75,4 +75,24 @@
     </string-array>
     <string name="frame_profile_config_privacy_compliance_text">Al continuar usted esta aceptando compartir su información con fines de investigación.</string>
     <string name="use_cardboard_switch_text">¿Usar Google Cardboard?</string>
+    <string name="system_usability_scale_tittle_text">Escala de usabilidad del sistema (SUS)</string>
+    <string name="system_usability_scale_1_text">1. Muy en desacuerdo</string>
+    <string name="system_usability_scale_5_text">5. Totalmente de acuerdo</string>
+    <string name="system_usability_scale_instructions_text">Instrucciones: Para cada una de las siguientes afirmaciones, marque la casilla que mejor describa su interacción con AREVI hoy.</string>
+    <string name="system_usability_scale_answer_1_text">1</string>
+    <string name="system_usability_scale_answer_2_text">2</string>
+    <string name="system_usability_scale_answer_3_text">3</string>
+    <string name="system_usability_scale_answer_4_text">4</string>
+    <string name="system_usability_scale_answer_5_text">5</string>
+    <string name="system_usability_scale_question_1_text">1. Creo que me gustaría usar esta aplicación con frecuencia.</string>
+    <string name="system_usability_scale_question_2_text">2. Encontré esta aplicación innecesariamente compleja.</string>
+    <string name="system_usability_scale_question_3_text">3. Pensé que esta aplicación era fácil de usar.</string>
+    <string name="system_usability_scale_question_4_text">4. Creo que necesitaría ayuda para poder usar esta aplicación.</string>
+    <string name="system_usability_scale_question_5_text">5. Encontré que las diversas funcionalidades en esta aplicación estaban bien integradas.</string>
+    <string name="system_usability_scale_question_6_text">6. Pensé que había demasiada inconsistencia en esta aplicación.</string>
+    <string name="system_usability_scale_question_7_text">7. Me imagino que la mayoría de la gente aprendería a usar esta aplicación muy rápidamente.</string>
+    <string name="system_usability_scale_question_8_text">8. Encontré esta aplicación muy engorrosa/incómoda de usar.</string>
+    <string name="system_usability_scale_question_9_text">9. Me sentí muy seguro(cómodo) usando esta aplicación.</string>
+    <string name="system_usability_scale_question_10_text">10. Necesitaba aprender muchas cosas antes de comenzar con esta aplicación.</string>
+    <string name="system_usability_scale_free_question_text">Proporcione cualquier comentario sobre esta aplicación:</string>
 </resources>

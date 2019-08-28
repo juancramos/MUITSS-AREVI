@@ -3,9 +3,13 @@ package com.upv.muitss.arevi.views;
 import android.content.Context;
 import android.graphics.Point;
 import android.net.Uri;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.text.TextUtils;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -56,7 +60,7 @@ public class ArView extends ArFragment {
     private Node polyAssetInfoNode;
     private AnchorNode webRTCNode;
     private boolean isWebRTCNodeVisible = false;
-    private static Random rand;
+    private static Random rand = new Random();;
 
     Work currentScore;
     AnchorNode currentRandomAnchorNode;
@@ -66,27 +70,24 @@ public class ArView extends ArFragment {
 
     public void init(WeakReference<ArActivity> pOwner) {
         owner = pOwner;
-        if (owner.get() == null) return;
+        if (getView() != null) {
 
-        rand = new Random();
+            initCurrentScore();
 
-        if (getView() == null) return;
+            pointerView = getView().findViewById(R.id.sceneform_pointer);
+            spinner= getView().findViewById(R.id.sceneform_progress_bar);
+            spinner.setVisibility(View.GONE);
 
-        initCurrentScore();
-
-        pointerView = getView().findViewById(R.id.sceneform_pointer);
-        spinner= getView().findViewById(R.id.sceneform_progress_bar);
-        spinner.setVisibility(View.GONE);
-
-        getView().getViewTreeObserver().addOnGlobalLayoutListener(() -> {
-            Point pt = getScreenCenter();
-            if (pointer == null){
-                pointer = new PointerDrawable(pt.x, pt.y);
-            }
-            else {
-                pointer.setPoint(pt);
-            }
-        });
+            getView().getViewTreeObserver().addOnGlobalLayoutListener(() -> {
+                Point pt = getScreenCenter();
+                if (pointer == null){
+                    pointer = new PointerDrawable(pt.x, pt.y);
+                }
+                else {
+                    pointer.setPoint(pt);
+                }
+            });
+        }
 
         getArSceneView().getScene().addOnUpdateListener(frameTime -> {
             onUpdate(frameTime);
@@ -392,13 +393,24 @@ public class ArView extends ArFragment {
         webRTCNode = null;
     }
 
-    Void backToMain(){
+    private Void backToMain(){
         owner.get().startMainActivity();
         return null;
     }
 
+    void startAssessmentActivity(){
+        owner.get().startAssessmentActivity();
+    }
+
     void initCurrentScore() {
         currentScore = new Work();
+    }
+
+    @Override
+    public void onResume(){
+        super.onResume();
+
+        rand = new Random();
     }
 
     @Override
