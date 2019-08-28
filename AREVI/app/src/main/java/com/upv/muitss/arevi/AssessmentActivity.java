@@ -260,9 +260,7 @@ public class AssessmentActivity extends AppCompatActivity {
         view.setFocusable(false);
         view.setFocusableInTouchMode(false);
         if (notComplete) return;
-        runOnUiThread(() -> {
-            sendAssessmentToApi(AssessmentType.SUS);
-        });
+        runOnUiThread(() -> sendAssessmentToApi(AssessmentType.SUS));
         page -= 1;
         startMainActivity();
     }
@@ -272,7 +270,7 @@ public class AssessmentActivity extends AppCompatActivity {
         view.setFocusableInTouchMode(true);
         view.requestFocus();
 
-        boolean notComplete = validateProfileFormError(page);
+        boolean notComplete = validateProfileFormError(page + 1);
 
         view.setFocusable(false);
         view.setFocusableInTouchMode(false);
