@@ -41,7 +41,7 @@ public class ArInstructionsActivity extends AppCompatActivity implements Activit
 
     private void configurationChanged(boolean useGoogleCardboardBoolean) {
         if (useGoogleCardboardBoolean) {
-            focusView.setVisibility(View.VISIBLE);
+            focusView.setVisibility(View.GONE);
 
             triggerView.setVisibility(View.VISIBLE);
         }
