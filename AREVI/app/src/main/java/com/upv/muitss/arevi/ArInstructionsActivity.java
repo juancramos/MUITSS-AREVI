@@ -12,7 +12,7 @@ import com.upv.muitss.arevi.logic.web.interfaces.ActivityMessage;
 
 public class ArInstructionsActivity extends AppCompatActivity implements ActivityMessage {
 
-    private View focusView, triggerView;
+    private View focusView, triggerView, rotateView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,7 +24,9 @@ public class ArInstructionsActivity extends AppCompatActivity implements Activit
 
         focusView = findViewById(R.id.ar_instructions_focus_view);
         triggerView = findViewById(R.id.ar_instructions_trigger_view);
+        rotateView = findViewById(R.id.ar_instructions_rotate_view);
 
+        rotateView.setVisibility(View.GONE);
         triggerView.setVisibility(View.GONE);
 
         if (userLogin) {
@@ -44,6 +46,7 @@ public class ArInstructionsActivity extends AppCompatActivity implements Activit
             focusView.setVisibility(View.GONE);
 
             triggerView.setVisibility(View.VISIBLE);
+            rotateView.setVisibility(View.VISIBLE);
         }
     }
 

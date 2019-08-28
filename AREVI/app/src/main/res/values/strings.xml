@@ -131,4 +131,9 @@
     <string name="fragment_ar_trigger_push_text">Activate the Google cardboard trigger to increase the scale of an object when is being pointed to it.</string>
     <string name="fragment_ar_trigger_hold_text">Pull and hold the Google cardboard trigger to vanish the signaled object and start loading the next one.</string>
     <string name="fragment_ar_cast_push_text">Push the cast button to share your experience via WebRTC.</string>
+    <string name="fragment_ar_discovering_text">Look around in direction to plane surfaces in order to map your environment.</string>
+    <string name="ar_instructions_rotate_view_text">Hit let\'s start button and rotate your phone and put it into the Google Cardboard.</string>
+    <string name="ar_instructions_end_task_text">The task will end when all objects are vanished. Please fill the questionnaire after finishing the job.</string>
+    <string name="ar_instructions_task_description_text">The coming up task is designed to assess whether scalable objects in augmented reality environments are useful for improving your ability to see them clearly, so do not rush and take the time to increase the scale of objects until you can read their description and distinguish them.</string>
+    <string name="activity_instructions_ar_skip_btn">Skip</string>
 </resources>

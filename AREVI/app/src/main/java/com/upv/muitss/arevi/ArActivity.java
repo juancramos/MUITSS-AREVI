@@ -130,6 +130,27 @@ public class ArActivity extends AppCompatActivity implements ActivityMessage {
                 CAPTURE_PERMISSION_REQUEST_CODE);
     }
 
+    public void configurationChanged(boolean orientation){
+        // Checks the orientation of the screen
+        if (orientation) {
+            setContentView(R.layout.activity_ar_landscape);
+        }
+        else {
+            setContentView(R.layout.activity_ar);
+        }
+
+        arView = (ArView) getSupportFragmentManager().findFragmentById(R.id.sceneform_fragment);
+        gallery = findViewById(R.id.gallery_layout);
+
+        if (gallery == null || arView == null) startMainActivity();
+
+        weakReference = new WeakReference<>(this);
+        arView.init(weakReference);
+        gallery.init(weakReference);
+
+        startScreenCapture();
+    }
+
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == CAPTURE_PERMISSION_REQUEST_CODE) {
@@ -160,28 +181,6 @@ public class ArActivity extends AppCompatActivity implements ActivityMessage {
         webRTCModule= null;
     }
 
-    public void configurationChanged(boolean orientation){
-        // Checks the orientation of the screen
-        if (orientation) {
-            setContentView(R.layout.activity_ar_landscape);
-        }
-        else {
-            setContentView(R.layout.activity_ar);
-        }
-
-        arView = (ArView) getSupportFragmentManager().findFragmentById(R.id.sceneform_fragment);
-        gallery = findViewById(R.id.gallery_layout);
-
-        if (gallery == null || arView == null) startMainActivity();
-
-        weakReference = new WeakReference<>(this);
-        arView.init(weakReference);
-        gallery.init(weakReference);
-
-        startScreenCapture();
-    }
-
-
     @Override
     public <T> void onResponse(T response) {
         if (response instanceof Task){
@@ -198,5 +197,10 @@ public class ArActivity extends AppCompatActivity implements ActivityMessage {
             Utils.showToast(this, Utils.getResourceString(R.string.toast_no_task_AREVI));
             startMainActivity();
         }
+    }
+
+    @Override
+    public void onBackPressed(){
+        startMainActivity();
     }
 }

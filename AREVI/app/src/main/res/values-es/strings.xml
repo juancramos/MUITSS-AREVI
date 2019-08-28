@@ -123,4 +123,9 @@
     <string name="fragment_ar_trigger_push_text">Active el gatillo del Google Cardboard para aumentar la escala de un objeto cuando se está apuntado a el.</string>
     <string name="fragment_ar_trigger_hold_text">Tire y mantenga presionado el gatillo del Google Cardboard para desvanecer el objeto señalado e iniciar la carga del siguiente.</string>
     <string name="fragment_ar_cast_push_text">Presione el botón de transmisión para compartir su experiencia a través de WebRTC.</string>
+    <string name="fragment_ar_discovering_text">Mire a su alrededor en dirección a superficies planas para mapear su entorno.</string>
+    <string name="ar_instructions_rotate_view_text">Presione el botón empecemos, gire su teléfono y colóquelo en el Google Cardboard.</string>
+    <string name="ar_instructions_end_task_text">La tarea finalizará cuando todos los objetos desaparezcan. Por favor complete el cuestionario después de terminar el trabajo.</string>
+    <string name="ar_instructions_task_description_text">La próxima tarea está diseñada para evaluar si los objetos escalables en entornos de realidad aumentada son útiles para mejorar su capacidad de verlos con claridad, así que no se apresure y tómese el tiempo para aumentar la escala de los objetos hasta que pueda leer su descripción y distinguirlos.</string>
+    <string name="activity_instructions_ar_skip_btn">Saltar</string>
 </resources>

@@ -21,7 +21,8 @@
             android:ellipsize="end"
             android:hyphenationFrequency="normal"
             android:breakStrategy="simple"
-            android:scrollHorizontally="false" />
+            android:scrollHorizontally="false"
+            android:textSize="?attr/titleTextSize" />
 
         <Button
             android:id="@+id/activity_main_manage_profile.btn"

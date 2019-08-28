@@ -74,17 +74,17 @@
 
             <TextView
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:gravity="start"
+                android:layout_height="match_parent"
                 android:layout_gravity="start"
+                android:breakStrategy="simple"
+                android:ellipsize="end"
+                android:gravity="start"
+                android:hyphenationFrequency="normal"
+                android:maxWidth="160dp"
                 android:paddingStart="@dimen/activity_horizontal_margin"
                 android:paddingEnd="0dp"
-                android:maxWidth="150dp"
-                android:text="@string/task_load_index_1_text"
-                android:ellipsize="end"
-                android:hyphenationFrequency="normal"
-                android:breakStrategy="simple"
-                android:scrollHorizontally="false"/>
+                android:scrollHorizontally="false"
+                android:text="@string/task_load_index_1_text" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -93,7 +93,7 @@
                 android:layout_gravity="end"
                 android:paddingStart="0dp"
                 android:paddingEnd="@dimen/activity_horizontal_margin"
-                android:maxWidth="150dp"
+                android:maxWidth="160dp"
                 android:text="@string/task_load_index_5_text"
                 android:ellipsize="end"
                 android:hyphenationFrequency="normal"

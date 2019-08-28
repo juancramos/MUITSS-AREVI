@@ -44,12 +44,25 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/activity_horizontal_margin"
-                android:gravity="center"
+                android:gravity="start"
                 android:text="@string/ar_instructions_description_text"
                 android:ellipsize="end"
                 android:hyphenationFrequency="normal"
                 android:breakStrategy="simple"
                 android:scrollHorizontally="false"/>
+
+            <Button
+                android:id="@+id/activity_skip_instructions_ar_scene.btn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingTop="@dimen/activity_horizontal_margin"
+                android:text="@string/activity_instructions_ar_skip_btn"
+                android:onClick="onEnterArButtonClick"
+                android:ellipsize="end"
+                android:hyphenationFrequency="normal"
+                android:breakStrategy="simple"
+                android:scrollHorizontally="false"
+                style="@style/Widget.MaterialComponents.Button.TextButton"/>
         </LinearLayout>
 
         <LinearLayout
@@ -74,6 +87,40 @@
                     android:layout_gravity="center"
                     android:adjustViewBounds="true"
                     android:layout_marginTop="@dimen/activity_margin_half"
+                    android:src="@drawable/ic_smartphone_black_24dp"
+                    android:scaleType="fitCenter"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="6dp"
+                    android:text="@string/fragment_ar_discovering_text"
+                    android:ellipsize="end"
+                    android:hyphenationFrequency="normal"
+                    android:breakStrategy="simple"
+                    android:scrollHorizontally="false" />
+
+            </LinearLayout>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="2dp"
+                android:layout_marginLeft="@dimen/activity_margin_border"
+                android:layout_marginRight="@dimen/activity_margin_border"
+                android:layout_gravity="bottom"
+                android:background="?attr/fillPrimaryColor"  />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center">
+
+                <ImageView
+                    android:layout_width="76dp"
+                    android:layout_height="76dp"
+                    android:padding="10dp"
+                    android:layout_gravity="center"
+                    android:adjustViewBounds="true"
                     android:src="@drawable/ic_fiber_manual_record_black_24dp"
                     android:scaleType="fitCenter"/>
 
@@ -249,6 +296,47 @@
                 android:layout_marginRight="@dimen/activity_margin_border"
                 android:layout_gravity="bottom"
                 android:background="?attr/fillPrimaryColor"  />
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:gravity="center"
+                android:padding="@dimen/activity_horizontal_margin">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/activity_horizontal_margin"
+                    android:gravity="start"
+                    android:text="@string/ar_instructions_task_description_text"
+                    android:ellipsize="end"
+                    android:hyphenationFrequency="normal"
+                    android:breakStrategy="simple"
+                    android:scrollHorizontally="false"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/activity_horizontal_margin"
+                    android:gravity="start"
+                    android:text="@string/ar_instructions_end_task_text"
+                    android:ellipsize="end"
+                    android:hyphenationFrequency="normal"
+                    android:breakStrategy="simple"
+                    android:scrollHorizontally="false"/>
+                <TextView
+                    android:id="@+id/ar_instructions_rotate_view"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/activity_horizontal_margin"
+                    android:gravity="start"
+                    android:text="@string/ar_instructions_rotate_view_text"
+                    android:ellipsize="end"
+                    android:hyphenationFrequency="normal"
+                    android:breakStrategy="simple"
+                    android:scrollHorizontally="false"/>
+            </LinearLayout>
 
             <Button
                 android:id="@+id/activity_instructions_ar_scene.btn"
