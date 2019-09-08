@@ -109,22 +109,60 @@ var playing = false;
 const localVideo = document.querySelector('#localVideo');
 const remoteVideo = document.querySelector('#remoteVideo');
 const startCast = document.querySelector('#startCast');
-
-startCast.addEventListener("click", function () {
-  if (!playing) {
-    playing = true;
-    localVideo.play();
-  }
-});
-
-navigator.mediaDevices.getDisplayMedia({
+const displayMediaOptions = {
   video: {
     cursor: "never"
   },
   audio: false
-}).then(gotStream).catch(function (e) {
-  console.log('getUserMedia() error: ' + e);
-});
+};
+
+startCast.addEventListener("click", function (evt) {
+  if (!playing) {
+    playing = true;
+    startCapture();
+  }
+  else {
+    playing = false;
+    stopCapture();
+  }
+}, false);
+
+// Set event listeners for the start and stop buttons
+startElem.addEventListener("click", function(evt) {
+  startCapture();
+  localVideo.play();
+}, false);
+
+stopElem.addEventListener("click", function(evt) {
+  stopCapture();
+}, false);
+
+async function startCapture() {
+  logElem.innerHTML = "";
+
+  try {
+    localVideo.srcObject = await navigator.mediaDevices.getDisplayMedia(displayMediaOptions);
+    dumpOptionsInfo();
+  } catch(err) {
+    console.error("Error: " + err);
+  }
+}
+
+function stopCapture(evt) {
+  let tracks = localVideo.srcObject.getTracks();
+
+  tracks.forEach(track => track.stop());
+  localVideo.srcObject = null;
+}
+
+function dumpOptionsInfo() {
+  const videoTrack = localVideo.srcObject.getVideoTracks()[0];
+ 
+  console.info("Track settings:");
+  console.info(JSON.stringify(videoTrack.getSettings(), null, 2));
+  console.info("Track constraints:");
+  console.info(JSON.stringify(videoTrack.getConstraints(), null, 2));
+}
 
 
 // try {
