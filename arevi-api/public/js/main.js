@@ -117,14 +117,11 @@ startCast.addEventListener("click", function () {
   }
 });
 
-navigator.mediaDevices.getUserMedia({
-  audio: true,
+navigator.mediaDevices.getDisplayMedia({
   video: {
-    mediaSource: "screen", // whole screen sharing
-    width: { max: '1920' },
-    height: { max: '1080' },
-    frameRate: { max: '10' }
-  }
+    cursor: "never"
+  },
+  audio: false
 }).then(gotStream).catch(function (e) {
   console.log('getUserMedia() error: ' + e);
 });

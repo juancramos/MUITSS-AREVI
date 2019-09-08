@@ -1,7 +1,5 @@
 package com.upv.muitss.arevi.helpers;
 
-import android.text.TextUtils;
-
 import com.upv.muitss.arevi.entities.Assessment;
 import com.upv.muitss.arevi.entities.Profile;
 import com.upv.muitss.arevi.entities.Round;
