@@ -2,7 +2,7 @@
     <string name="ice_candidates_file_name" translatable="false">ice_servers.json</string>
     <string name="signaling_server_url" translatable="false">http://192.168.0.105:3030/</string>
     <string name="default_signaling_server_url" translatable="false">http://localhost:3030/</string>
-    <string name="default_signaling_server_room" translatable="false">room/</string>
+    <string name="default_signaling_server_room" translatable="false">room</string>
     <string name="poly_server_url" translatable="false">https://poly.googleapis.com/</string>
     <string name="poly_server_api_key" translatable="false">XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX</string>
     <string name="app_releases_url" translatable="false">https://github.com/judicapo/MUITSS-AREVI/releases/latest</string>

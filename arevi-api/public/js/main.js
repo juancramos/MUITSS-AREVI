@@ -137,7 +137,8 @@ async function startCapture() {
     } else {
       str = await navigator.mediaDevices.getUserMedia(displayMediaOptions);
     }
-    localVideo.srcObject = str;
+    
+    gotStream(str);
     localVideo.play();
     dumpOptionsInfo();
   } catch(err) {
