@@ -129,7 +129,13 @@ startCast.addEventListener("click", function (evt) {
 
 async function startCapture() {
   try {
-    localVideo.srcObject = await navigator.mediaDevices.getDisplayMedia(displayMediaOptions);
+    if (navigator.getDisplayMedia) {
+      navigator.getDisplayMedia({video: true});
+    } else if (navigator.mediaDevices.getDisplayMedia) {
+      navigator.mediaDevices.getDisplayMedia({video: true});
+    } else {
+      navigator.mediaDevices.getUserMedia(displayMediaOptions);
+    }
     localVideo.play();
     dumpOptionsInfo();
   } catch(err) {
