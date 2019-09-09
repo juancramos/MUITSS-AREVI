@@ -127,21 +127,10 @@ startCast.addEventListener("click", function (evt) {
   }
 }, false);
 
-// Set event listeners for the start and stop buttons
-startElem.addEventListener("click", function(evt) {
-  startCapture();
-  localVideo.play();
-}, false);
-
-stopElem.addEventListener("click", function(evt) {
-  stopCapture();
-}, false);
-
 async function startCapture() {
-  logElem.innerHTML = "";
-
   try {
     localVideo.srcObject = await navigator.mediaDevices.getDisplayMedia(displayMediaOptions);
+    localVideo.play();
     dumpOptionsInfo();
   } catch(err) {
     console.error("Error: " + err);
