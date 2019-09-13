@@ -56,7 +56,7 @@ public class ArView extends ArFragment {
     private Node polyAssetInfoNode;
     private AnchorNode webRTCNode;
     private boolean isWebRTCNodeVisible = false;
-    private static Random rand = new Random();;
+    private static Random rand = new Random();
 
     Work currentScore;
     AnchorNode currentRandomAnchorNode;

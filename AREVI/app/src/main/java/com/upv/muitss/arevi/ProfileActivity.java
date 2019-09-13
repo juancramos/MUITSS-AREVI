@@ -314,21 +314,21 @@ public class ProfileActivity extends AppCompatActivity implements ActivityMessag
             }
         }
         else if (response instanceof UserInfo && !(TextUtils.isEmpty(((UserInfo) response).id))){
+            Profile sp = AppState.getInstance().getProfile();
+
             int theme =  Utils.getSavedThemeStyle();
-            Profile p = AppState.getInstance().getProfile();
+            Profile p = new Profile();
             p.enabled = String.valueOf(true);
             Configuration c = p.getConfiguration();
             c.setSelectedAppTheme(theme);
             p.setConfiguration(c);
             p.name = Profile.class.getSimpleName() + "-" + theme;
 
-            AppState.getInstance().setProfile(p);
-
-            if (AppState.getInstance().getProfile().isLocal()){
-                AREVIRepository.getInstance().postProfile(AppState.getInstance().getProfile());
+            if (sp.isLocal() || !p.name.equals(sp.name)){
+                AREVIRepository.getInstance().postProfile(p);
             }
-            else if (Utils.getLogIn().isValidState() && p.name.equals(AppState.getInstance().getProfile().name)) {
-                AREVIRepository.getInstance().updateProfile(AppState.getInstance().getProfile().id, AppState.getInstance().getProfile());
+            else if (Utils.getLogIn().isValidState() && p.name.equals(sp.name)) {
+                AREVIRepository.getInstance().updateProfile(sp.id, sp);
             }
         }
     }
