@@ -484,7 +484,7 @@ public class AREVIRepository {
             Utils.popProgressDialog(null, null);
             return;
         }
-        apiService.findApiProfile(userId, 1).enqueue(new Callback<DataResponse<Profile>>() {
+        apiService.findApiProfile(userId, 1, 1, -1).enqueue(new Callback<DataResponse<Profile>>() {
             @Override
             public void onResponse(@NonNull Call<DataResponse<Profile>> call, @NonNull Response<DataResponse<Profile>> response) {
 

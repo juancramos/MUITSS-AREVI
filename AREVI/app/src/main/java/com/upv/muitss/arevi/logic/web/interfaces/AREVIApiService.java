@@ -65,7 +65,8 @@ public interface AREVIApiService {
 
 
     @GET(PROFILE_API_ROUTE)
-    Call<DataResponse<Profile>> findApiProfile(@Query("userId") String userId, @Query("enabled") int enabled);
+    Call<DataResponse<Profile>> findApiProfile(@Query("userId") String userId, @Query("enabled") int enabled, @Query("$limit") int limit
+            , @Query("$sort[createdAt]") int order);
 
     @POST(PROFILE_API_ROUTE)
     @Headers({ "Content-Type: application/json;charset=UTF-8"})
